@@ -9,5 +9,5 @@ package Instance;
  * @author felix
  */
 public class Instance {
-    
+    private int test;
 }
