@@ -4,6 +4,8 @@
  */
 package solution;
 
+import Ensemble.Chaine;
+import Ensemble.Cycle;
 import instance.Instance;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +21,8 @@ public class Solution {
 
     private int coutTotal;
     private Instance instance;
+    private LinkedList<Chaine> chaines;
+    private LinkedList<Cycle> cycles;
 
     public Solution(Instance i) {
         this.coutTotal = 0;
@@ -29,6 +33,8 @@ public class Solution {
     public Solution(Solution solution) {
         this.coutTotal = solution.coutTotal;
         this.instance = solution.instance;
+        chaines = new LinkedList<Chaine>(); // a voir
+        cycles = new LinkedList<Cycle>(); // a voir
        
     }
 
@@ -42,6 +48,20 @@ public class Solution {
         return hash;
     }
 
+    public LinkedList<Chaine> getChaines() {
+        return chaines;
+    }
+
+    public LinkedList<Cycle> getCycles() {
+        return cycles;
+    }
+
+    public Instance getInstance() {
+        return instance;
+    }
+
+    
+    
   
 
 }
