@@ -10,7 +10,9 @@ package instance.reseau;
  * @author Bart
  */
 public class Transplantation {
-    public int benefice;
+    private int benefice;
+    private Participant beneficiaire;
+    private Participant donneur;
     
     
     public Transplantation() {
@@ -21,7 +23,13 @@ public class Transplantation {
     public int getBenefice() {
         return benefice;
     }
-    
-    
+
+    public Participant getBeneficiaire() {
+        return beneficiaire;
+    }
+
+    public Participant getDonneur() {
+        return donneur;
+    }
     
 }

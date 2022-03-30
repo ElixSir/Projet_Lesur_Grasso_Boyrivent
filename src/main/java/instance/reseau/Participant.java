@@ -14,7 +14,7 @@ import java.util.Map;
 public abstract class Participant {
     private int id;
     //private Participant receveur;
-     private Map<Participant, Transplantation> routes;
+     private Map<Participant, Transplantation> transplantations;
     
     public Participant(){
         id = 0;
@@ -25,8 +25,8 @@ public abstract class Participant {
         return id;
     }
 
-    public Map<Participant, Transplantation> getRoutes() {
-        return routes;
+    public Map<Participant, Transplantation> getTransplantations() {
+        return transplantations;
     }
     
     

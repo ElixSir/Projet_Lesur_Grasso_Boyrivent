@@ -6,12 +6,16 @@
 package test;
 
 // TO CHECK : import des classes Instance, InstanceReader et ReaderException
+import ensemble.Chaine;
+import ensemble.Cycle;
 import instance.Instance;
+import instance.reseau.Paire;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -133,6 +137,8 @@ public class TestAllSolveur {
             printEnTetes(ecriture);
             for (Instance inst : instances) {
                 printResultatsInstance(ecriture, inst);
+                PrintWriter ecritureIndividuelle = new PrintWriter(inst.getNom() + "_sol" + ".txt");
+                printResultatsInstance(ecritureIndividuelle, inst);
             }
             ecriture.println();
             printSommeResultats(ecriture);
@@ -168,6 +174,7 @@ public class TestAllSolveur {
      */
     private void printResultatsInstance(PrintWriter ecriture, Instance inst) {
         // TO CHECK : recuperer le nom de l'instance
+        String s;
         ecriture.print(inst.getNom());
         for (Solveur solveur : solveurs) {
             long start = System.currentTimeMillis();
@@ -176,10 +183,23 @@ public class TestAllSolveur {
             long time = System.currentTimeMillis() - start;
             // TO CHECK : recperer le cout total de la solution, et savoir si
             // la solution est valide
-            Resultat result = new Resultat(sol.getCoutTotal(), time, sol.check());//ouvrir le checker
+            // Cout total de la solution
+            ecriture.print("// Cout total de la solution");
+            ecriture.print(sol.getCoutTotal());
+            // Description de la solution
+            // Cycles
+            ecriture.print("// Description de la solution");
+            ecriture.print("// Cycles");
+            printCycles(sol, ecriture); //Affiches les donneurs des différents cycles
+            ecriture.print("\n");
+            // Chaines
+            ecriture.print("// Chaines");
+            printChaines(sol, ecriture); //Affiches les donneurs des différentes chaines
+
+            /*Resultat result = new Resultat(sol.getCoutTotal(), time, sol.check());//ouvrir le checker
             resultats.put(new InstanceSolveur(inst, solveur), result);
             ecriture.print(";" + result.formatCsv());
-            totalStats.get(solveur).add(result);
+            totalStats.get(solveur).add(result);*/
         }
         ecriture.println();
     }
@@ -201,6 +221,52 @@ public class TestAllSolveur {
             ecriture.print(";valide ?");
         }
         ecriture.println();
+    }
+
+    /**
+     * //Affiches les donneurs des différents cycles de la solution
+     * @param sol
+     * @param ecriture 
+     */
+    private void printCycles(Solution sol, PrintWriter ecriture) {
+        String s;
+        LinkedList<Cycle> cycles = sol.getCycles();
+        
+        for (int i = 0; i < cycles.size(); i++) {
+            s = "";
+            Cycle cycle = cycles.get(i);
+            LinkedList<Paire> paires = cycle.getPaires();
+            
+            for (int j = 0; j < paires.size()-1; j++) {
+                Paire paire = paires.get(j);
+                s += paire.getId() + "\t";
+            }
+            
+            ecriture.print(s);
+        }
+    }
+    
+    /**
+     * //Affiches les donneurs des différentes chaines de la solution
+     * @param sol
+     * @param ecriture 
+     */
+    private void printChaines(Solution sol, PrintWriter ecriture) {
+        String s;
+        LinkedList<Chaine> chaines = sol.getChaines();
+
+        for (int i = 0; i < chaines.size(); i++) {
+            Chaine chaine = chaines.get(i);
+            s = chaine.getAltruiste() + "\t";
+            LinkedList<Paire> paires = chaine.getPaires();
+
+            for (int j = 0; j < paires.size() - 1; j++) {
+                Paire paire = paires.get(j);
+                s += paire.getId() + "\t";
+            }
+
+            ecriture.print(s);
+        }
     }
 
     /**

@@ -6,6 +6,8 @@
 package ensemble;
 
 import instance.reseau.Altruiste;
+import instance.reseau.Paire;
+import java.util.LinkedList;
 
 /**
  *
@@ -27,6 +29,4 @@ public class Chaine extends Echanges {
     public Altruiste getAltruiste() {
         return altruiste;
     }
-    
-    
 }

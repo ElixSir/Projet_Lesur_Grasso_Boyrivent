@@ -5,12 +5,15 @@
  */
 package ensemble;
 
+import instance.reseau.Paire;
+import java.util.LinkedList;
+
 /**
  *
  * @author Bart
  */
 public class Cycle extends Echanges {
-    public int maxCycle;
+    private int maxCycle;
 
     public Cycle() {
         maxCycle = 1;
@@ -19,8 +22,4 @@ public class Cycle extends Echanges {
     public int getMaxCycle() {
         return maxCycle;
     }
-    
-    
-    
-    
 }

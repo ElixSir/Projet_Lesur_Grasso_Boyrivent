@@ -49,11 +49,11 @@ public class Solution {
     }
 
     public LinkedList<Chaine> getChaines() {
-        return chaines;
+        return new LinkedList<>(chaines);
     }
 
     public LinkedList<Cycle> getCycles() {
-        return cycles;
+        return new LinkedList<>(cycles);
     }
 
     public Instance getInstance() {
