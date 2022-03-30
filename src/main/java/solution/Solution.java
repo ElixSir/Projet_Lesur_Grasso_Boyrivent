@@ -4,8 +4,8 @@
  */
 package solution;
 
-import Ensemble.Chaine;
-import Ensemble.Cycle;
+import ensemble.Chaine;
+import ensemble.Cycle;
 import instance.Instance;
 import java.util.LinkedList;
 import java.util.List;
