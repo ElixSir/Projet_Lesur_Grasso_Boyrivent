@@ -23,6 +23,14 @@ public class Transplantation {
     public int getBenefice() {
         return benefice;
     }
+    
+    public void setBenefice(int b){
+        this.benefice = b;
+    }
+    
+    public void addBenefice(int b){
+        this.benefice += b;
+    }
 
     public Participant getBeneficiaire() {
         return beneficiaire;
@@ -31,5 +39,25 @@ public class Transplantation {
     public Participant getDonneur() {
         return donneur;
     }
+    
+    public boolean ajouterDonneur(Participant p){
+        if(p ==null) return false;
+        if(this.donneur != null) return false; // si il est deja la on remplace pas
+        
+        this.donneur = p;
+        
+        return true;
+    }
+    
+    public boolean ajouterBeneficiaire(Participant p){
+        if(p == null) return false;
+        if(this.beneficiaire != null) return false; // si il est deja la on remplace pas
+        
+        this.beneficiaire = p;
+        
+        return true;
+    }
+    
+    
     
 }

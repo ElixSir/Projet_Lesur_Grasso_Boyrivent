@@ -13,8 +13,8 @@ import java.util.LinkedList;
  * @author Bart
  */
 public abstract class Echanges {
-    private int beneficeTotal;
-    private LinkedList<Paire> paires;
+    protected int beneficeTotal;
+    protected LinkedList<Paire> paires;
     
     public Echanges(){
         beneficeTotal = 0;
@@ -29,6 +29,8 @@ public abstract class Echanges {
         return new LinkedList<>(paires);
     }
  
+    
+
     
     
 }

@@ -17,16 +17,52 @@ public class Chaine extends Echanges {
     private int maxChaine;
     private Altruiste altruiste; 
     
-    public Chaine(){
-        maxChaine = 0;
+    public Chaine(int maxChaine){
+        this.maxChaine = maxChaine;
         altruiste = null; // a voir
+    }
+    
+    public Chaine(int maxChaine, Altruiste altruiste){
+        this.maxChaine = maxChaine;
+        this.altruiste = altruiste; // a voir
     }
 
     public int getMaxChaine() {
         return maxChaine;
     }
+    
+    public void setMaxChaine(int m){
+        this.maxChaine = m;        
+    }
 
     public Altruiste getAltruiste() {
         return altruiste;
     }
+    
+    public boolean ajouterAltruiste(Altruiste a){
+        if(a == null) return false;
+        if(this.altruiste != null) return false; // si un altruiste est deja la alors je peut pas l'ajouter
+
+        
+        this.altruiste = a;   
+        return true;
+    }
+    
+    
+    public boolean ajouterPaire(Paire p){ // si chaine pas pleine et que la paire est pas en double alors on ajoute
+        if(p == null) return false;
+        if(this.paires.size()  >= this.maxChaine ) return false; // si la chaine est pleine alors return
+        
+        for(Paire pa: this.paires){
+            if(pa.equals(p)){
+                return false; // si la paire existe deja je n'ajoute pas
+            }
+        }
+        
+        this.paires.add(p);
+        
+        return true;
+    }
+    
+    
 }
