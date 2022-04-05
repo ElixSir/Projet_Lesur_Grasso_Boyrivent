@@ -9,6 +9,8 @@ import ensemble.Chaine;
 import instance.Instance;
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;
+import io.InstanceReader;
+import io.exception.ReaderException;
 import solution.Solution;
 
 /**
@@ -58,11 +60,19 @@ public class SolutionSimple implements Solveur{
     
     public static void main(String[] args) {
 
-        //SolutionSimple soluce = new SolutionSimple();
-        
-       // System.out.println(soluce.solve(null));
-        
-        System.out.println("test");
+        try {
+            InstanceReader read = new InstanceReader("instancesInitiales/KEP_p100_n0_k3_l0.txt");
+            Instance i = read.readInstance();
+
+            SolutionSimple algoSimple = new SolutionSimple();
+
+            Solution simple = algoSimple.solve(i);
+
+            System.out.println(simple.toString());
+
+        } catch (ReaderException ex) {
+            System.out.println(ex.getMessage());
+        }
         
     }
     

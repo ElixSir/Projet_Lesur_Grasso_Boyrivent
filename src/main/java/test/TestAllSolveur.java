@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 // TO CHECK : import des classes Solution, InsertionSimple et Solveur
 import solution.Solution;
+import solveur.SolutionSimple;
 import solveur.Solveur;
 
 /**
@@ -92,7 +93,8 @@ public class TestAllSolveur {
      */
     private void addSolveurs() {
         // TO CHECK : constructeur par defaut de la classe InsertionSimple
-        /*Solveur solutionSimple = new InsertionSimple();
+        solveurs.add(new SolutionSimple());
+        /*
         Solveur solutionRechercheLocale = new RechercheLocale(solutionSimple);
         solveurs.add(solutionSimple);
         solveurs.add(new InsertionPlusProcheVoisin());
@@ -135,12 +137,21 @@ public class TestAllSolveur {
     public void printAllResultats(String nomFichierResultats) {
         PrintWriter ecriture = null;
         try {
-            ecriture = new PrintWriter(nomFichierResultats + ".csv");
-            printEnTetes(ecriture);
+            ecriture = new PrintWriter(nomFichierResultats + ".txt");
+            //printEnTetes(ecriture);
             for (Instance inst : instances) {
+                ecriture.println(inst.getNom());
+                ecriture.print("\n");
                 printResultatsInstance(ecriture, inst);
-                PrintWriter ecritureIndividuelle = new PrintWriter(inst.getNom() + "_sol" + ".txt");
+                PrintWriter ecritureIndividuelle = new PrintWriter("annexe/" + inst.getNom() + "_sol" + ".txt");
                 printResultatsInstance(ecritureIndividuelle, inst);
+                ecritureIndividuelle.println();
+                
+                if(ecritureIndividuelle != null)
+                {
+                    ecritureIndividuelle.close();
+                }
+                ecriture.print("\n");
             }
             ecriture.println();
             printSommeResultats(ecriture);
@@ -177,7 +188,7 @@ public class TestAllSolveur {
     private void printResultatsInstance(PrintWriter ecriture, Instance inst) {
         // TO CHECK : recuperer le nom de l'instance
         String s;
-        ecriture.print(inst.getNom());
+        
         for (Solveur solveur : solveurs) {
             long start = System.currentTimeMillis();
             // TO CHECK : resolution de l'instance avec le solveur
@@ -186,12 +197,12 @@ public class TestAllSolveur {
             // TO CHECK : recperer le cout total de la solution, et savoir si
             // la solution est valide
             // Cout total de la solution
-            ecriture.print("// Cout total de la solution");
-            ecriture.print(sol.getCoutTotal());
+            ecriture.println("// Cout total de la solution");
+            ecriture.println(sol.getCoutTotal());
             // Description de la solution
             // Cycles
-            ecriture.print("// Description de la solution");
-            ecriture.print("// Cycles");
+            ecriture.println("// Description de la solution");
+            ecriture.println("// Cycles");
             printCycles(sol, ecriture); //Affiches les donneurs des différents cycles
             ecriture.print("\n");
             // Chaines
@@ -232,20 +243,24 @@ public class TestAllSolveur {
      */
     private void printCycles(Solution sol, PrintWriter ecriture) {
         String s;
-        LinkedList<Cycle> cycles = sol.getCycles();
-        
-        for (int i = 0; i < cycles.size(); i++) {
-            s = "";
-            Cycle cycle = cycles.get(i);
-            LinkedList<Paire> paires = cycle.getPaires();
-            
-            for (int j = 0; j < paires.size()-1; j++) {
-                Paire paire = paires.get(j);
-                s += paire.getId() + "\t";
+        if(sol.getCycles() != null)
+        {
+            LinkedList<Cycle> cycles = sol.getCycles();
+
+            for (int i = 0; i < cycles.size(); i++) {
+                s = "";
+                Cycle cycle = cycles.get(i);
+                LinkedList<Paire> paires = cycle.getPaires();
+
+                for (int j = 0; j < paires.size() - 1; j++) {
+                    Paire paire = paires.get(j);
+                    s += paire.getId() + "\t";
+                }
+
+                ecriture.print(s);
             }
-            
-            ecriture.print(s);
         }
+        
     }
     
     /**
@@ -255,20 +270,23 @@ public class TestAllSolveur {
      */
     private void printChaines(Solution sol, PrintWriter ecriture) {
         String s;
-        LinkedList<Chaine> chaines = sol.getChaines();
+        if (sol.getChaines() != null) {
+            LinkedList<Chaine> chaines = sol.getChaines();
 
-        for (int i = 0; i < chaines.size(); i++) {
-            Chaine chaine = chaines.get(i);
-            s = chaine.getAltruiste() + "\t";
-            LinkedList<Paire> paires = chaine.getPaires();
+            for (int i = 0; i < chaines.size(); i++) {
+                Chaine chaine = chaines.get(i);
+                s = chaine.getAltruiste() + "\t";
+                LinkedList<Paire> paires = chaine.getPaires();
 
-            for (int j = 0; j < paires.size() - 1; j++) {
-                Paire paire = paires.get(j);
-                s += paire.getId() + "\t";
+                for (int j = 0; j < paires.size() - 1; j++) {
+                    Paire paire = paires.get(j);
+                    s += paire.getId() + "\t";
+                }
+
+                ecriture.print(s);
             }
-
-            ecriture.print(s);
         }
+        
     }
 
     /**
@@ -421,7 +439,7 @@ public class TestAllSolveur {
      * @param args
      */
     public static void main(String[] args) {
-        TestAllSolveur test = new TestAllSolveur("instances");
+        TestAllSolveur test = new TestAllSolveur("instancesInitiales");
         test.printAllResultats("results");
     }
 

@@ -50,11 +50,11 @@ public class Solution {
     }
 
     public LinkedList<Chaine> getChaines() {
-        return new LinkedList<>(chaines);
+        return this.chaines;
     }
 
     public LinkedList<Cycle> getCycles() {
-        return new LinkedList<>(cycles);
+        return this.cycles;
     }
 
     public Instance getInstance() {
@@ -115,5 +115,16 @@ public class Solution {
 
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "Solution" 
+                + "\n\tcoutTotal=" + coutTotal 
+                + "\n\tinstance=" + instance 
+                + "\n\tchaines=" + chaines 
+                + "\n\tcycles=" + cycles + '}';
+    }
+      
+    
 
 }
