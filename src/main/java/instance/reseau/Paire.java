@@ -11,7 +11,8 @@ package instance.reseau;
  */
 public class Paire extends Participant {
 
-    public Paire() {
+    public Paire(int id) {
+        super(id);
     }
     
     

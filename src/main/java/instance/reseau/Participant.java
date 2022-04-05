@@ -5,6 +5,7 @@
  */
 package instance.reseau;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -12,13 +13,43 @@ import java.util.Map;
  * @author Bart
  */
 public abstract class Participant {
-    protected int id;
-    //private Participant receveur;
-    protected Map<Participant, Transplantation> transplantations;
     
-    public Participant(){
-        id = 0;
-        //receveur = null;
+    private final int id;
+    
+    /**
+     * la clef représente le bénéficiaire
+     */
+    private Map<Participant, Transplantation> transplantations;
+    
+    public Participant(int id){
+        this.id = id;
+        this.transplantations = new LinkedHashMap<>();
+    }
+    
+    public void ajouterTransplantation(Paire beneficiaire, int benefice) {
+        if( 
+                null == beneficiaire  ||
+                benefice < 0
+                ) return;
+        
+        Transplantation t = new Transplantation(this, beneficiaire, benefice);
+        
+        this.transplantations.put(beneficiaire, t);
+    }
+    
+    /**
+     * Donne le bénéfice de la transplantation de lui vers la paire
+     * @param p
+     * @return un bénéfice de -1 si aucune transplantation lui est associé 
+     */
+    public int getBeneficeVers( Paire p ) {
+        Transplantation t = this.transplantations.get(p);
+        
+        if( t != null ) {
+            return t.getBenefice();
+        }
+        
+        return -1;
     }
 
     public int getId() {
@@ -53,7 +84,9 @@ public abstract class Participant {
         }
         return true;
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "{" + "id=" + id + '}';
+    }
 }

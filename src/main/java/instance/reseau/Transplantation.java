@@ -10,54 +10,31 @@ package instance.reseau;
  * @author Bart
  */
 public class Transplantation {
-    private int benefice;
-    private Participant beneficiaire;
-    private Participant donneur;
+    private final int benefice;
+    private final Paire beneficiaire;
+    private final Participant donneur;
     
-    
-    public Transplantation() {
-        
-       benefice = 0;
+    /**
+     * le bénéficiaire ne peut être qu'un donneur
+     * @param donneur
+     * @param beneficiaire
+     * @param benefice 
+     */
+    public Transplantation(Participant donneur, Paire beneficiaire, int benefice ) {   
+       this.benefice = benefice;
+       this.donneur = donneur;
+       this.beneficiaire = beneficiaire;
     }
 
     public int getBenefice() {
         return benefice;
     }
-    
-    public void setBenefice(int b){
-        this.benefice = b;
-    }
-    
-    public void addBenefice(int b){
-        this.benefice += b;
-    }
 
-    public Participant getBeneficiaire() {
+    public Paire getBeneficiaire() {
         return beneficiaire;
     }
 
     public Participant getDonneur() {
         return donneur;
     }
-    
-    public boolean ajouterDonneur(Participant p){
-        if(p ==null) return false;
-        if(this.donneur != null) return false; // si il est deja la on remplace pas
-        
-        this.donneur = p;
-        
-        return true;
-    }
-    
-    public boolean ajouterBeneficiaire(Participant p){
-        if(p == null) return false;
-        if(this.beneficiaire != null) return false; // si il est deja la on remplace pas
-        
-        this.beneficiaire = p;
-        
-        return true;
-    }
-    
-    
-    
 }

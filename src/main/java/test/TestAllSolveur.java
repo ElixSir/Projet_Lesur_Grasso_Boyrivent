@@ -10,6 +10,8 @@ import ensemble.Chaine;
 import ensemble.Cycle;
 import instance.Instance;
 import instance.reseau.Paire;
+import io.InstanceReader;
+import io.exception.ReaderException;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;

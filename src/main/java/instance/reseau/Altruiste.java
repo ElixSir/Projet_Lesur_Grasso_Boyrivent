@@ -10,14 +10,9 @@ package instance.reseau;
  * @author Bart
  */
 public class Altruiste extends Participant{
-
-    
-    
-    public Altruiste() {
-    }
     
     public Altruiste(int id){
-        this.id = id;
+        super(id);
     }
     
     

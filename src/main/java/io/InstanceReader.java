@@ -7,7 +7,8 @@ package io;
 
 // TO CHECK : import des classes Instance, Client, Depot et Point
 import instance.Instance;
-import instance.reseau.Participant;
+import instance.reseau.Altruiste;
+import instance.reseau.Paire;
 import io.exception.FileExistException;
 import io.exception.FormatFileException;
 import io.exception.OpenFileException;
@@ -17,8 +18,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 /**
  * Cette classe permet de lire une instance pour les TPs du cours de LE4-SI
  * POO pour l'optimisation.
@@ -40,7 +39,7 @@ public class InstanceReader {
      */
     private File instanceFile;
     
-    private final String fileFormat = "vrp";
+    private final String fileFormat = "txt";
     
     /**
      * Constructeur par donnee du chemin du fichier d'instance.
@@ -71,17 +70,38 @@ public class InstanceReader {
             FileReader f = new FileReader(this.instanceFile.getAbsolutePath());
             BufferedReader br = new BufferedReader(f);
             
-            Instance instance = new Instance(this.instanceFile.getName());
+            int id = 1;
+            
+            String instanceName = this.instanceFile.getName();
+            instanceName = instanceName.replace("."+this.fileFormat, "");
             
             int nbPaires = this.lireInt(br);
             int nbAltruistes = this.lireInt(br);
             int maxCycle = this.lireInt(br);
             int maxChaine = this.lireInt(br);
             
-            Map<Integer,Participant> participants = lireParticipants(br);
+            // System.out.println("nbPaires : " + nbPaires);
+            // System.out.println("nbAltruistes : " + nbAltruistes);
+            
+            int[][] matriceDeCorrelation = this.lireMatrice(br, nbAltruistes ,nbPaires);
+            
+            // this.printMatrice(matriceDeCorrelation);
+            
+            Instance instance = new Instance( instanceName, matriceDeCorrelation, maxCycle, maxChaine );
+            
+            for (int i = 0; i < nbAltruistes; i++, id++) {
+                Altruiste a = new Altruiste(id);
+                instance.ajouterParticipant(a);
+            }
+            
+            for (int i = 0; i < nbPaires; i++, id++) {
+                Paire p = new Paire(id);
+                instance.ajouterParticipant(p);
+            }
             
             br.close();
             f.close();
+            
             return instance;
         } catch (FileNotFoundException ex) {
             throw new FileExistException(instanceFile.getName());
@@ -130,23 +150,55 @@ public class InstanceReader {
         return Integer.parseInt(s);
     }
     
-    private Map<Integer,Participant> lireParticipants(BufferedReader br) throws IOException {
-        Map<Integer,Participant> ps = new LinkedHashMap<>();
-        String line = this.getDataLine(br);
+    /**
+     * 
+     * @param br
+     * @param nbAltruistes
+     * @param nbPaires
+     * @return
+     * @throws IOException 
+     */
+    private int[][] lireMatrice(BufferedReader br, int nbAltruistes, int nbPaires) throws IOException {
+        int[][] matrice = new int[nbAltruistes + nbPaires][nbPaires];
         
-        while (line != null) {
-            Participant p = this.lireUnParticipant(line);
-            ps.put(p.getId(), p);
-            line = this.getDataLine(br);
+        for(int i = 0; i < matrice.length; i++ ){
+            matrice[i] = lireLigneMatrice(br, nbPaires);
         }
         
-        return ps;
+        return matrice;
     }
     
-    private Participant lireUnParticipant(String line) throws IOException, NumberFormatException {
-        Participant p;
+    /**
+     * 
+     * @param br
+     * @param nbColonnes
+     * @return
+     * @throws IOException 
+     */
+    private int[] lireLigneMatrice(BufferedReader br, int nbColonnes) throws IOException {
+        int[] res = new int[nbColonnes] ;
+        String ligne = this.getDataLine(br);
+        String[] values = ligne.split("\t");
         
-        return p;
+        for (int i = 0; i < values.length; i++) {
+            res[i] = Integer.parseInt( values[i] );
+        }
+        
+        return res;
+    }
+    
+    /**
+     * affiche la matrice de correlation
+     * @param m 
+     */
+    private void printMatrice(int[][] m ) {
+        System.out.println("Matrice (" + m.length + ","+ m[0].length + "): " );
+        for (int i = 0; i < m.length; i++) {
+            for (int j = 0; j < m[i].length; j++) {
+                System.out.print(m[i][j] + "\t");
+            }
+            System.out.println("");
+        }
     }
     
     
@@ -155,13 +207,36 @@ public class InstanceReader {
      * @param args 
      */
     public static void main(String[] args) {
+        File folder = new File("instancesInitiales");
+        File[] listOfFiles = folder.listFiles();
+        for (File file : listOfFiles) {
+            if (file.isFile()) {
+                try {
+                    // TO CHECK : constructeur de InstanceReader
+                    InstanceReader reader = new InstanceReader(file.getAbsolutePath());
+                    // TO CHECK : lecture d'une instance avec la classe InstanceReader
+                    Instance i = reader.readInstance();
+                    System.out.println(i.toString());
+                } catch (ReaderException ex) {
+                    System.out.println("L'instance " + file.getAbsolutePath()
+                            + " n'a pas pu etre lue correctement");
+                }
+            }
+        }
+        
+        /*
         try {
-            InstanceReader reader = new InstanceReader("instances/A-n32-k5.vrp");
-            reader.readInstance();
+            
+            
+            InstanceReader reader = new InstanceReader("instancesInitiales/KEP_p9_n0_k3_l0.txt");
+            Instance i = reader.readInstance();
             System.out.println("Instance lue avec succes !");
-            System.out.println("Depot : ");
+            System.out.println("Instance " + i.getNom() + " :");
+            System.out.println(i.toString());
+            
         } catch (ReaderException ex) {
             System.out.println(ex.getMessage());
         }
+        */
     }
 }
