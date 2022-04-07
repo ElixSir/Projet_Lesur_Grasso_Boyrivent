@@ -6,6 +6,8 @@
 package ensemble;
 
 import instance.reseau.Paire;
+import java.io.PrintWriter;
+import java.util.LinkedList;
 
 /**
  *
@@ -41,5 +43,15 @@ public class Cycle extends Echanges {
         
         return true;
     }
-    
+
+    public void printCycle(PrintWriter ecriture) {
+        String s = "";
+
+        for (int j = 0; j < paires.size() - 1; j++) {
+            Paire paire = paires.get(j);
+            s += paire.getId() + "\t";
+        }
+
+        ecriture.print(s);
+    }
 }

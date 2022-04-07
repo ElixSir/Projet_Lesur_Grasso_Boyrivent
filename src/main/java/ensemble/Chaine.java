@@ -7,6 +7,7 @@ package ensemble;
 
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 
 /**
@@ -62,6 +63,17 @@ public class Chaine extends Echanges {
         this.paires.add(p);
         
         return true;
+    }
+
+    public void printChaine(PrintWriter ecriture) {
+        
+        String s = this.altruiste + "\t";
+        for (int j = 0; j < paires.size() - 1; j++) {
+            Paire paire = paires.get(j);
+            s += paire.getId() + "\t";
+        }
+
+        ecriture.print(s);
     }
     
     

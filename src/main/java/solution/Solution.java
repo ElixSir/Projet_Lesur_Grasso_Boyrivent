@@ -8,6 +8,7 @@ import ensemble.Chaine;
 import ensemble.Cycle;
 import instance.Instance;
 import instance.reseau.Paire;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -47,14 +48,6 @@ public class Solution {
     public int hashCode() {
         int hash = 3;
         return hash;
-    }
-
-    public LinkedList<Chaine> getChaines() {
-        return this.chaines;
-    }
-
-    public LinkedList<Cycle> getCycles() {
-        return this.cycles;
     }
 
     public Instance getInstance() {
@@ -124,7 +117,66 @@ public class Solution {
                 + "\n\tchaines=" + chaines 
                 + "\n\tcycles=" + cycles + '}';
     }
-      
+
+    public void printSolution(PrintWriter ecriture) {
+        // Cout total de la solution
+        ecriture.println("// Cout total de la solution");
+        ecriture.println(this.coutTotal);
+        // Description de la solution
+        // Cycles
+        ecriture.println("// Description de la solution");
+        ecriture.println("// Cycles");
+        printCycles(ecriture); //Affiches les donneurs des différents cycles
+        ecriture.print("\n");
+        // Chaines
+        ecriture.print("// Chaines");
+        printChaines(ecriture); //Affiches les donneurs des différentes chaines
+    }
     
+    /**
+     * //Affiches les donneurs des différents cycles de la solution
+     *
+     * @param sol
+     * @param ecriture
+     */
+    private void printCycles(PrintWriter ecriture) {
+        if (this.cycles != null) {
+
+            for (int i = 0; i < cycles.size(); i++) {
+                Cycle cycle = cycles.get(i);
+                cycle.printCycle(ecriture);
+                
+            }
+        }
+
+    }
+    
+    /**
+     * //Affiches les donneurs des différentes chaines de la solution
+     *
+     * @param sol
+     * @param ecriture
+     */
+    private void printChaines(PrintWriter ecriture) {
+        if (this.chaines != null) {
+            for (int i = 0; i < chaines.size(); i++) {
+                Chaine chaine = chaines.get(i);
+                chaine.printChaine(ecriture);
+               
+            }
+        }
+
+    }
+      
+    /**
+     * Checker de la class Solution
+     *
+     * @return
+     *
+     * A modifier
+     */
+    public boolean check() {
+        return true;
+    }
 
 }

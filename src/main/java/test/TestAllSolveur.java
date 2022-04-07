@@ -137,21 +137,18 @@ public class TestAllSolveur {
     public void printAllResultats(String nomFichierResultats) {
         PrintWriter ecriture = null;
         try {
-            ecriture = new PrintWriter(nomFichierResultats + ".txt");
-            //printEnTetes(ecriture);
+            ecriture = new PrintWriter(nomFichierResultats + ".csv");
+            printEnTetes(ecriture);
             for (Instance inst : instances) {
-                ecriture.println(inst.getNom());
-                ecriture.print("\n");
                 printResultatsInstance(ecriture, inst);
                 PrintWriter ecritureIndividuelle = new PrintWriter("annexe/" + inst.getNom() + "_sol" + ".txt");
-                printResultatsInstance(ecritureIndividuelle, inst);
+                printResultatsInstanceIndividuelle(ecritureIndividuelle, inst);
                 ecritureIndividuelle.println();
                 
                 if(ecritureIndividuelle != null)
                 {
                     ecritureIndividuelle.close();
                 }
-                ecriture.print("\n");
             }
             ecriture.println();
             printSommeResultats(ecriture);
@@ -187,8 +184,7 @@ public class TestAllSolveur {
      */
     private void printResultatsInstance(PrintWriter ecriture, Instance inst) {
         // TO CHECK : recuperer le nom de l'instance
-        String s;
-        
+        ecriture.print(inst.getNom());
         for (Solveur solveur : solveurs) {
             long start = System.currentTimeMillis();
             // TO CHECK : resolution de l'instance avec le solveur
@@ -196,25 +192,29 @@ public class TestAllSolveur {
             long time = System.currentTimeMillis() - start;
             // TO CHECK : recperer le cout total de la solution, et savoir si
             // la solution est valide
-            // Cout total de la solution
-            ecriture.println("// Cout total de la solution");
-            ecriture.println(sol.getCoutTotal());
-            // Description de la solution
-            // Cycles
-            ecriture.println("// Description de la solution");
-            ecriture.println("// Cycles");
-            printCycles(sol, ecriture); //Affiches les donneurs des différents cycles
-            ecriture.print("\n");
-            // Chaines
-            ecriture.print("// Chaines");
-            printChaines(sol, ecriture); //Affiches les donneurs des différentes chaines
-
-            /*Resultat result = new Resultat(sol.getCoutTotal(), time, sol.check());//ouvrir le checker
+            Resultat result = new Resultat(sol.getCoutTotal(), time, sol.check());
             resultats.put(new InstanceSolveur(inst, solveur), result);
             ecriture.print(";" + result.formatCsv());
-            totalStats.get(solveur).add(result);*/
+            totalStats.get(solveur).add(result);
         }
         ecriture.println();
+    }
+    
+    /**
+     * Cette méthode crée un fichier de solutions individuel 
+     * avec un format adaptée au checker externe
+     *
+     * @param ecriture le writer sur lequel on fait l'ecriture
+     * @param inst l'instane pour laquelle on ecrit les resultats
+     */
+    private void printResultatsInstanceIndividuelle(PrintWriter ecritureIndividuelle, Instance inst) {
+
+        for (Solveur solveur : solveurs) {
+            // TO CHECK : resolution de l'instance avec le solveur
+            Solution sol = solveur.solve(inst);
+            sol.printSolution(ecritureIndividuelle);
+        }
+        ecritureIndividuelle.println();
     }
 
     /**
@@ -236,58 +236,7 @@ public class TestAllSolveur {
         ecriture.println();
     }
 
-    /**
-     * //Affiches les donneurs des différents cycles de la solution
-     * @param sol
-     * @param ecriture 
-     */
-    private void printCycles(Solution sol, PrintWriter ecriture) {
-        String s;
-        if(sol.getCycles() != null)
-        {
-            LinkedList<Cycle> cycles = sol.getCycles();
-
-            for (int i = 0; i < cycles.size(); i++) {
-                s = "";
-                Cycle cycle = cycles.get(i);
-                LinkedList<Paire> paires = cycle.getPaires();
-
-                for (int j = 0; j < paires.size() - 1; j++) {
-                    Paire paire = paires.get(j);
-                    s += paire.getId() + "\t";
-                }
-
-                ecriture.print(s);
-            }
-        }
-        
-    }
-    
-    /**
-     * //Affiches les donneurs des différentes chaines de la solution
-     * @param sol
-     * @param ecriture 
-     */
-    private void printChaines(Solution sol, PrintWriter ecriture) {
-        String s;
-        if (sol.getChaines() != null) {
-            LinkedList<Chaine> chaines = sol.getChaines();
-
-            for (int i = 0; i < chaines.size(); i++) {
-                Chaine chaine = chaines.get(i);
-                s = chaine.getAltruiste() + "\t";
-                LinkedList<Paire> paires = chaine.getPaires();
-
-                for (int j = 0; j < paires.size() - 1; j++) {
-                    Paire paire = paires.get(j);
-                    s += paire.getId() + "\t";
-                }
-
-                ecriture.print(s);
-            }
-        }
-        
-    }
+   
 
     /**
      * Cette classe interne represente le couple instance / solveur
