@@ -37,4 +37,10 @@ public class Transplantation {
     public Participant getDonneur() {
         return donneur;
     }
+    
+    
+    public static void main(String[] args) {
+        
+    }
+    
 }

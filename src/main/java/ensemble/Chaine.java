@@ -43,26 +43,20 @@ public class Chaine extends Echanges {
     public boolean ajouterAltruiste(Altruiste a){
         if(a == null) return false;
         if(this.altruiste != null) return false; // si un altruiste est deja la alors je peut pas l'ajouter
-
+           // ajouter benefice de de l'altruiste
         
         this.altruiste = a;   
         return true;
     }
     
     
-    public boolean ajouterPaire(Paire p){ // si chaine pas pleine et que la paire est pas en double alors on ajoute
-        if(p == null) return false;
-        if(this.paires.size()  >= this.maxChaine ) return false; // si la chaine est pleine alors return
+    public boolean possibleAjouter(){
+        return this.paires.size()  < this.maxChaine;
+    }
+    
+    
+    public static void main(String[] args) {
         
-        for(Paire pa: this.paires){
-            if(pa.equals(p)){
-                return false; // si la paire existe deja je n'ajoute pas
-            }
-        }
-        
-        this.paires.add(p);
-        
-        return true;
     }
 
     public void printChaine(PrintWriter ecriture) {

@@ -42,7 +42,7 @@ public abstract class Participant {
      * @param p
      * @return un bénéfice de -1 si aucune transplantation lui est associé 
      */
-    public int getBeneficeVers( Paire p ) {
+    public int getBeneficeVers( Participant p ) {
         Transplantation t = this.transplantations.get(p);
         
         if( t != null ) {
@@ -84,4 +84,10 @@ public abstract class Participant {
     public String toString() {
         return "{" + "id=" + id + '}';
     }
+    
+    public static void main(String[] args) {
+        
+    }
+    
+    
 }

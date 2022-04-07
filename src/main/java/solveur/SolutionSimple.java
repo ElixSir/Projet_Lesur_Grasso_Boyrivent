@@ -9,8 +9,10 @@ import ensemble.Chaine;
 import instance.Instance;
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;
+import instance.reseau.Participant;
 import io.InstanceReader;
 import io.exception.ReaderException;
+import java.util.LinkedList;
 import solution.Solution;
 
 /**
@@ -24,36 +26,35 @@ public class SolutionSimple implements Solveur{
     }
     
     
-    public void unuseLine(int matrix[][], int line){ // mettre 0 dans la matrice a la ligne donneur pour dire qu'il est fait
-        for(int i=0; i< matrix[line].length; i++){
-            matrix[line][i] = 0;
-        }
-    }
-    
     @Override
     public Solution solve(Instance instance){
         
         Solution soluce = new Solution(instance); // solution 
-       /* int N = 2; // nombre de donneurs altruistes
-        int P = 5; // nombre de paires patient-donneurs
+
         
-        int K = 3; // taille max cycles
-        int L = 3; // taille max chaines
+       // LinkedList<Paire> list = new LinkedList<Paire>(instance.getPaires());
+        //LinkedList<Altruiste> listAltruiste = new LinkedList<Altruiste>(instance.getAltruistes());
         
-        int lignes = N+P; // nombre de lignes du tableau
-        int colones = P; // nombre de colones du tableau
+        LinkedList<Participant> list = new LinkedList<Participant>();
         
-        int matrix[][] = { // matrice de bénéfice
-            {5,-1,-1,-1,-1},
-            {2,-1,-1,-1,-1},
-            {-1,-1,2,-1,-1},
-            {-1,-1,-1,1,-1},
-            {-1,-1,-1,-1,2},
-            {-1, 3,4,-1,-1},
-            {-1,-1,-1,6,-1}
-        };*/
+        for(Participant p: instance.getAltruistes()){
+            list.add(p);
+        }
+        
+        for(Participant p: instance.getPaires()){
+            list.add(p);
+        }
         
         
+        boolean fin = true;
+        
+        while(fin){
+             fin = false;
+            
+            
+            
+            
+        } 
 
         return soluce;
     }

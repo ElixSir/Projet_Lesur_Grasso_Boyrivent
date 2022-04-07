@@ -29,19 +29,14 @@ public class Cycle extends Echanges {
         this.maxCycle = m;
     }
     
-    public boolean ajouterPaire(Paire p){ // si chaine pas pleine et que la paire est pas en double alors on ajoute
-        if(p == null) return false;
-        if(this.paires.size()  >= this.maxCycle ) return false; // si la chaine est pleine alors return
+
+    
+    public boolean possibleAjouter(){
+        return this.paires.size()  < this.maxCycle;
+    }
+ 
+    public static void main(String[] args) {
         
-        for(Paire pa: this.paires){
-            if(pa.equals(p)){
-                return false; // si la paire existe deja je n'ajoute pas
-            }
-        }
-        
-        this.paires.add(p);
-        
-        return true;
     }
 
     public void printCycle(PrintWriter ecriture) {
