@@ -19,7 +19,7 @@ public abstract class Participant {
     /**
      * la clef représente le bénéficiaire
      */
-    private Map<Participant, Transplantation> transplantations;
+    private Map<Paire, Transplantation> transplantations;
     
     public Participant(int id){
         this.id = id;
@@ -42,7 +42,7 @@ public abstract class Participant {
      * @param p
      * @return un bénéfice de -1 si aucune transplantation lui est associé 
      */
-    public int getBeneficeVers( Participant p ) {
+    public int getBeneficeVers( Paire p ) {
         Transplantation t = this.transplantations.get(p);
         
         if( t != null ) {
@@ -55,6 +55,7 @@ public abstract class Participant {
     public int getId() {
         return id;
     }
+    
     @Override
     public int hashCode() {
         int hash = 7;

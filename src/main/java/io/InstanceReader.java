@@ -70,7 +70,6 @@ public class InstanceReader {
             FileReader f = new FileReader(this.instanceFile.getAbsolutePath());
             BufferedReader br = new BufferedReader(f);
             
-            int id = 1;
             
             String instanceName = this.instanceFile.getName();
             instanceName = instanceName.replace("."+this.fileFormat, "");
@@ -87,17 +86,7 @@ public class InstanceReader {
             
             // this.printMatrice(matriceDeCorrelation);
             
-            Instance instance = new Instance( instanceName, matriceDeCorrelation, maxCycle, maxChaine );
-            
-            for (int i = 0; i < nbAltruistes; i++, id++) {
-                Altruiste a = new Altruiste(id);
-                instance.ajouterParticipant(a);
-            }
-            
-            for (int i = 0; i < nbPaires; i++, id++) {
-                Paire p = new Paire(id);
-                instance.ajouterParticipant(p);
-            }
+            Instance instance = new Instance( instanceName, matriceDeCorrelation, nbAltruistes, nbPaires, maxCycle, maxChaine );
             
             br.close();
             f.close();
@@ -225,20 +214,5 @@ public class InstanceReader {
                 }
             }
         }
-        
-        /*
-        try {
-            
-            
-            InstanceReader reader = new InstanceReader("instancesInitiales/KEP_p9_n0_k3_l0.txt");
-            Instance i = reader.readInstance();
-            System.out.println("Instance lue avec succes !");
-            System.out.println("Instance " + i.getNom() + " :");
-            System.out.println(i.toString());
-            
-        } catch (ReaderException ex) {
-            System.out.println(ex.getMessage());
-        }
-        */
     }
 }

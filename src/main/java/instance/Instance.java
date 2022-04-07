@@ -21,36 +21,52 @@ public class Instance {
     private final String nom;
     private final int maxChaines;
     private final int maxCycles;
+    private final int nbAltruistes;
+    private final int nbPaires;
     
-    private final int[][] matriceTransplantations;
     
     /**
      * la clé est l'id de l'altruiste
      */
-    private Map<Integer,Altruiste> altruistes;
+    private final Map<Integer,Altruiste> altruistes;
     /**
      * la clé est l'id de la paire
      */
-    private Map<Integer,Paire> paires;
+    private final Map<Integer,Paire> paires;
     
-    public Instance(String nom, int[][] matriceTransplantations, int maxCycles, int maxChaines) {
+    public Instance(String nom, int[][] matriceTransplantations, int nbAltruistes, int nbPaires, int maxCycles, int maxChaines) {
         this.nom = nom;
         this.maxCycles = maxCycles;
         this.maxChaines = maxChaines;
-        
-        this.matriceTransplantations = matriceTransplantations;
+        this.nbAltruistes = nbAltruistes;
+        this.nbPaires = nbPaires;
         
         this.altruistes = new LinkedHashMap<>();
         this.paires = new LinkedHashMap<>();
+        
+        int id = 1;
+        
+        for (int i = 0; i < nbAltruistes; i++, id++) {
+            Altruiste a = new Altruiste(id);
+            this.ajouterParticipant(a, matriceTransplantations);
+        }
+
+        for (int i = 0; i < nbPaires; i++, id++) {
+            Paire p = new Paire(id);
+            this.ajouterParticipant(p, matriceTransplantations);
+        }
+        
+        /* TODO : CHECK */
     }
     
     /**
      * deux participants ayant le même id ne peuvent être présant 
      * ajoute le participant dans sa collection
      * @param p
+     * @param mTrans matrice de transplantation
      * @return false si non ajouté sinon true
      */
-    public boolean ajouterParticipant( Participant p) {
+    private boolean ajouterParticipant( Participant p, int[][] mTrans ) {
         if( null == p ) return false;
         
         int id = p.getId();
@@ -60,24 +76,25 @@ public class Instance {
         
         if( p instanceof Paire) {
             this.paires.put( id, (Paire) p );
-            creerPaireTransplantation( (Paire) p);
+            creerPaireTransplantation( (Paire) p, mTrans);
         } else if ( p instanceof Altruiste ) {
             this.altruistes.put( id,(Altruiste) p );
-            creerAltruisteTransplantation( (Altruiste) p);
-        }
+            creerAltruisteTransplantation( (Altruiste) p, mTrans);
+        } else 
+            return false;
         
         
         return true;
     }
     
-    private void creerPaireTransplantation(Paire pToAdd) {
+    private void creerPaireTransplantation(Paire pToAdd, int[][] mTrans) {
         int idP = pToAdd.getId();
         
         for (Participant altruiste: this.altruistes.values()) {
 
             int idA = altruiste.getId();
 
-            int benefice = this.getBenefice(idA, idP);
+            int benefice = this.getBenefice(idA, idP, mTrans);
 
             if( benefice != -1) {
                 altruiste.ajouterTransplantation((Paire)pToAdd, benefice);
@@ -88,27 +105,27 @@ public class Instance {
             
             int idDonneur = paire.getId();
                 
-            int benefice = this.getBenefice(idDonneur, idP);
+            int benefice = this.getBenefice(idDonneur, idP, mTrans);
 
             paire.ajouterTransplantation((Paire)pToAdd, benefice);
         }
         
     }
     
-    private void creerAltruisteTransplantation(Altruiste a) {
+    private void creerAltruisteTransplantation(Altruiste a, int[][] mTrans) {
         for (Participant paire : this.paires.values()) {
             int idA = a.getId();
             int idP = paire.getId();
             
-            int benefice = this.getBenefice(idA,idP);
+            int benefice = this.getBenefice(idA,idP, mTrans);
             
             a.ajouterTransplantation( (Paire) paire, benefice );
         }
     }
     
     
-    private int getBenefice(int idAltruiste, int idParticipant) {
-        return this.matriceTransplantations[idAltruiste - 1][idParticipant - this.getNbAltruistes() - 1];
+    private int getBenefice(int idAltruiste, int idParticipant, int[][] mTrans) {
+        return mTrans[idAltruiste - 1][idParticipant - this.nbAltruistes - 1];
     }
     
     public int getMaxChaines() {
@@ -124,11 +141,11 @@ public class Instance {
     }
     
     public int getNbAltruistes() {
-        return this.altruistes.size();
+        return this.nbAltruistes;
     }
     
     public int getNbPaires() {
-        return this.paires.size();
+        return this.nbPaires;
     }
     
     public LinkedList<Altruiste> getAltruistes() {
