@@ -29,7 +29,8 @@ public class Solution {
     public Solution(Instance i) {
         this.coutTotal = 0;
         this.instance = i;
-        
+        chaines = new LinkedList<Chaine>(); // a voir
+        cycles = new LinkedList<Cycle>(); // a voir
     }
 
     public Solution(Solution solution) {
@@ -54,14 +55,14 @@ public class Solution {
         return instance;
     }
 
-/* Pas utile pour le moment mais peut le devenir par la suite
+
     public boolean ajouterChaine(Chaine c){
        if(c == null) return true;
         this.chaines.add(c);
         return true;
     }
     
-    public boolean ajouterCycle(Cycle c){
+ /*   public boolean ajouterCycle(Cycle c){
         if(c == null) return false;
         
         this.cycles.add(c);
@@ -70,7 +71,7 @@ public class Solution {
     
     public boolean ajouterPaireCycleExistant(Paire p){
         if(p == null) return false;
-        
+
         //Parcours des tournees existantes
         for(Cycle c : this.cycles){
             if(c.ajouterPaire(p)){

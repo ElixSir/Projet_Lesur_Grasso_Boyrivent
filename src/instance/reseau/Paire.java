@@ -15,6 +15,8 @@ public class Paire extends Participant {
         super(id);
     }
     
-    
+    public static void main(String[] args) {
+        
+    }
     
 }

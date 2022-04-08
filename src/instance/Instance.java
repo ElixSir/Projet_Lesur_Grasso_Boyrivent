@@ -131,11 +131,11 @@ public class Instance {
         return this.paires.size();
     }
     
-    public LinkedList<Participant> getAltruistes() {
+    public LinkedList<Altruiste> getAltruistes() {
         return new LinkedList<>(this.altruistes.values());
     }
     
-    public LinkedList<Participant> getPaires() {
+    public LinkedList<Paire> getPaires() {
         return new LinkedList<>(this.paires.values());
     }
 
@@ -206,6 +206,11 @@ public class Instance {
         }
         
         return s + "]";
+    }
+    
+    
+    public static void main(String[] args) {
+        
     }
     
 }

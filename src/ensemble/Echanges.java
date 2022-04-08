@@ -29,8 +29,27 @@ public abstract class Echanges {
         return new LinkedList<>(paires);
     }
  
+    public boolean ajouterPaire(Paire p){ // si chaine pas pleine et que la paire est pas en double alors on ajoute
+        if(p == null) return false;
+        if(!this.possibleAjouter()) return false; // si la chaine est pleine alors return
+        
+        for(Paire pa: this.paires){
+            if(pa.equals(p)){
+                return false; // si la paire existe deja je n'ajoute pas
+            }
+        }
+        
+        // Ajouter benefice de la paire
+        
+        this.paires.add(p);
+        
+        return true;
+    }
     
+    public abstract boolean possibleAjouter();
 
-    
+    public static void main(String[] args) {
+        
+    }
     
 }

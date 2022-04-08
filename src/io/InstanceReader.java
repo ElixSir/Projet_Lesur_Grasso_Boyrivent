@@ -184,6 +184,7 @@ public class InstanceReader {
             res[i] = Integer.parseInt( values[i] );
         }
         
+
         return res;
     }
     
@@ -199,6 +200,7 @@ public class InstanceReader {
             }
             System.out.println("");
         }
+        
     }
     
     

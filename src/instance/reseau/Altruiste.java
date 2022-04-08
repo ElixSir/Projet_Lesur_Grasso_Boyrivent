@@ -16,4 +16,10 @@ public class Altruiste extends Participant{
     }
     
     
+    public static void main(String[] args) {
+        
+    }
+    
+    
+    
 }
