@@ -81,7 +81,12 @@ public class TestAllSolveur {
         instances = new ArrayList<>();
         this.resultats = new HashMap<>();
         this.addSolveurs();
-        this.readNomInstances();
+        if (new File(pathRepertoire).listFiles() == null) {
+            this.readNomInstance();
+        }
+        else{
+            this.readNomInstances();
+        }
         this.totalStats = new HashMap<>();
         for (Solveur solveur : solveurs) {
             totalStats.put(solveur, new Resultat());
@@ -126,22 +131,44 @@ public class TestAllSolveur {
                 }
             }
         }
+        
+        
     }
 
+    /**
+     * Lecture de l'instance à tester. Ces instances se
+     * trouvent dans le repertoire pathRepertoire. Les instances sont lues et
+     * chargees en memoire.
+     */
+    private void readNomInstance() {
+        File file = new File(pathRepertoire);
+
+        if (file.isFile()) {
+            try {
+                // TO CHECK : constructeur de InstanceReader
+                InstanceReader reader = new InstanceReader(file.getAbsolutePath());
+                // TO CHECK : lecture d'une instance avec la classe InstanceReader
+                instances.add(reader.readInstance());
+            } catch (ReaderException ex) {
+                System.out.println("L'instance " + file.getAbsolutePath()
+                        + " n'a pas pu etre lue correctement");
+            }
+        }
+    }
     /**
      * Affichage de tous les resultats. Les resultats sont affiches dans un
      * fichier csv avec separateur ';'.
      *
      * @param nomFichierResultats nom du fichier de resultats
      */
-    public void printAllResultats(String nomFichierResultats) {
+    public void printAllResultats(String nomFichierResultats, String destinationSol) {
         PrintWriter ecriture = null;
         try {
             ecriture = new PrintWriter(nomFichierResultats + ".csv");
             printEnTetes(ecriture);
             for (Instance inst : instances) {
                 printResultatsInstance(ecriture, inst);
-                PrintWriter ecritureIndividuelle = new PrintWriter("annexe/" + inst.getNom() + "_sol" + ".txt");
+                PrintWriter ecritureIndividuelle = new PrintWriter(destinationSol + "/" + inst.getNom() + "_sol" + ".txt");
                 printResultatsInstanceIndividuelle(ecritureIndividuelle, inst);
                 ecritureIndividuelle.println();
                 
@@ -236,7 +263,6 @@ public class TestAllSolveur {
         ecriture.println();
     }
 
-   
 
     /**
      * Cette classe interne represente le couple instance / solveur
@@ -389,7 +415,7 @@ public class TestAllSolveur {
      */
     public static void main(String[] args) {
         TestAllSolveur test = new TestAllSolveur("instancesInitiales");
-        test.printAllResultats("results");
+        test.printAllResultats("results", "annexe/");
     }
 
 }
