@@ -1,3 +1,5 @@
 #delete xml files 
 /target/
 /annexe/
+/dist/
+/build/
