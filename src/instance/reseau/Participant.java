@@ -56,7 +56,7 @@ public abstract class Participant {
         return id;
     }
 
-    public Map<Participant, Transplantation> getTransplantations() {
+    public Map<Paire, Transplantation> getTransplantations() {
         return transplantations;
     }
     
