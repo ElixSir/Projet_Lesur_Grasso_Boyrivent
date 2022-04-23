@@ -7,11 +7,14 @@ package solution;
 import ensemble.Chaine;
 import ensemble.Cycle;
 import instance.Instance;
+import instance.reseau.Altruiste;
 import instance.reseau.Paire;
 import java.io.PrintWriter;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
+import javax.print.attribute.standard.MediaSize;
 
 
 
@@ -21,99 +24,149 @@ import java.util.Objects;
  */
 public class Solution {
 
-    private int coutTotal;
+    private int beneficeTotal;
     private Instance instance;
-    private LinkedList<Chaine> chaines;
+    // private LinkedList<Chaine> chaines;
+    
+    private Map<Altruiste,Chaine> chaines;
     private LinkedList<Cycle> cycles;
 
     public Solution(Instance i) {
-        this.coutTotal = 0;
+        this.beneficeTotal = 0;
         this.instance = i;
-        chaines = new LinkedList<Chaine>(); // a voir
-        cycles = new LinkedList<Cycle>(); // a voir
+        chaines = new LinkedHashMap(); // a voir
+        cycles = new LinkedList(); // a voir
     }
-
+/*
     public Solution(Solution solution) {
-        this.coutTotal = solution.coutTotal;
+        this.beneficeTotal = solution.beneficeTotal;
         this.instance = solution.instance;
         chaines = new LinkedList<Chaine>(); // a voir
-        cycles = new LinkedList<Cycle>(); // a voir
-       
+        cycles = new LinkedList<Cycle>(); // a voir  
     }
+*/
+    public boolean ajouterAltruisteNouvelleChaine(Altruiste a) {
+        if( null == a ) return false;
+        
+        Chaine c = new Chaine( this.instance, a );
+        this.chaines.put(a, c);
+        
+        return true;
+    }
+    
+    
+    public boolean ajouterPaireNouveauCycle(Paire p){
+        if(p == null) return false;
+        
+        Cycle c = new Cycle( this.instance );
+        
+        if(c.ajouterPaire(p)){
+            this.cycles.add(c);
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public boolean ajouterPaireChaine(Paire p){
+        if( null == p ) return false;
+        
+        int benefice = 0;
+        
+        for(Chaine c : this.chaines.values()){
+            
+            benefice = c.getBeneficeTotal();
+            
+            if(c.ajouterPaire(p)){
+                
+                this.beneficeTotal += c.getBeneficeTotal() - benefice;
+                
+                return true;
+            }
+        }
 
+        return false;
+    }
+    
+    public boolean ajouterPaireCycle(Paire p){
+        if(null == p) return false;
+        
+        int benefice = 0;
+
+        for(Cycle c : this.cycles){
+            
+            benefice = c.getBeneficeTotal();
+            
+            if(c.ajouterPaire(p)){
+                
+                this.beneficeTotal += c.getBeneficeTotal() - benefice;
+                
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    public boolean ajouterPaireLastCycle(Paire p) {
+        if(null == p || this.cycles.isEmpty()) return false;
+        
+        int benefice = 0;
+        
+        Cycle c = this.cycles.getLast();
+        
+        benefice = c.getBeneficeTotal();
+        
+        if(c.ajouterPaire(p)) {
+            
+            this.beneficeTotal += c.getBeneficeTotal() - benefice;
+            
+            return true;
+        }
+
+        return false;
+    }
+    
+    public boolean ajouterPaireChaineByAltruiste(Altruiste a,Paire p) {
+        if(null == p || null == a) return false;
+        if( !this.chaines.containsKey(a) ) return false;
+        
+        Chaine c = this.chaines.get(a);
+        int benefice = c.getBeneficeTotal();
+        
+        if(c.ajouterPaire(p)) {
+            this.beneficeTotal += c.getBeneficeTotal() - benefice;
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public boolean ajouterNouveauCycle(LinkedList<Paire> cycle) {
+        if( !Cycle.checkCycleValide(cycle) ) return false;
+        
+        Cycle c = new Cycle(instance, cycle);
+        
+        this.cycles.add(c);
+        
+        this.beneficeTotal += Cycle.beneficeTotalCycle(cycle);
+                
+        return true;
+    }
+    
     public int getCoutTotal() {
-        return coutTotal;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        return hash;
+        return beneficeTotal;
     }
 
     public Instance getInstance() {
         return instance;
     }
-
-
-    public boolean ajouterChaine(Chaine c){
-       if(c == null) return true;
-        this.chaines.add(c);
-        return true;
-    }
     
- /*   public boolean ajouterCycle(Cycle c){
-        if(c == null) return false;
-        
-        this.cycles.add(c);
-        return true;
-    }*/
-    
-    public boolean ajouterPaireCycleExistant(Paire p){
-        if(p == null) return false;
-
-        //Parcours des tournees existantes
-        for(Cycle c : this.cycles){
-            if(c.ajouterPaire(p)){
-                // penser a mettre a jour le cout ici
-                return true;
-            }
-        }
-
-        return false;
-    }
-    
-    
-    public boolean ajouterPaireNouveauCycle(Paire p, int taillecycle){
-        if(p == null) return false;
-        
-        Cycle nouveauCycle = new Cycle(taillecycle);
-        if(nouveauCycle.ajouterPaire(p)){ 
-             // penser a mettre a jour le cout ici
-            this.cycles.add(nouveauCycle);
-            return true;
-        }
-        return false;
-    }
-    
-      public boolean ajouterPaireChaineExistante(Paire p){
-        if(p == null) return false;
-        
-        //Parcours des tournees existantes
-        for(Chaine c : this.chaines){
-            if(c.ajouterPaire(p)){
-                // penser a mettre a jour le cout ici
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     @Override
     public String toString() {
         return "Solution" 
-                + "\n\tcoutTotal=" + coutTotal 
+                + "\n\tbeneficeTotal=" + this.beneficeTotal 
                 + "\n\tinstance=" + instance 
                 + "\n\tchaines=" + chaines 
                 + "\n\tcycles=" + cycles + '}';
@@ -122,7 +175,7 @@ public class Solution {
     public void printSolution(PrintWriter ecriture) {
         // Cout total de la solution
         ecriture.println("// Cout total de la solution");
-        ecriture.println(this.coutTotal);
+        ecriture.println(this.beneficeTotal);
         // Description de la solution
         // Cycles
         ecriture.println("// Description de la solution");
@@ -160,11 +213,18 @@ public class Solution {
      */
     private void printChaines(PrintWriter ecriture) {
         if (this.chaines != null) {
+            
+            for (Altruiste altruiste : this.chaines.keySet()) {
+                Chaine chaine = chaines.get(altruiste);
+                chaine.printChaine(ecriture);
+            }
+            /*
             for (int i = 0; i < chaines.size(); i++) {
                 Chaine chaine = chaines.get(i);
                 chaine.printChaine(ecriture);
                
             }
+            */
         }
 
     }
@@ -177,7 +237,94 @@ public class Solution {
      * A modifier
      */
     public boolean check() {
-        return true;
+        boolean checker = true;
+        int nbTrouneeNotCheck = this.nbEchangesNotChecked();
+        int coutTotalSolution = beneficeTotalSolution();
+        
+        if( nbTrouneeNotCheck != 0 ) {
+            System.err.println("[CHECK - Solution] : " + nbTrouneeNotCheck + " échnages(s) non valides");
+            checker = false;
+        }
+        
+        if(coutTotalSolution != this.beneficeTotal) {
+            System.err.println("[CHECK - Solution] : Le bénéfice totale de la solution n'est pas correcte : ( classe : " + this.beneficeTotal + ", calculé : " +  coutTotalSolution + " )");
+            checker = false;
+        }
+        
+        checker = checker && uniqParticipantInEchanges();
+        
+        return checker;
     }
-
+    
+    private int nbEchangesNotChecked() {
+        int res = 0;
+        
+        for (Cycle cycle : this.cycles) {
+            if(!cycle.check()) res++;
+        }
+        
+        for (Chaine c : this.chaines.values()) {
+            if(!c.check()) res++;
+        }
+        
+        return res;
+    }
+    
+    private int beneficeTotalSolution() {
+        int benef = 0;
+        
+        for (Cycle cycle : this.cycles) {
+            benef += cycle.getBeneficeTotal();
+        }
+        
+        for (Chaine c : this.chaines.values()) {
+            benef += c.getBeneficeTotal();
+        }
+        
+        return benef;
+    }
+    
+    private boolean uniqParticipantInEchanges() {
+        boolean checker = true;
+        
+        List<Altruiste> altruistes = this.instance.getAltruistes();
+        List<Paire> paires = this.instance.getPaires();
+        
+        for (Chaine c : this.chaines.values()) {
+            if (! altruistes.remove(c.getAltruiste())){
+                System.err.println("[CHECK - Solution] : L'altruiste est déjà présent dans la chaine :\n\t" + c.getAltruiste().toString() );
+                checker = false;
+            }
+        }
+        
+        if(! altruistes.isEmpty()) {
+            System.err.println("[CHECK - Solution] : Tout les altruistes ne sont pas présents dans la solution : " + altruistes.size() );
+            checker = false;
+        }
+        
+        for (Chaine c : this.chaines.values()) {
+            for (Paire paire : c.getPaires()) {
+                if (! paires.remove(paire)){
+                    System.err.println("[CHECK - Solution] : La paire est déjà présente dans la chaine :\n\t" + paire );
+                    checker = false;
+                }
+            }
+        }
+        
+        for (Cycle cycle : this.cycles) {
+            for (Paire paire : cycle.getPaires()) {
+                if (! paires.remove(paire)){
+                    System.err.println("[CHECK - Solution] : La paire est déjà présente dans le cyle :\n\t" + paire );
+                    checker = false;
+                }
+            }
+        }
+        
+        if(! paires.isEmpty()) {
+            System.err.println("[CHECK - Solution] : Toutes les paires ne sont pas présentes dans la solution : " + paires.size() );
+            checker = false;
+        }
+        
+        return checker;
+    }
 }

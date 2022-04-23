@@ -7,6 +7,9 @@ package instance;
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;
 import instance.reseau.Participant;
+import instance.reseau.Transplantation;
+import io.InstanceReader;
+import io.exception.ReaderException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -48,15 +51,18 @@ public class Instance {
         
         for (int i = 0; i < nbAltruistes; i++, id++) {
             Altruiste a = new Altruiste(id);
-            this.ajouterParticipant(a, matriceTransplantations);
+            this.ajouterParticipant(a);
         }
 
         for (int i = 0; i < nbPaires; i++, id++) {
             Paire p = new Paire(id);
-            this.ajouterParticipant(p, matriceTransplantations);
+            this.ajouterParticipant(p);
         }
         
-        /* TODO : CHECK */
+        this.ajouterTransplantations(matriceTransplantations);
+        
+        /* CHECK */
+        this.check(matriceTransplantations);
     }
     
     /**
@@ -66,7 +72,7 @@ public class Instance {
      * @param mTrans matrice de transplantation
      * @return false si non ajouté sinon true
      */
-    private boolean ajouterParticipant( Participant p, int[][] mTrans ) {
+    private boolean ajouterParticipant( Participant p) {
         if( null == p ) return false;
         
         int id = p.getId();
@@ -76,10 +82,8 @@ public class Instance {
         
         if( p instanceof Paire) {
             this.paires.put( id, (Paire) p );
-            creerPaireTransplantation( (Paire) p, mTrans);
         } else if ( p instanceof Altruiste ) {
             this.altruistes.put( id,(Altruiste) p );
-            creerAltruisteTransplantation( (Altruiste) p, mTrans);
         } else 
             return false;
         
@@ -87,45 +91,45 @@ public class Instance {
         return true;
     }
     
-    private void creerPaireTransplantation(Paire pToAdd, int[][] mTrans) {
-        int idP = pToAdd.getId();
+    private void ajouterTransplantations(int[][] matriceTransplantation) {
         
-        for (Participant altruiste: this.altruistes.values()) {
-
-            int idA = altruiste.getId();
-
-            int benefice = this.getBenefice(idA, idP, mTrans);
-
-            if( benefice != -1) {
-                altruiste.ajouterTransplantation((Paire)pToAdd, benefice);
+        int idA, idP, benefice;
+        
+        for (Altruiste a : this.altruistes.values()) {
+            
+            idA = a.getId();
+            
+            for (Paire p : this.paires.values()) {
+            
+                idP = p.getId();
+                benefice = this.getBenefice(idA, idP, matriceTransplantation);
+                
+                if(benefice >= 0) {
+                    a.ajouterTransplantation(p, benefice);
+                }
             }
         }
         
-        for (Participant paire : this.paires.values()) {
+        for (Paire donneur : this.paires.values()) {
             
-            int idDonneur = paire.getId();
+            idA = donneur.getId();
+            
+            for (Paire receveur : this.paires.values()) {
+            
+                idP = receveur.getId();
+                benefice = this.getBenefice(idA, idP, matriceTransplantation);
                 
-            int benefice = this.getBenefice(idDonneur, idP, mTrans);
-
-            paire.ajouterTransplantation((Paire)pToAdd, benefice);
-        }
-        
-    }
-    
-    private void creerAltruisteTransplantation(Altruiste a, int[][] mTrans) {
-        for (Participant paire : this.paires.values()) {
-            int idA = a.getId();
-            int idP = paire.getId();
-            
-            int benefice = this.getBenefice(idA,idP, mTrans);
-            
-            a.ajouterTransplantation( (Paire) paire, benefice );
+                if(benefice >= 0) {
+                    donneur.ajouterTransplantation(receveur, benefice);
+                }
+            }
         }
     }
     
     
-    private int getBenefice(int idAltruiste, int idParticipant, int[][] mTrans) {
-        return mTrans[idAltruiste - 1][idParticipant - this.nbAltruistes - 1];
+    private int getBenefice(int idDonneur, int idReceveur, int[][] mTrans) {
+        // System.out.println("i: " + (idDonneur - 1) + ", j: " + (idReceveur- this.nbAltruistes - 1));
+        return mTrans[idDonneur - 1][idReceveur - this.nbAltruistes - 1];
     }
     
     public int getMaxChaines() {
@@ -146,6 +150,10 @@ public class Instance {
     
     public int getNbPaires() {
         return this.nbPaires;
+    }
+    
+    public Paire getPaireById(int id) {
+        return this.paires.get(id);
     }
     
     public LinkedList<Altruiste> getAltruistes() {
@@ -225,9 +233,77 @@ public class Instance {
         return s + "]";
     }
     
-    
-    public static void main(String[] args) {
+    public boolean check(int[][] matriceTransplantations) {
+        boolean checker = true;
+        int checkNbDiffTrans = this.nbParticipantsTransplantationsManquantes( matriceTransplantations);
+        int[][] m = matriceTransplantations.clone();
         
+        if( m[0].length != this.nbPaires) {
+            System.err.println("[CHECK - Instance] : La taille de la matrice ne correspond pas avec le nombre de paires données : ( length : " + m[0].length + ", this.nbPaires : " + this.nbPaires + " )");
+            checker = false;
+        }
+        
+        if( m[0].length != this.paires.size()) {
+            System.err.println("[CHECK - Instance] : La taille de la matrice ne correspond pas avec le nombre de paires ajoutées dans l'instance : ( length : " + m[0].length + ", paires size : " + this.paires.size() + " )");
+            checker = false;
+        }
+        
+        if( this.nbAltruistes != this.altruistes.size()) {
+            System.err.println("[CHECK - Instance] : Le nombre d'altruistes données ne correspond pas avec le nombre d'altruistes ajoutés dans l'instance : ( matrice length : " + m.length + ", altruistes size : " + this.altruistes.size() + " )");
+            checker = false;
+        }
+        
+        if( checkNbDiffTrans > 0 ) {
+            System.err.println("[CHECK - Instance] : " + checkNbDiffTrans + " participant(s) n'ont pas toutes leur(s) transplantations");
+            checker = false;
+        }
+        
+        return checker;
     }
     
+    private int nbParticipantsTransplantationsManquantes(int[][] matriceTransplantations) {
+        int[][] m = matriceTransplantations.clone();
+        int nbParti = 0;
+        
+        for (Altruiste a : this.altruistes.values()) {
+            int n = 0;
+            for (int i = 0; i < m[a.getId() - 1].length; i++) {
+                int t = m[a.getId() - 1][i];
+                if(t >= 0) 
+                    n ++;
+            }
+            
+            if(a.getTransplantations().size() != n) {
+                nbParti++;
+            }
+        }
+        
+        for (Paire p : this.paires.values()) {
+            int n = 0;
+            for (int i = 0; i < m[p.getId() - 1].length; i++) {
+                int t = m[p.getId() - 1][i];
+                if(t >= 0) 
+                    n ++;
+            }
+            
+            if(p.getTransplantations().size() != n) {
+                nbParti++;
+            }
+        }
+        
+        return nbParti;
+    } 
+    
+    
+    public static void main(String[] args) {
+        // KEP_p9_n1_k3_l3
+        try {
+            InstanceReader read = new InstanceReader("instancesInitiales/KEP_p100_n11_k3_l4.txt");
+            Instance i = read.readInstance();
+
+        } catch (ReaderException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
+    }
 }

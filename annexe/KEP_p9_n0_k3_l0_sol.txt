@@ -1,7 +1,22 @@
 // Cout total de la solution
-0
+38
 // Description de la solution
 // Cycles
-
+1	3	6	7	
+// Chaines// Cout total de la solution
+38
+// Description de la solution
+// Cycles
+1	3	6	7	
+// Chaines// Cout total de la solution
+26
+// Description de la solution
+// Cycles
+3	5	
+// Chaines// Cout total de la solution
+42
+// Description de la solution
+// Cycles
+1	4	2	3	
 // Chaines
 

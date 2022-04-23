@@ -6,6 +6,7 @@
 package instance.reseau;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -50,6 +51,10 @@ public abstract class Participant {
         }
         
         return -1;
+    }
+    
+    public LinkedList<Transplantation> getTransplantations() {
+        return new LinkedList(this.transplantations.values());
     }
 
     public int getId() {

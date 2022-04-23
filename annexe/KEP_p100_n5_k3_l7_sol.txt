@@ -1,7 +1,22 @@
 // Cout total de la solution
-0
+801
 // Description de la solution
 // Cycles
-
-// Chaines
+30	50	
+// Chaines{id=1}	11	20	23	45	{id=2}	6	{id=3}	37	39	{id=4}	22	25	85	91	{id=5}	7	67	105	// Cout total de la solution
+1144
+// Description de la solution
+// Cycles
+50	
+// Chaines{id=1}	11	20	33	6	{id=2}	35	85	96	89	{id=3}	37	105	25	45	{id=4}	23	{id=5}	30	68	14	// Cout total de la solution
+467
+// Description de la solution
+// Cycles
+10	11	30	50	
+// Chaines{id=1}	{id=2}	{id=3}	{id=4}	{id=5}	// Cout total de la solution
+1474
+// Description de la solution
+// Cycles
+57	85	50	
+// Chaines{id=1}	11	20	33	6	{id=2}	35	105	96	89	{id=3}	37	13	22	12	48	45	{id=4}	23	{id=5}	30	68	14	
 

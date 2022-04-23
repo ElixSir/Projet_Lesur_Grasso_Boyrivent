@@ -7,8 +7,6 @@ package io;
 
 // TO CHECK : import des classes Instance, Client, Depot et Point
 import instance.Instance;
-import instance.reseau.Altruiste;
-import instance.reseau.Paire;
 import io.exception.FileExistException;
 import io.exception.FormatFileException;
 import io.exception.OpenFileException;

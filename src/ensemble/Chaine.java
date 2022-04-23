@@ -8,7 +8,7 @@ package ensemble;
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;
 import java.io.PrintWriter;
-import java.util.LinkedList;
+import instance.Instance;
 
 /**
  *
@@ -18,57 +18,95 @@ public class Chaine extends Echanges {
     private int maxChaine;
     private Altruiste altruiste; 
     
-    public Chaine(int maxChaine){
-        this.maxChaine = maxChaine;
-        altruiste = null; // a voir
+    public Chaine(Instance i){
+        super();
+        this.maxChaine = i.getMaxChaines();
+        altruiste = null;
     }
     
-    public Chaine(int maxChaine, Altruiste altruiste){
-        this.maxChaine = maxChaine;
-        this.altruiste = altruiste; // a voir
+    public Chaine(Instance i, Altruiste altruiste){
+        this(i);
+        this.altruiste = altruiste;
     }
-
+    
+    @Override
+    public int getSize() {
+        return super.getSize() + 1;
+    }
+    
+    @Override
+    public boolean isPaireAjoutable(Paire p) {
+        if( null == p || this.getSize()  >= this.maxChaine ) return false;
+        
+        if( this.getSize() == 1 ) {
+            return this.altruiste.getBeneficeVers(p) >= 0;
+        }
+        
+        Paire pLast = this.getLastPaire();
+        
+        return (pLast.getBeneficeVers(p) >= 0);
+    }
+    
+    @Override
+    public int deltaBenefice(Paire p) {
+                
+        if( this.getSize() == 1 ) {
+            return this.altruiste.getBeneficeVers(p);
+        }
+        
+        Paire pLast = this.getLastPaire();
+        
+        return pLast.getBeneficeVers(p);
+    }
+    
     public int getMaxChaine() {
         return maxChaine;
-    }
-    
-    public void setMaxChaine(int m){
-        this.maxChaine = m;        
     }
 
     public Altruiste getAltruiste() {
         return altruiste;
     }
-    
-    public boolean ajouterAltruiste(Altruiste a){
-        if(a == null) return false;
-        if(this.altruiste != null) return false; // si un altruiste est deja la alors je peut pas l'ajouter
-           // ajouter benefice de de l'altruiste
-        
-        this.altruiste = a;   
-        return true;
-    }
-    
-    
-    public boolean possibleAjouter(){
-        return this.paires.size()  < this.maxChaine;
-    }
-    
-    
-    public static void main(String[] args) {
-        
-    }
 
     public void printChaine(PrintWriter ecriture) {
         
         String s = this.altruiste + "\t";
-        for (int j = 0; j < paires.size() - 1; j++) {
-            Paire paire = paires.get(j);
+        for (int j = 0; j < this.getSize() - 1; j++) {
+            Paire paire = this.get(j);
             s += paire.getId() + "\t";
         }
 
         ecriture.print(s);
     }
-    
-    
+
+    @Override
+    public boolean check() {
+        boolean checker = true;
+        
+        int beneficeTotal = 0;
+        
+        if( this.getSize() > 1) {
+            
+            Altruiste a = this.getAltruiste();
+            Paire p = this.getFirstPaire();
+            beneficeTotal += a.getBeneficeVers(p);
+            
+            for(int i = 1; i < this.getSize() - 1; i++) {
+                Paire pcurr = this.get(i);
+                beneficeTotal += p.getBeneficeVers(pcurr);
+                p = pcurr;
+            }
+        } 
+        
+        if( beneficeTotal != this.getBeneficeTotal()) {
+            System.err.println("[CHECK - Chaine] : Le bénéfice total calculé n'est pas correcte : ( classe : " + this.getBeneficeTotal() + ", calculé : " + beneficeTotal + " )");
+            checker = false;
+        }
+        
+        if( this.getSize() > this.maxChaine ) {
+            System.err.println("[CHECK - Chaine] : La taille totale est supérieur à la capacité : ( taille totale : " + this.getSize() + ", capacité : " + this.maxChaine  + " )" );
+            checker = false;
+        }
+        
+        return checker;
+    }
 }

@@ -23,6 +23,10 @@ import java.util.Map;
 import java.util.Objects;
 // TO CHECK : import des classes Solution, InsertionSimple et Solveur
 import solution.Solution;
+import solveur.ChainesMeilleurBenef;
+import solveur.CycleMeilleurBenef;
+import solveur.InsertionSimple;
+import solveur.LargeCycles;
 import solveur.SolutionSimple;
 import solveur.Solveur;
 
@@ -98,14 +102,29 @@ public class TestAllSolveur {
      */
     private void addSolveurs() {
         // TO CHECK : constructeur par defaut de la classe InsertionSimple
+        /*
+        System.out.println("Solution Simple");
         solveurs.add(new SolutionSimple());
+        */
+        System.out.println("Insertion Simple");
+        solveurs.add(new InsertionSimple());
+        
+        System.out.println("Meilleur Bénéfice Chaine");
+        solveurs.add(new ChainesMeilleurBenef());
+        
+        System.out.println("Meilleur Bénéfice Cycle");
+        solveurs.add(new CycleMeilleurBenef());
+        
+        System.out.println("Large Cycle");
+        solveurs.add(new LargeCycles());
         /*
         Solveur solutionRechercheLocale = new RechercheLocale(solutionSimple);
         solveurs.add(solutionSimple);
         solveurs.add(new InsertionPlusProcheVoisin());
         solveurs.add(new MeilleureInsertion());
         solveurs.add(solutionRechercheLocale);
-        solveurs.add(new RechercheTabou(solutionRechercheLocale));*/
+        solveurs.add(new RechercheTabou(solutionRechercheLocale));
+        */
         // TO ADD : par la suite vous ajouterez ici les autres solveurs a tester
         // solveurs.add(new AutreSolveurATester());
     }
@@ -136,7 +155,7 @@ public class TestAllSolveur {
     }
 
     /**
-     * Lecture de l'instance Ã  tester. Ces instances se
+     * Lecture de l'instance à tester. Ces instances se
      * trouvent dans le repertoire pathRepertoire. Les instances sont lues et
      * chargees en memoire.
      */
@@ -228,8 +247,8 @@ public class TestAllSolveur {
     }
     
     /**
-     * Cette mÃ©thode crÃ©e un fichier de solutions individuel 
-     * avec un format adaptÃ©e au checker externe
+     * Cette méthode crée un fichier de solutions individuel 
+     * avec un format adaptée au checker externe
      *
      * @param ecriture le writer sur lequel on fait l'ecriture
      * @param inst l'instane pour laquelle on ecrit les resultats
