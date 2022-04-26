@@ -109,14 +109,14 @@ public class TestAllSolveur {
         System.out.println("Insertion Simple");
         solveurs.add(new InsertionSimple());
         
-        System.out.println("Meilleur Bénéfice Chaine");
+        /*System.out.println("Meilleur Bénéfice Chaine");
         solveurs.add(new ChainesMeilleurBenef());
         
         System.out.println("Meilleur Bénéfice Cycle");
         solveurs.add(new CycleMeilleurBenef());
         
         System.out.println("Large Cycle");
-        solveurs.add(new LargeCycles());
+        solveurs.add(new LargeCycles());*/
         /*
         Solveur solutionRechercheLocale = new RechercheLocale(solutionSimple);
         solveurs.add(solutionSimple);

@@ -60,11 +60,6 @@ public abstract class Participant {
     public int getId() {
         return id;
     }
-
-    public Map<Paire, Transplantation> getTransplantations() {
-        return transplantations;
-    }
-    
     
     @Override
     public int hashCode() {

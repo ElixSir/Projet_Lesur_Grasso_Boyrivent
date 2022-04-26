@@ -3,20 +3,6 @@
 // Description de la solution
 // Cycles
 5	6	15	25	32	45	
-// Chaines// Cout total de la solution
-563
-// Description de la solution
-// Cycles
-5	6	15	25	32	45	
-// Chaines// Cout total de la solution
-467
-// Description de la solution
-// Cycles
-5	6	25	45	
-// Chaines// Cout total de la solution
-559
-// Description de la solution
-// Cycles
-52	80	6	15	25	45	
 // Chaines
+
 

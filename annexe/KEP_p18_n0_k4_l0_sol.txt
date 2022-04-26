@@ -3,20 +3,6 @@
 // Description de la solution
 // Cycles
 1	3	4	5	7	
-// Chaines// Cout total de la solution
-66
-// Description de la solution
-// Cycles
-1	3	4	5	7	
-// Chaines// Cout total de la solution
-51
-// Description de la solution
-// Cycles
-1	3	16	4	7	
-// Chaines// Cout total de la solution
-39
-// Description de la solution
-// Cycles
-5	16	10	7	
 // Chaines
+
 

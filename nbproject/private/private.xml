@@ -3,7 +3,6 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< Updated upstream
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/ensemble/Echanges.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/test/TestAlgo1.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/instance/Instance.java</file>
@@ -15,12 +14,7 @@
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/io/InstanceReader.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/main/Main.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/instance/reseau/Participant.java</file>
-=======
-            <file>file:/C:/Users/Clem/Documents/NetBeansProjects/projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/LargeCycles.java</file>
-            <file>file:/C:/Users/Clem/Documents/NetBeansProjects/projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/CycleMeilleurBenef.java</file>
-            <file>file:/C:/Users/Clem/Documents/NetBeansProjects/projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/InsertionSimple.java</file>
-            <file>file:/C:/Users/Clem/Documents/NetBeansProjects/projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/ChainesMeilleurBenef.java</file>
->>>>>>> Stashed changes
+            <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/LargeCycles.java</file>
         </group>
     </open-files>
 </project-private>

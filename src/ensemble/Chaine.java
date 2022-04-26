@@ -69,7 +69,7 @@ public class Chaine extends Echanges {
 
     public void printChaine(PrintWriter ecriture) {
         
-        String s = this.altruiste + "\t";
+        String s = this.altruiste.getId() + "\t";
         for (int j = 0; j < this.getSize() - 1; j++) {
             Paire paire = this.get(j);
             s += paire.getId() + "\t";

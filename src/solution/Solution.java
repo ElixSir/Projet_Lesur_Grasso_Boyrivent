@@ -226,19 +226,12 @@ public class Solution {
      * @param ecriture
      */
     private void printChaines(PrintWriter ecriture) {
+        ecriture.print("\n");
         if (this.chaines != null) {
             
-            for (Altruiste altruiste : this.chaines.keySet()) {
-                Chaine chaine = chaines.get(altruiste);
+            for (Chaine chaine : this.chaines.values()) {
                 chaine.printChaine(ecriture);
             }
-            /*
-            for (int i = 0; i < chaines.size(); i++) {
-                Chaine chaine = chaines.get(i);
-                chaine.printChaine(ecriture);
-               
-            }
-            */
         }
 
     }

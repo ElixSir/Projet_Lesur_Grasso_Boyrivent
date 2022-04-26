@@ -3,20 +3,6 @@
 // Description de la solution
 // Cycles
 4	7	8	
-// Chaines{id=1}	2	3	// Cout total de la solution
-49
-// Description de la solution
-// Cycles
-2	6	7	
-// Chaines{id=1}	9	4	// Cout total de la solution
-26
-// Description de la solution
-// Cycles
-4	6	
-// Chaines{id=1}	// Cout total de la solution
-49
-// Description de la solution
-// Cycles
-2	5	3	
-// Chaines{id=1}	9	4	
+// Chaines
+1	2	3	
 
