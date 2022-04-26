@@ -156,16 +156,33 @@ public class Solution {
     }
     
     public void clean() {
+        
+        LinkedList<Altruiste> altruisteSupp = new LinkedList<>();
+        LinkedList<Cycle> cycleSupp = new LinkedList<>();
+        
+        
         for (Altruiste a : this.chaines.keySet()) {
             Chaine c = this.chaines.get(a);
             if(c.getSize() <= 1) 
-                this.chaines.remove(a);
+                //this.chaines.remove(a);
+                altruisteSupp.add(a);
         }
         
         for (Cycle c : this.cycles) {
             if(c.getSize() <= 1) 
-                this.cycles.remove(c);
+                //this.cycles.remove(c);
+                cycleSupp.add(c);
         }
+        
+        
+        for(Altruiste a: altruisteSupp){
+            this.chaines.remove(a);
+        }
+        
+        for(Cycle c: cycleSupp){
+            this.cycles.remove(c);
+        }
+        
         
     }
     

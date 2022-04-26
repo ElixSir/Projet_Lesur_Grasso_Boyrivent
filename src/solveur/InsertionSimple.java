@@ -35,7 +35,7 @@ public class InsertionSimple implements Solveur{
                 }
             } 
         }
-        
+        s.clean();
         return s;
     }
     
