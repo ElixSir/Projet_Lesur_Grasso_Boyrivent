@@ -69,7 +69,7 @@ public class LargeCycles implements Solveur {
         return false;
     }
     
-    private boolean rechercheBestCycleOld(Paire paire,int maxtailleCycle, LinkedList<Paire> cycle, Paire next) {
+    private boolean rechercheBestCycleOld(Paire paire, int maxtailleCycle, LinkedList<Paire> cycle, Paire next) {
         // LinkedList<Paire> cycle = new LinkedList();
         cycle.add(next);
         // this.printCycle(cycle);
