@@ -137,8 +137,6 @@ public class Cycle extends Echanges {
         if( beneficeTotal != this.getBeneficeTotal()) {
             System.err.println(this.getSize() +"[CHECK - Cycle] : Le bénéfice total calculé n'est pas correcte : ( classe : " + this.getBeneficeTotal() + ", calculé : " + beneficeTotal + " )");
             checker = false;
-        } else {
-            //System.out.println("valide : " + beneficeTotal + ", " + this.getSize());
         }
         
         if( this.getSize() > this.maxCycle ) {

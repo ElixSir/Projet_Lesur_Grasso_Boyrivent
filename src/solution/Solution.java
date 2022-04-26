@@ -155,6 +155,20 @@ public class Solution {
         return true;
     }
     
+    public void clean() {
+        for (Altruiste a : this.chaines.keySet()) {
+            Chaine c = this.chaines.get(a);
+            if(c.getSize() <= 1) 
+                this.cycles.remove(a);
+        }
+        
+        for (Cycle c : this.cycles) {
+            if(c.getSize() <= 1) 
+                this.cycles.remove(c);
+        }
+        
+    }
+    
     public int getCoutTotal() {
         return beneficeTotal;
     }
@@ -297,10 +311,12 @@ public class Solution {
             }
         }
         
+        /*
         if(! altruistes.isEmpty()) {
             System.err.println("[CHECK - Solution] : Tout les altruistes ne sont pas présents dans la solution : " + altruistes.size() );
             checker = false;
         }
+        */
         
         for (Chaine c : this.chaines.values()) {
             for (Paire paire : c.getPaires()) {
@@ -320,10 +336,12 @@ public class Solution {
             }
         }
         
+        /*
         if(! paires.isEmpty()) {
             System.err.println("[CHECK - Solution] : Toutes les paires ne sont pas présentes dans la solution : " + paires.size() );
             checker = false;
         }
+        */
         
         return checker;
     }
