@@ -83,7 +83,7 @@ public class CycleMeilleurBenef implements Solveur{
             }
             */
         }
-        
+        s.clean();
         return s;
     }   
 }

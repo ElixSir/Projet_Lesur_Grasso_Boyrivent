@@ -3,18 +3,18 @@
 KEP_p100_n0_k3_l0;563;5;true
 KEP_p100_n11_k3_l13;1 154;0;true
 KEP_p100_n11_k3_l4;1 018;0;true
-KEP_p100_n11_k3_l7;1 139;1;true
+KEP_p100_n11_k3_l7;1 139;0;true
 KEP_p100_n11_k5_l17;1 154;0;true
-KEP_p100_n5_k3_l13;801;1;true
+KEP_p100_n5_k3_l13;801;0;true
 KEP_p100_n5_k3_l4;855;0;true
 KEP_p100_n5_k3_l7;801;0;true
-KEP_p100_n5_k5_l17;801;0;true
+KEP_p100_n5_k5_l17;801;1;true
 KEP_p18_n0_k4_l0;66;0;true
 KEP_p18_n2_k4_l4;43;0;true
 KEP_p50_n0_k3_l0;210;0;true
-KEP_p50_n3_k3_l13;404;0;true
+KEP_p50_n3_k3_l13;404;1;true
 KEP_p50_n3_k3_l4;404;0;true
-KEP_p50_n3_k3_l7;404;1;true
+KEP_p50_n3_k3_l7;404;0;true
 KEP_p50_n3_k5_l17;404;0;true
 KEP_p50_n6_k3_l13;390;0;true
 KEP_p50_n6_k3_l4;390;0;true
@@ -23,4 +23,4 @@ KEP_p50_n6_k5_l17;390;0;true
 KEP_p9_n0_k3_l0;38;0;true
 KEP_p9_n1_k3_l3;40;0;true
 
-SOMME;11 859;8;true
+SOMME;11 859;7;true

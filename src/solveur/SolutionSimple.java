@@ -55,7 +55,7 @@ public class SolutionSimple implements Solveur{
             
             
         } 
-
+        soluce.clean();
         return soluce;
     }
     

@@ -81,7 +81,7 @@ public class InsertionBestLocal implements Solveur{
                     }
                 }
             }
-
+            s.clean();
             return s;
         }
 

@@ -87,7 +87,7 @@ public class ChainesMeilleurBenef implements Solveur{
                 }
             }*/
         }
-        
+        s.clean();
         return s;
     }
     

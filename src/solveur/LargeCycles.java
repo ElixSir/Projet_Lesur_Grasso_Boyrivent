@@ -217,7 +217,7 @@ public class LargeCycles implements Solveur {
                 s.ajouterPaireNouveauCycle(bestP);
             }
         }
-        
+        s.clean();
         return s;
     }
     
