@@ -9,6 +9,8 @@ import instance.reseau.Altruiste;
 import instance.reseau.Paire;
 import java.io.PrintWriter;
 import instance.Instance;
+import instance.reseau.Participant;
+import java.util.LinkedList;
 
 /**
  *
@@ -27,6 +29,23 @@ public class Chaine extends Echanges {
     public Chaine(Instance i, Altruiste altruiste){
         this(i);
         this.altruiste = altruiste;
+    }
+    
+    public static int beneficeTotalChaine(LinkedList<Participant> chaine) {
+        if( null == chaine ) return -1;
+        if( chaine.size() < 2 ) return 0;
+        
+        Participant p = chaine.getFirst(),
+                temp; 
+        int beneficeTotal = 0;
+        
+        for (int i = 1; i < chaine.size(); i++) {
+            temp = chaine.get(i);
+            if( !(temp instanceof Paire) ) return -1;
+            beneficeTotal += p.getBeneficeVers((Paire)temp);
+            p = temp;
+        }
+        return beneficeTotal;
     }
     
     @Override
@@ -75,7 +94,7 @@ public class Chaine extends Echanges {
             s += paire.getId() + "\t";
         }
 
-        ecriture.print(s);
+        ecriture.print(s + "\n");
     }
 
     @Override

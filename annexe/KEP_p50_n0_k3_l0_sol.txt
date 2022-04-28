@@ -2,7 +2,41 @@
 210
 // Description de la solution
 // Cycles
-3	5	
+3	14	
+5	38	
+
+// Chaines
+// Cout total de la solution
+210
+// Description de la solution
+// Cycles
+3	14	
+5	38	
+
+// Chaines
+// Cout total de la solution
+210
+// Description de la solution
+// Cycles
+3	14	
+5	38	
+
+// Chaines
+// Cout total de la solution
+313
+// Description de la solution
+// Cycles
+14	30	42	
+28	38	40	
+
+// Chaines
+// Cout total de la solution
+313
+// Description de la solution
+// Cycles
+14	30	42	
+28	38	40	
+
 // Chaines
 
 

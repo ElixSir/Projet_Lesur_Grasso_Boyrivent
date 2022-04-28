@@ -109,12 +109,12 @@ public class Cycle extends Echanges {
     public void printCycle(PrintWriter ecriture) {
         String s = "";
 
-        for (int j = 0; j < this.getSize() - 1; j++) {
+        for (int j = 0; j < this.getSize(); j++) {
             Paire paire = this.get(j);
             s += paire.getId() + "\t";
         }
 
-        ecriture.print(s);
+        ecriture.print(s + "\n");
     }
 
     @Override

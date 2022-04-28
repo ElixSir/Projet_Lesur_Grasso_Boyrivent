@@ -165,6 +165,7 @@ public class LargeCycles implements Solveur {
         while( ! paires.isEmpty() && bestCycle != null ) {
             
             bestCycle = null;
+            bestBenef = 0;
             
             for (Paire paire : paires) {
             
@@ -217,6 +218,7 @@ public class LargeCycles implements Solveur {
                 s.ajouterPaireNouveauCycle(bestP);
             }
         }
+        
         s.clean();
         return s;
     }
@@ -276,15 +278,18 @@ public class LargeCycles implements Solveur {
     
     public static void main(String[] args) {
         // KEP_p9_n1_k3_l3
+        // KEP_p9_n1_k3_l3
+        // KEP_p100_n11_k5_l17
+        // KEP_p50_n6_k5_l17
         try {
-            InstanceReader read = new InstanceReader("instancesInitiales/KEP_p100_n11_k5_l17.txt");
+            InstanceReader read = new InstanceReader("instancesInitiales/KEP_p50_n6_k5_l17.txt");
             Instance i = read.readInstance();
 
             LargeCycles algoSimple = new LargeCycles();
 
             Solution simple = algoSimple.solve(i);
 
-            //System.out.println("solution valide : " + simple.check());
+            System.out.println("solution valide : " + simple.check());
             
             System.out.println(simple.toString());
 

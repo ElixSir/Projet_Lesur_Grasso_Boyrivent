@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 // TO CHECK : import des classes Solution, InsertionSimple et Solveur
 import solution.Solution;
+import solveur.ArbreSolveur;
 import solveur.ChainesMeilleurBenef;
 import solveur.CycleMeilleurBenef;
 import solveur.InsertionSimple;
@@ -109,14 +110,17 @@ public class TestAllSolveur {
         System.out.println("Insertion Simple");
         solveurs.add(new InsertionSimple());
         
-        /*System.out.println("Meilleur Bénéfice Chaine");
+        System.out.println("Meilleur Bénéfice Chaine");
         solveurs.add(new ChainesMeilleurBenef());
         
         System.out.println("Meilleur Bénéfice Cycle");
         solveurs.add(new CycleMeilleurBenef());
         
         System.out.println("Large Cycle");
-        solveurs.add(new LargeCycles());*/
+        solveurs.add(new LargeCycles());
+        
+        System.out.println("Arbre");
+        solveurs.add(new ArbreSolveur());
         /*
         Solveur solutionRechercheLocale = new RechercheLocale(solutionSimple);
         solveurs.add(solutionSimple);

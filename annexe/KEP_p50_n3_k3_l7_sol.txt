@@ -2,7 +2,44 @@
 404
 // Description de la solution
 // Cycles
-8	
+8	41	
+
 // Chaines
-1	17	33	45	3	5	6	
+1	17	33	45	
+3	5	6	
+// Cout total de la solution
+404
+// Description de la solution
+// Cycles
+8	41	
+
+// Chaines
+1	17	33	45	
+3	5	6	
+// Cout total de la solution
+210
+// Description de la solution
+// Cycles
+6	17	
+8	41	
+
+// Chaines
+// Cout total de la solution
+448
+// Description de la solution
+// Cycles
+17	33	45	
+31	41	43	
+
+// Chaines
+3	5	6	
+// Cout total de la solution
+384
+// Description de la solution
+// Cycles
+31	41	43	
+
+// Chaines
+3	5	6	17	33	
+
 
