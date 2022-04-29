@@ -103,18 +103,18 @@ public class TestAllSolveur {
      */
     private void addSolveurs() {
         // TO CHECK : constructeur par defaut de la classe InsertionSimple
-        /*
-        System.out.println("Solution Simple");
-        solveurs.add(new SolutionSimple());
-        */
-        System.out.println("Insertion Simple");
-        solveurs.add(new InsertionSimple());
         
-        System.out.println("Meilleur Bénéfice Chaine");
+        System.out.println("Meilleur Bï¿½nï¿½fice Chaine");
         solveurs.add(new ChainesMeilleurBenef());
         
-        System.out.println("Meilleur Bénéfice Cycle");
-        solveurs.add(new CycleMeilleurBenef());
+        //System.out.println("Insertion Simple");
+        //solveurs.add(new InsertionSimple());
+        
+        //System.out.println("Meilleur Bï¿½nï¿½fice Chaine");
+        //solveurs.add(new ChainesMeilleurBenef());
+        
+        //System.out.println("Meilleur Bï¿½nï¿½fice Cycle");
+        //solveurs.add(new CycleMeilleurBenef());
         
         System.out.println("Large Cycle");
         solveurs.add(new LargeCycles());
@@ -159,7 +159,7 @@ public class TestAllSolveur {
     }
 
     /**
-     * Lecture de l'instance à tester. Ces instances se
+     * Lecture de l'instance ï¿½ tester. Ces instances se
      * trouvent dans le repertoire pathRepertoire. Les instances sont lues et
      * chargees en memoire.
      */
@@ -251,8 +251,8 @@ public class TestAllSolveur {
     }
     
     /**
-     * Cette méthode crée un fichier de solutions individuel 
-     * avec un format adaptée au checker externe
+     * Cette mï¿½thode crï¿½e un fichier de solutions individuel 
+     * avec un format adaptï¿½e au checker externe
      *
      * @param ecriture le writer sur lequel on fait l'ecriture
      * @param inst l'instane pour laquelle on ecrit les resultats

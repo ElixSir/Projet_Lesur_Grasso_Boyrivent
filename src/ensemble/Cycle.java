@@ -72,6 +72,17 @@ public class Cycle extends Echanges {
         return benefice;
     }
     
+    protected boolean isPaireInserable(int position, Paire p){
+        
+        if(!isPositionInsertionValide(position)) return false;
+        if( this.getSize() >= this.maxCycle ) return false;
+        
+        if(this.deltaCoutInsertion(position, p) >= Integer.MAX_VALUE) return false;
+        
+        
+        return true;
+    }
+    
     @Override
     public boolean isPaireAjoutable(Paire p) {
         if( null == p || this.getSize()  >= this.maxCycle ) return false;
@@ -147,9 +158,28 @@ public class Cycle extends Echanges {
         return checker;
     }
 
+    
+    public int deltaCoutInsertion(int position, Paire paireToAdd){
+        int deltaBenefice = 0;
+                
+        if(this.paires.isEmpty()){
+            //Pas de Benefice en plus car c'est la première paire dans le cycle
+        }
+        else{
+            Paire pPrec = this.getPrec(position);
+            Paire pCour = this.getCurrent(position);
+            
+            deltaBenefice -= pPrec.getBeneficeVers(pCour);
+            deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
+            deltaBenefice += paireToAdd.getBeneficeVers(pCour);
+        }
+        
+        return deltaBenefice;
+    }
+    
     @Override
     public String toString() {
-        String res = "[";
+        String res = "\n[";
         
         LinkedList<Paire> paires = this.getPaires();
         

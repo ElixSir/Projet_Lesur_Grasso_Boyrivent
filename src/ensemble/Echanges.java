@@ -14,8 +14,8 @@ import java.util.LinkedList;
  */
 public abstract class Echanges {
     
-    private int beneficeTotal;
-    private LinkedList<Paire> paires;
+    protected int beneficeTotal;
+    protected LinkedList<Paire> paires;
     
     public Echanges(){
         beneficeTotal = 0;
@@ -31,6 +31,9 @@ public abstract class Echanges {
                 
         return true;
     }
+    
+    protected abstract boolean isPaireInserable(int position, Paire p);
+    
     
     public abstract int deltaBenefice(Paire p);
     
@@ -74,6 +77,28 @@ public abstract class Echanges {
     public int getBeneficeTotal() {
         return beneficeTotal;
     }
+
+    
+    protected boolean isPositionInsertionValide(int position){
+        if(0 <= position && position <= this.getSize()){
+            return true;
+        }
+        return false;
+    }
+    
+    public abstract int deltaCoutInsertion(int position, Paire paireToAdd);  
+        
+    public Paire getPrec(int position){
+        if(!this.isPositionInsertionValide(position)) return null;
+        return this.paires.get(position -1);
+    }
+    
+    public Paire getCurrent(int position){
+        if(!this.isPositionInsertionValide(position)) return null;
+        return this.paires.get(position);
+    }
+    
+        
 
     public LinkedList<Paire> getPaires() {
         return new LinkedList<>(paires);

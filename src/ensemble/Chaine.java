@@ -10,7 +10,9 @@ import instance.reseau.Paire;
 import java.io.PrintWriter;
 import instance.Instance;
 import instance.reseau.Participant;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -56,7 +58,8 @@ public class Chaine extends Echanges {
     @Override
     public boolean isPaireAjoutable(Paire p) {
         if( null == p || this.getSize()  >= this.maxChaine ) return false;
-        
+         
+       
         if( this.getSize() == 1 ) {
             return this.altruiste.getBeneficeVers(p) >= 0;
         }
@@ -86,9 +89,61 @@ public class Chaine extends Echanges {
         return altruiste;
     }
 
+
+    
+    public int deltaCoutInsertion(int position, Paire paireToAdd){
+        if(!this.isPaireAjoutable(paireToAdd)) return Integer.MAX_VALUE;
+        int deltaBenefice = 0;
+                
+        Participant pPrec;
+        Participant pCour;
+        
+        if(this.paires.isEmpty()){
+            deltaBenefice = this.altruiste.getBeneficeVers(paireToAdd);
+        }
+        else{
+            
+            if(position <= 0){
+                pPrec = this.altruiste;
+                pCour = this.getCurrent(position);
+            }
+            
+            
+            else if(position == this.getSize()){
+                pPrec = this.getPrec(position);
+                deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
+                return deltaBenefice;
+            }
+            else{
+                pPrec = this.getPrec(position);
+                pCour = this.getCurrent(position);
+            }
+           
+            deltaBenefice -= pPrec.getBeneficeVers(pCour);
+            deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
+            deltaBenefice += paireToAdd.getBeneficeVers(pCour);
+            
+ 
+        }
+        
+        return deltaBenefice;
+    }
+    
+        protected boolean isPaireInserable(int position, Paire p){
+        
+        if(!isPositionInsertionValide(position)) return false;
+        if( this.getSize() >= this.maxChaine ) return false;
+        
+        if(this.deltaCoutInsertion(position, p) >= Integer.MAX_VALUE) return false;
+        
+        
+        return true;
+    }
+    
+    
     public void printChaine(PrintWriter ecriture) {
         
-        String s = this.altruiste.getId() + "\t";
+        String s =  this.altruiste.getId() + "\t";
         for (int j = 0; j < this.getSize() - 1; j++) {
             Paire paire = this.get(j);
             s += paire.getId() + "\t";
@@ -128,4 +183,19 @@ public class Chaine extends Echanges {
         
         return checker;
     }
+
+    @Override
+    public String toString(){
+           String s = "Chaine{" + "maxChaine=" + maxChaine + ", altruiste=" + altruiste;
+            
+            for(Paire p: this.getPaires()){
+                s+= p.getId()+",";
+            }
+            
+        return s;
+    }
+    
+    
+    
+    
 }

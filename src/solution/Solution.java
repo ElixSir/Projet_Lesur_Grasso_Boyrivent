@@ -199,8 +199,8 @@ public class Solution {
         return "Solution" 
                 + "\n\tbeneficeTotal=" + this.beneficeTotal 
                 + "\n\tinstance=" + instance 
-                + "\n\tchaines=" + chaines 
-                + "\n\tcycles=" + cycles + '}';
+                + "\n\tchaines=" + chaines.toString()
+                + "\n\tcycles=" + cycles.toString() + '}';
     }
 
     public void printSolution(PrintWriter ecriture) {
@@ -247,6 +247,7 @@ public class Solution {
         if (this.chaines != null) {
             
             for (Chaine chaine : this.chaines.values()) {
+                
                 chaine.printChaine(ecriture);
             }
         }
