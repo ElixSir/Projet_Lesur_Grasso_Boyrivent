@@ -1,7 +1,8 @@
 // Cout total de la solution
-66
+0
 // Description de la solution
 // Cycles
+<<<<<<< Updated upstream
 1	10	
 3	16	
 4	11	
@@ -49,4 +50,8 @@
 
 // Chaines
 
+=======
+
+// Chaines
+>>>>>>> Stashed changes
 

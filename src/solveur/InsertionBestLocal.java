@@ -91,13 +91,14 @@ public class InsertionBestLocal implements Solveur{
                 InstanceReader read = new InstanceReader("instancesInitiales/KEP_p100_n11_k3_l4.txt");
                 Instance i = read.readInstance();
 
-                ChainesMeilleurBenef algoSimple = new ChainesMeilleurBenef();
+                InsertionBestLocal algoBestLocal = new InsertionBestLocal();
 
-                Solution simple = algoSimple.solve(i);
+                Solution bestLocal = algoBestLocal.solve(i);
+                
 
-                System.out.println("solution valide : " + simple.check());
+                System.out.println("solution valide : " + bestLocal.check());
 
-                System.out.println(simple.toString());
+                System.out.println(bestLocal.toString());
 
             } catch (ReaderException ex) {
                 System.out.println(ex.getMessage());

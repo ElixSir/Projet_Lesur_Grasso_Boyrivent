@@ -163,7 +163,7 @@ public class Cycle extends Echanges {
         int deltaBenefice = 0;
                 
         if(this.paires.isEmpty()){
-            //Pas de Benefice en plus car c'est la première paire dans le cycle
+            //Pas de Benefice en plus car c'est la premiï¿½re paire dans le cycle
         }
         else{
             Paire pPrec = this.getPrec(position);
