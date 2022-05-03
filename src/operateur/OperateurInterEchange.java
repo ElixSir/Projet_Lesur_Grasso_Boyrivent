@@ -5,6 +5,7 @@
 package operateur;
 
 import ensemble.Echanges;
+import instance.reseau.Paire;
 
 
 
@@ -28,7 +29,7 @@ public abstract class OperateurInterEchange extends OperateurLocal {
     public OperateurInterEchange(Echanges echange, Echanges autreEchange, int positionI, int positionJ) {
         super(echange,positionI, positionJ);
         this.autreEchange = autreEchange;
-        this.paireJ = autreEchange.getCurrent(positionJ);
+        this.paireJ = (Paire) autreEchange.getCurrent(positionJ);
         this.deltaBenefice = this.evalDeltaBenefice();
     }
     

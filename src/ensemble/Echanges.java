@@ -116,7 +116,7 @@ public abstract class Echanges {
         return false;
     }
    
-    
+    protected abstract int getMaxEchange();
     
     public abstract int deltaCoutInsertion(int position, Paire paireToAdd);  
         
@@ -150,7 +150,34 @@ public abstract class Echanges {
 
      public abstract Paire getNext(int position);
         
-    
+        /**
+     * Ins?re dans l'?change si il y a possibilit?
+     *
+     * @param infos
+     * @return
+     */
+    public boolean doInsertion(InsertionPaire infos) {
+        if (infos == null) {
+            return false;
+        }
+        if (!infos.isMouvementRealisable()) {
+            return false;
+        }
+
+        Paire paire = infos.getPaire();
+
+        this.beneficeTotal += infos.getDeltaBenefice();
+        this.paires.add(infos.getPosition(), paire);
+
+        if (!this.check()) {
+            System.out.println("Erreur doInsertion");
+            System.out.println(infos);
+            System.exit(-1); // Si erreur critique on arrete 
+        }
+
+        return true;
+    }
+
 
 
     public LinkedList<Paire> getPaires() {

@@ -29,8 +29,8 @@ public abstract class OperateurLocal extends Operateur{
         super(echange);
         this.positionI = positionI;
         this.positionJ = positionJ;
-        this.paireI = this.echange.getCurrent(positionI);
-        this.paireJ = this.echange.getCurrent(positionJ);
+        this.paireI = (Paire) this.echange.getCurrent(positionI);
+        this.paireJ = (Paire) this.echange.getCurrent(positionJ);
     }
     
     public int getPositionI() {

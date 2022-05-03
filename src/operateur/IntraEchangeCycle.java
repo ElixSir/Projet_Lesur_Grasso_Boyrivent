@@ -45,12 +45,14 @@ public class IntraEchangeCycle extends OperateurIntraEchange {
     @Override
     protected int evalDeltaBenefice() {
         if(echange == null) return Integer.MAX_VALUE;
-        return this.echange.deltaBeneficeEchange(this.positionI, this.positionJ);
+        return 0;
+//return this.echange.deltaBeneficeEchange(this.positionI, this.positionJ);
     }
 
     @Override
     protected boolean doMouvement() {
-        return this.echange.doEchangeCycle(this);
+        return false;
+        //return this.echange.doEchangeCycle(this);
     }
     
 }
