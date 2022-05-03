@@ -8,7 +8,9 @@ package ensemble;
 import instance.reseau.Paire;
 import java.io.PrintWriter;
 import instance.Instance;
+import instance.reseau.Participant;
 import java.util.LinkedList;
+import operateur.InsertionPaire;
 import operateur.IntraEchangeCycle;
 
 /**
@@ -85,7 +87,7 @@ public class Cycle extends Echanges {
     }
     
     @Override
-    public boolean isPaireAjoutable(Paire p) {
+    public boolean isPaireAjoutableFin(Paire p) {
         if( null == p || this.getSize()  >= this.maxCycle ) return false;
         
         if( this.getSize() == 0 ) return true;
@@ -121,7 +123,7 @@ public class Cycle extends Echanges {
     public Paire getNext(int position){
         if(!this.isPositionInsertionValide(position)) return null;
         if(position >= this.paires.size()){
-            return this.paires.get(position - this.paires.size()); // Si on dépasse on reviens au début + n 
+            return this.paires.get(position - this.paires.size()); // Si on dï¿½passe on reviens au dï¿½but + n 
         }
         return this.paires.get(position +1);
     }
@@ -169,15 +171,23 @@ public class Cycle extends Echanges {
 
     
     public int deltaCoutInsertion(int position, Paire paireToAdd){
-        if (!isPositionInsertionValide(position)) return Integer.MAX_VALUE;
+        if (!isPositionInsertionValide(position) || paireToAdd == null) return Integer.MAX_VALUE;
         int deltaBenefice = 0;
                 
         if(this.paires.isEmpty()){
             //Pas de Benefice en plus car c'est la premiï¿½re paire dans le cycle
         }
+        else if(this.getSize() == 1)
+        {
+            Participant pPrec = this.getCurrent(position);
+            Participant pCour = this.getCurrent(position);
+            
+            deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
+            deltaBenefice += paireToAdd.getBeneficeVers(pCour);
+        }
         else{
-            Paire pPrec = this.getPrec(position);
-            Paire pCour = this.getCurrent(position);
+            Participant pPrec = this.getPrec(position);
+            Participant pCour = this.getCurrent(position);
             
             deltaBenefice -= pPrec.getBeneficeVers(pCour);
             deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
@@ -203,5 +213,51 @@ public class Cycle extends Echanges {
         
         return res + ']';
     }
+
+    @Override 
+    protected boolean isPaireInserable(Paire p) {
+
+        for (int i = 0; i < this.getSize(); i++) {
+            if (isPaireInserablePosition(i, p)) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
     
+    
+    @Override
+    protected int getMaxEchange() {
+        return this.maxCycle;
+    }
+    
+    @Override
+    public int getSize() {
+        return this.paires.size();
+    }
+    
+    @Override
+    public Paire getPrec(int position) {
+        
+        if (!this.isPositionInsertionValide(position)) {
+            return null;
+        }
+        if (position == 0) {
+            return this.paires.get(this.getSize()-1);
+        }
+        return this.paires.get(position - 1);
+    }
+    
+    @Override
+    public Participant getCurrent(int position) {
+        if (position == this.getSize()) {
+            position = 0;
+        }
+        if (!this.isPositionInsertionValide(position)) {
+            return null;
+        }
+        return this.paires.get(position);
+    }
 }

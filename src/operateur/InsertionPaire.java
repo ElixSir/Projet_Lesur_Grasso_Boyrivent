@@ -15,9 +15,10 @@ import instance.reseau.Paire;
 public class InsertionPaire extends Operateur {
     
    private int position;
-   private Paire paireToInsert;
+   private Paire paire;
 
     public InsertionPaire() {
+        super();
     }
    
    
@@ -25,7 +26,7 @@ public class InsertionPaire extends Operateur {
     public InsertionPaire(Echanges echange, int position, Paire paireToInsert) {
         super(echange);
         this.position = position;
-        this.paireToInsert = paireToInsert;
+        this.paire = paireToInsert;
         this.deltaBenefice = this.evalDeltaBenefice();
     }
     
@@ -36,14 +37,20 @@ public class InsertionPaire extends Operateur {
     @Override
     protected int evalDeltaBenefice() {
         if(this.echange == null) return Integer.MAX_VALUE;
-        return this.echange.deltaCoutInsertion(this.position, this.paireToInsert);
+        return this.echange.deltaCoutInsertion(this.position, this.paire);
     }
 
     @Override
     protected boolean doMouvement() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.echange.doInsertion(this);
     }
-    
-    
+
+    public Paire getPaire() {
+        return paire;
+    }
+
+    public int getPosition() {
+        return position;
+    }
     
 }

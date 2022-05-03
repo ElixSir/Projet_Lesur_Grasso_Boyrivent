@@ -6,6 +6,7 @@ package solution;
 
 import ensemble.Chaine;
 import ensemble.Cycle;
+import ensemble.Echanges;
 import instance.Instance;
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;
@@ -15,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.print.attribute.standard.MediaSize;
+import operateur.InsertionPaire;
 
 
 
@@ -30,6 +32,7 @@ public class Solution {
     
     private Map<Altruiste,Chaine> chaines;
     private LinkedList<Cycle> cycles;
+    private LinkedList<Echanges> echanges;
 
     public Solution(Instance i) {
         this.beneficeTotal = 0;
@@ -307,6 +310,54 @@ public class Solution {
         }
         
         return benef;
+    }
+    
+    /**
+     * Récupère la meilleure insertion
+     * @param paireToInsert
+     * @return 
+     */
+    public InsertionPaire getMeilleurInsertion(Paire paireToInsert) {
+        InsertionPaire insMeilleur = new InsertionPaire();
+        if (paireToInsert == null) {
+            return insMeilleur;
+        }
+
+        InsertionPaire insActu;
+        for (Chaine c : this.chaines.values()) {
+            insActu = c.getMeilleureInsertion(paireToInsert);
+            if (insActu.isMeilleur(insMeilleur)) {
+                insMeilleur = insActu;
+            }
+        }
+        
+        for (Cycle cy : this.cycles) {
+            insActu = cy.getMeilleureInsertion(paireToInsert);
+            if (insActu.isMeilleur(insMeilleur)) {
+                insMeilleur = insActu;
+            }
+        }
+        return insMeilleur;
+    }
+    
+    /**
+     * Effectue une insertion dans la solution
+     * @param infos
+     * @return 
+     */
+    public boolean doInsertion(InsertionPaire infos) {
+        if (infos == null) {
+            return false;
+        }
+        if (!this.chaines.containsValue(infos.getEchange()) && !this.cycles.contains(infos.getEchange())) {
+            return false;
+        }
+        if (!infos.doMouvementIfRealisable()) {
+            return false;
+        }
+
+        this.beneficeTotal += infos.getDeltaBenefice();
+        return true;
     }
     
     private boolean uniqParticipantInEchanges() {

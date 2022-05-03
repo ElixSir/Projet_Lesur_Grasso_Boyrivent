@@ -53,11 +53,11 @@ public class Chaine extends Echanges {
     
     @Override
     public int getSize() {
-        return super.getSize() + 1;
+        return this.paires.size() + 1;
     }
     
     @Override
-    public boolean isPaireAjoutable(Paire p) {
+    public boolean isPaireAjoutableFin(Paire p) {
         if( null == p || this.getSize()  >= this.maxChaine ) return false;
          
        
@@ -69,6 +69,8 @@ public class Chaine extends Echanges {
         
         return (pLast.getBeneficeVers(p) >= 0);
     }
+    
+    
     
     @Override
     public int deltaBenefice(Paire p) {
@@ -90,56 +92,54 @@ public class Chaine extends Echanges {
         return altruiste;
     }
 
+    @Override
+    protected boolean isPaireInserable(Paire p) {
 
+        for (int i = 0; i < this.getSize()-1; i++) {
+            if (isPaireInserablePosition(i, p)) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
     
     public int deltaCoutInsertion(int position, Paire paireToAdd){
-        if(!this.isPaireAjoutable(paireToAdd)) return Integer.MAX_VALUE;
+        if(!this.isPaireAjoutableFin(paireToAdd)) return Integer.MAX_VALUE;
         int deltaBenefice = 0;
                 
-        Participant pPrec;
-        Participant pCour;
+        Participant pPrec = null;
+        Participant pCour = null;
         
         if(this.paires.isEmpty()){
             deltaBenefice = this.altruiste.getBeneficeVers(paireToAdd);
+            return deltaBenefice;
+        }
+        else if(position == 0){
+            pPrec = this.altruiste;
+            pCour = this.getCurrent(position);
+        }
+        else if(position == this.getSize()-1){
+            pPrec = this.getPrec(position);
+            deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
         }
         else{
-            
-            if(position <= 0){
-                pPrec = this.altruiste;
-                pCour = this.getCurrent(position);
-            }
-            
-            
-            else if(position == this.getSize()){
-                pPrec = this.getPrec(position);
-                deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
-                return deltaBenefice;
-            }
-            else{
-                pPrec = this.getPrec(position);
-                pCour = this.getCurrent(position);
-            }
            
-            deltaBenefice -= pPrec.getBeneficeVers(pCour);
-            deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
-            deltaBenefice += paireToAdd.getBeneficeVers(pCour);
-            
- 
+            pPrec = this.getPrec(position);
+            pCour = this.getCurrent(position);
         }
+        if (pPrec == null)
+        {
+            int size = this.getSize();
+        }
+        deltaBenefice -= pPrec.getBeneficeVers(pCour);
+        deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
+        deltaBenefice += paireToAdd.getBeneficeVers(pCour);
         
         return deltaBenefice;
     }
     
-        protected boolean isPaireInserable(int position, Paire p){
-        
-        if(!isPositionInsertionValide(position)) return false;
-        if( this.getSize() >= this.maxChaine ) return false;
-        
-        if(this.deltaCoutInsertion(position, p) >= Integer.MAX_VALUE) return false;
-        
-        
-        return true;
-    }
     
     public Paire getNext(int position){
         if(!this.isPositionInsertionValide(position)) return null;
@@ -204,26 +204,26 @@ public class Chaine extends Echanges {
     }
 
     @Override
-    public InsertionPaire getMeilleureInsertion(Paire paireToInsert) {
-        InsertionPaire insMeilleur = new InsertionPaire();
-        //isPaireAjoutable ne va pas car teste juste si on peut ajouter à la fin,
-        //il faut tester pour insérer à l'intérieur de la chaine
-        if (!isPaireAjoutable(paireToInsert)) {
-            return insMeilleur;
-        }
-
-        InsertionPaire insActu;
-        for (int pos = 0; pos <= this.getSize(); pos++) {
-            insActu = new InsertionPaire( this, pos, paireToInsert);
-            if (insActu.isMeilleur(insMeilleur)) {
-                insMeilleur = insActu;
-            }
-        }
-
-        return insMeilleur;
+    protected int getMaxEchange() {
+        return this.maxChaine;
     }
     
+    @Override
+    public Participant getPrec(int position) {
+        if (!this.isPositionInsertionValide(position)) {
+            return null;
+        }
+        if (position == 0) {
+            return this.altruiste;
+        }
+        return this.paires.get(position - 1);
+    }
     
-    
-    
+    @Override
+    public Participant getCurrent(int position) {
+        if (!this.isPositionInsertionValide(position)) {
+            return null;
+        }
+        return this.paires.get(position);
+    }
 }

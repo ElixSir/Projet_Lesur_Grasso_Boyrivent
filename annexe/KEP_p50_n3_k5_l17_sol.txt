@@ -1,50 +1,41 @@
 // Cout total de la solution
-0
+217
 // Description de la solution
 // Cycles
-<<<<<<< Updated upstream
-8	41	
+53	44	51	17	4	
+31	21	41	25	5	
+42	27	14	6	
+15	26	48	45	7	
+43	22	50	8	
+9	
+10	
+11	
+12	
+13	
+16	
+18	
+19	
+20	
+23	
+52	24	
+28	
+29	
+30	
+32	
+33	
+34	
+35	
+36	
+37	
+38	
+39	
+49	40	
+46	
+47	
 
 // Chaines
-1	17	33	45	
-3	5	6	
-// Cout total de la solution
-404
-// Description de la solution
-// Cycles
-8	41	
+1	
+2	
+3	
 
-// Chaines
-1	17	33	45	
-3	5	6	
-// Cout total de la solution
-210
-// Description de la solution
-// Cycles
-6	17	
-8	41	
-
-// Chaines
-// Cout total de la solution
-490
-// Description de la solution
-// Cycles
-31	41	37	17	43	
-
-// Chaines
-2	45	
-3	5	6	
-// Cout total de la solution
-427
-// Description de la solution
-// Cycles
-8	43	31	41	
-
-// Chaines
-3	5	6	17	33	
-
-=======
-
-// Chaines
->>>>>>> Stashed changes
 

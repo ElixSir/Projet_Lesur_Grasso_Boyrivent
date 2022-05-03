@@ -28,6 +28,7 @@ import solveur.ChainesMeilleurBenef;
 import solveur.CycleMeilleurBenef;
 import solveur.InsertionSimple;
 import solveur.LargeCycles;
+import solveur.MeilleureInsertion;
 import solveur.SolutionSimple;
 import solveur.Solveur;
 
@@ -104,8 +105,8 @@ public class TestAllSolveur {
     private void addSolveurs() {
         // TO CHECK : constructeur par defaut de la classe InsertionSimple
         
-        System.out.println("Meilleur B�n�fice Chaine");
-        solveurs.add(new ChainesMeilleurBenef());
+       /* System.out.println("Meilleur B�n�fice Chaine");
+        solveurs.add(new ChainesMeilleurBenef());*/
         
         //System.out.println("Insertion Simple");
         //solveurs.add(new InsertionSimple());
@@ -116,16 +117,16 @@ public class TestAllSolveur {
         //System.out.println("Meilleur B�n�fice Cycle");
         //solveurs.add(new CycleMeilleurBenef());
         
-        System.out.println("Large Cycle");
+       /* System.out.println("Large Cycle");
         solveurs.add(new LargeCycles());
         
         System.out.println("Arbre");
-        solveurs.add(new ArbreSolveur());
+        solveurs.add(new ArbreSolveur());*/
+        
+        solveurs.add(new MeilleureInsertion());
+
         /*
         Solveur solutionRechercheLocale = new RechercheLocale(solutionSimple);
-        solveurs.add(solutionSimple);
-        solveurs.add(new InsertionPlusProcheVoisin());
-        solveurs.add(new MeilleureInsertion());
         solveurs.add(solutionRechercheLocale);
         solveurs.add(new RechercheTabou(solutionRechercheLocale));
         */

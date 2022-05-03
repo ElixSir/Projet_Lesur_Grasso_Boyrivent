@@ -44,6 +44,10 @@ public class TestMeilleureInsertion {
         System.out.println(insertion2.isMouvementRealisable());//true
         System.out.println(insertion3.isMouvementRealisable());//false
         
+        System.out.println(insertion3.doMouvementIfRealisable());//false
+        System.out.println(insertion2.doMouvementIfRealisable());//true
+        
+        
         
         }catch(Exception ex){
             System.out.println(ex);

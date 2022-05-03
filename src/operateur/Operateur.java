@@ -34,7 +34,7 @@ public abstract class Operateur {
      * @return 
      */
     public boolean isMouvementRealisable(){
-        if(this.deltaBenefice >= Integer.MAX_VALUE){
+        if(this.deltaBenefice >= Integer.MAX_VALUE-10000 || this.deltaBenefice <= Integer.MIN_VALUE+10000){
             return false;
         }
         return true;
