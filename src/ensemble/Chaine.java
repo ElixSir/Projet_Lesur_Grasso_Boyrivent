@@ -140,7 +140,14 @@ public class Chaine extends Echanges {
         return true;
     }
     
-    
+    public Paire getNext(int position){
+        if(!this.isPositionInsertionValide(position)) return null;
+        if(position == this.paires.size()){
+            return null;
+        }
+        return this.paires.get(position +1);
+    }
+        
     public void printChaine(PrintWriter ecriture) {
         
         String s =  this.altruiste.getId() + "\t";
