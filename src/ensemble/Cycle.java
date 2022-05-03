@@ -9,6 +9,7 @@ import instance.reseau.Paire;
 import java.io.PrintWriter;
 import instance.Instance;
 import java.util.LinkedList;
+import operateur.IntraEchangeCycle;
 
 /**
  *
@@ -117,6 +118,14 @@ public class Cycle extends Echanges {
         return maxCycle;
     }
 
+    public Paire getNext(int position){
+        if(!this.isPositionInsertionValide(position)) return null;
+        if(position >= this.paires.size()){
+            return this.paires.get(position - this.paires.size()); // Si on dépasse on reviens au début + n 
+        }
+        return this.paires.get(position +1);
+    }
+    
     public void printCycle(PrintWriter ecriture) {
         String s = "";
 
@@ -176,6 +185,8 @@ public class Cycle extends Echanges {
         
         return deltaBenefice;
     }
+    
+
     
     @Override
     public String toString() {
