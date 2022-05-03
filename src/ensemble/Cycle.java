@@ -169,6 +169,7 @@ public class Cycle extends Echanges {
 
     
     public int deltaCoutInsertion(int position, Paire paireToAdd){
+        if (!isPositionInsertionValide(position)) return Integer.MAX_VALUE;
         int deltaBenefice = 0;
                 
         if(this.paires.isEmpty()){

@@ -7,13 +7,13 @@
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/instance/Instance.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/test/TestAllSolveur.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/main/Main.java</file>
+            <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/test/TestMeilleureInsertion.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/instance/reseau/Participant.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/ensemble/Cycle.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/InsertionBestLocal.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/ensemble/Chaine.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/ensemble/Echanges.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/CycleMeilleurBenef.java</file>
-            <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/instance/reseau/Paire.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/ChainesMeilleurBenef.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/Solveur.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/instance/reseau/Altruiste.java</file>
@@ -21,6 +21,8 @@
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/solution/Solution.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/SolutionSimple.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/io/InstanceReader.java</file>
+            <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/operateur/InsertionPaire.java</file>
+            <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/operateur/Operateur.java</file>
             <file>file:/D:/Program%20Files/NetbeansProjects/Java_projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/LargeCycles.java</file>
         </group>
     </open-files>

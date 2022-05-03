@@ -16,6 +16,10 @@ public class InsertionPaire extends Operateur {
     
    private int position;
    private Paire paireToInsert;
+
+    public InsertionPaire() {
+    }
+   
    
    
     public InsertionPaire(Echanges echange, int position, Paire paireToInsert) {

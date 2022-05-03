@@ -35,14 +35,14 @@ public class TestMeilleureInsertion {
         
        // System.out.println(c.toString());
         
-        System.out.println(insertion2.isMeilleur(insertion3)); 
-        System.out.println(insertion3.isMeilleur(insertion2));
+        System.out.println(insertion2.isMeilleur(insertion3));//true 
+        System.out.println(insertion3.isMeilleur(insertion2));//false
         
-        System.out.println("insertion2 deltabenefice : "+insertion2.getDeltaBenefice());
-        System.out.println("insertion3 deltabenefice : "+insertion3.getDeltaBenefice());
+        System.out.println("insertion2 deltabenefice : "+insertion2.getDeltaBenefice());//0
+        System.out.println("insertion3 deltabenefice : "+insertion3.getDeltaBenefice());//+INF
         
-        System.out.println(insertion2.isMouvementRealisable());
-        System.out.println(insertion3.isMouvementRealisable());
+        System.out.println(insertion2.isMouvementRealisable());//true
+        System.out.println(insertion3.isMouvementRealisable());//false
         
         
         }catch(Exception ex){

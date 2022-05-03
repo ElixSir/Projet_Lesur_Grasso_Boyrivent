@@ -7,6 +7,7 @@ package ensemble;
 
 import instance.reseau.Paire;
 import java.util.LinkedList;
+import operateur.InsertionPaire;
 import operateur.IntraEchangeCycle;
 
 /**
@@ -102,6 +103,9 @@ public abstract class Echanges {
         if(!this.isPositionInsertionValide(position)) return null;
         return this.paires.get(position);
     }
+    
+    public abstract InsertionPaire getMeilleureInsertion(Paire paireToInsert);
+        
 
 
     public LinkedList<Paire> getPaires() {
@@ -181,7 +185,7 @@ public abstract class Echanges {
         this.beneficeTotal += infos.getDeltaBenefice(); //MAJ cout total
         
         if (!this.check()){
-            System.out.println("Mauvais échange des clients");
+            System.out.println("Mauvais ï¿½change des clients");
             System.out.println(infos);
             System.exit(-1); //Termine le programme
         }
@@ -209,10 +213,10 @@ public abstract class Echanges {
         
         
         if(positionJ-positionI == 1){
-            //System.out.println("Consécutif");
+            //System.out.println("Consï¿½cutif");
             return deltaBeneficeEchangeConsecutif(positionI);
         }
-        //System.out.println("Pas consécutif");
+        //System.out.println("Pas consï¿½cutif");
         return deltaBeneficeRemplacement(positionI,this.getCurrent(positionJ))+deltaBeneficeRemplacement(positionJ,this.getCurrent(positionI));
     }    
     

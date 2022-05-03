@@ -13,6 +13,7 @@ import instance.reseau.Participant;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import operateur.InsertionPaire;
 
 /**
  *
@@ -200,6 +201,26 @@ public class Chaine extends Echanges {
             }
             
         return s;
+    }
+
+    @Override
+    public InsertionPaire getMeilleureInsertion(Paire paireToInsert) {
+        InsertionPaire insMeilleur = new InsertionPaire();
+        //isPaireAjoutable ne va pas car teste juste si on peut ajouter à la fin,
+        //il faut tester pour insérer à l'intérieur de la chaine
+        if (!isPaireAjoutable(paireToInsert)) {
+            return insMeilleur;
+        }
+
+        InsertionPaire insActu;
+        for (int pos = 0; pos <= this.getSize(); pos++) {
+            insActu = new InsertionPaire( this, pos, paireToInsert);
+            if (insActu.isMeilleur(insMeilleur)) {
+                insMeilleur = insActu;
+            }
+        }
+
+        return insMeilleur;
     }
     
     
