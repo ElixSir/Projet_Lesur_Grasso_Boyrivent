@@ -31,6 +31,11 @@ public class Solution {
     private Map<Altruiste,Chaine> chaines;
     private LinkedList<Cycle> cycles;
 
+    public Solution() {
+        this.beneficeTotal = 0;
+    }
+
+    
     public Solution(Instance i) {
         this.beneficeTotal = 0;
         this.instance = i;
@@ -186,7 +191,7 @@ public class Solution {
         
     }
     
-    public int getCoutTotal() {
+    public int getBeneficeTotal() {
         return beneficeTotal;
     }
 
@@ -205,7 +210,7 @@ public class Solution {
 
     public void printSolution(PrintWriter ecriture) {
         // Cout total de la solution
-        ecriture.println("// Cout total de la solution");
+        ecriture.println("// Benefice total de la solution");
         ecriture.println(this.beneficeTotal);
         // Description de la solution
         // Cycles

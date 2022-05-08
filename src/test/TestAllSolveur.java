@@ -86,11 +86,15 @@ public class TestAllSolveur {
         instances = new ArrayList<>();
         this.resultats = new HashMap<>();
         this.addSolveurs();
-        if (new File(pathRepertoire).listFiles() == null) {
-            this.readNomInstance();
+        if (new File(pathRepertoire).listFiles() != null) {
+            this.readNomInstances();
         }
         else{
-            this.readNomInstances();
+            if (!this.pathRepertoire.substring(this.pathRepertoire.length()-4).equals(".txt"))
+            {
+                this.pathRepertoire += ".txt";
+            }
+            this.readNomInstance();
         }
         this.totalStats = new HashMap<>();
         for (Solveur solveur : solveurs) {
@@ -107,14 +111,14 @@ public class TestAllSolveur {
         System.out.println("Solution Simple");
         solveurs.add(new SolutionSimple());
         */
-        System.out.println("Insertion Simple");
-        solveurs.add(new InsertionSimple());
+        //System.out.println("Insertion Simple");
+        //solveurs.add(new InsertionSimple());
         
-        System.out.println("Meilleur Bénéfice Chaine");
+        System.out.println("Meilleur Benefice Chaine");
         solveurs.add(new ChainesMeilleurBenef());
         
-        System.out.println("Meilleur Bénéfice Cycle");
-        solveurs.add(new CycleMeilleurBenef());
+        //System.out.println("Meilleur Benefice Cycle");
+        //solveurs.add(new CycleMeilleurBenef());
         
         System.out.println("Large Cycle");
         solveurs.add(new LargeCycles());
@@ -187,7 +191,7 @@ public class TestAllSolveur {
     public void printAllResultats(String nomFichierResultats, String destinationSol) {
         PrintWriter ecriture = null;
         try {
-            ecriture = new PrintWriter(nomFichierResultats + ".csv");
+            ecriture = new PrintWriter(destinationSol + "/" + nomFichierResultats + ".csv");
             printEnTetes(ecriture);
             for (Instance inst : instances) {
                 printResultatsInstance(ecriture, inst);
@@ -242,7 +246,7 @@ public class TestAllSolveur {
             long time = System.currentTimeMillis() - start;
             // TO CHECK : recperer le cout total de la solution, et savoir si
             // la solution est valide
-            Resultat result = new Resultat(sol.getCoutTotal(), time, sol.check());
+            Resultat result = new Resultat(sol.getBeneficeTotal(), time, sol.check());
             resultats.put(new InstanceSolveur(inst, solveur), result);
             ecriture.print(";" + result.formatCsv());
             totalStats.get(solveur).add(result);
@@ -252,18 +256,26 @@ public class TestAllSolveur {
     
     /**
      * Cette méthode crée un fichier de solutions individuel 
-     * avec un format adaptée au checker externe
-     *
+     * avec un format adaptée au checker externe, avec un mix des différentes 
+     * solutions pour prendre le solveur avec le meilleur résultat
      * @param ecriture le writer sur lequel on fait l'ecriture
      * @param inst l'instane pour laquelle on ecrit les resultats
      */
     private void printResultatsInstanceIndividuelle(PrintWriter ecritureIndividuelle, Instance inst) {
-
+        Solution bestSol = new Solution();
         for (Solveur solveur : solveurs) {
             // TO CHECK : resolution de l'instance avec le solveur
             Solution sol = solveur.solve(inst);
-            sol.printSolution(ecritureIndividuelle);
+            if(sol.getBeneficeTotal() > bestSol.getBeneficeTotal())
+            {
+                bestSol = sol;
+            }
+
         }
+        bestSol.printSolution(ecritureIndividuelle);
+
+        
+
         ecritureIndividuelle.println();
     }
 

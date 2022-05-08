@@ -22,7 +22,7 @@ public class ChainesMeilleurBenef implements Solveur{
 
     @Override
     public String getNom() {
-        return "Meilleur Bénéfice Chaines";
+        return "Meilleur Benefice Chaines";
     }
     
     private Paire getPlusGrandBenefice(List<Paire> P,Participant p) {

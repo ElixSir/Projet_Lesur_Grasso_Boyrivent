@@ -4,6 +4,13 @@
  */
 package main;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import test.TestAllSolveur;
 
 /**
@@ -23,6 +30,18 @@ public class Main {
             if(args.length >= 4)
             {
                 destinationSol = args[3];
+                File file = new File(destinationSol);
+                if(!file.exists())
+                {
+                   
+                    Path path = Paths.get(destinationSol);
+                    try {
+                        Files.createDirectories(path);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
             }
 
             System.out.println(destinationSol);
@@ -38,7 +57,8 @@ public class Main {
 
         }
         else if(args.length == 1 && args[0].equals("--help")){
-            System.out.print("Command that is normally used : java -jar .\\Projet_Lesur_Grasso_Boyrivent.jar -inst ../instancesInitiales -dSol ../annexe\n"
+            System.out.print("Command that is normally used : java -jar .\\Projet_Lesur_Grasso_Boyrivent.jar "
+                    + "-inst ..\\instancesInitiales\\KEP_p100_n11_k5_l17 -dSol ../annexe\n"
                     + "The origin folder is the dist folder");
         }
         else {
