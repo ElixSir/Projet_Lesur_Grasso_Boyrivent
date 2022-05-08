@@ -29,7 +29,7 @@ public abstract class Echanges {
     public boolean ajouterPaire(Paire p) {
         if( null == p || !this.isPaireAjoutableFin(p) ) return false;
         
-        this.beneficeTotal += this.deltaBenefice(p);
+        //this.beneficeTotal += this.deltaBenefice(p); 
         this.paires.add(p);
                 
         return true;
@@ -110,7 +110,8 @@ public abstract class Echanges {
     
     protected boolean isPositionInsertionValide(int position){
         //on ne prend pas en compte l'altruiste donc la liste commence ï¿½ 1 donc dï¿½calage de 1
-        if(position >= 0 && position < this.getSize()){
+
+        if(position >= 0 && position <= this.getSize()){ // && position < this.getSize() Si on met ça impossible d'inserer en 
             return true;
         }
         return false;
@@ -123,6 +124,8 @@ public abstract class Echanges {
     public abstract Participant getPrec(int position);
     
     public abstract Participant getCurrent(int position);
+    
+    public abstract Participant getNext(int position);
     
     /**
      * Obtiens la meilleure insertionPaire pour une paire donnï¿½e
@@ -148,7 +151,7 @@ public abstract class Echanges {
    
     }
 
-     public abstract Paire getNext(int position);
+     
         
         /**
      * Ins?re dans l'?change si il y a possibilit?
@@ -178,9 +181,123 @@ public abstract class Echanges {
         return true;
     }
 
-
+    
 
     public LinkedList<Paire> getPaires() {
         return new LinkedList<>(paires);
     }
+    
+    
+     
+    private int deltaBeneficeEchangeConsecutif(int positionI){
+        
+        if(this.paires.size() < 2){
+            return -1;
+        }
+        
+        /*if(this.paires.size() == 2){ // si un cycle de 2 
+            Participant paireI = this.getCurrent(positionI);
+            Participant paireJ = this.getNext(positionI);
+            return paireI.getBeneficeVers(paireJ) + paireJ.getBeneficeVers(paireI);
+           
+        }*/
+        
+        
+        int deltaCout = 0;
+        
+        Participant paireI = this.getCurrent(positionI);
+        Participant paireJ = this.getNext(positionI);
+        Participant avantI = this.getPrec(positionI);
+        Participant apresJ = this.getNext(positionI+1);
+        
+        
+        deltaCout -= avantI.getBeneficeVers(paireI);
+        deltaCout -= paireI.getBeneficeVers(paireJ);
+        deltaCout -= paireJ.getBeneficeVers(apresJ);
+        
+        deltaCout += avantI.getBeneficeVers(paireJ);
+        deltaCout += paireJ.getBeneficeVers(paireI);
+        deltaCout += paireI.getBeneficeVers(apresJ);
+        
+        
+        return deltaCout;
+    }
+    
+    private int deltaBeneficeRemplacement(int position, Participant paireJ){
+        
+        if(this.paires.size() < 2){
+            return -1;
+        }
+        
+        int deltaCout = 0;
+
+        Participant paireI = this.getCurrent(position);
+        
+        Participant avantI = this.getPrec(position);
+        Participant apresI = this.getNext(position);
+        
+        deltaCout-= avantI.getBeneficeVers(paireI);
+        deltaCout-= paireI.getBeneficeVers(apresI);
+        
+        deltaCout+= avantI.getBeneficeVers(paireJ);
+        deltaCout+= paireJ.getBeneficeVers(apresI);
+        
+        return deltaCout;
+    }
+    
+    
+    public boolean doEchangeCycle(IntraEchangeCycle infos){
+        if(infos == null) return false;
+        if(!infos.isMouvementRealisable()) return false; 
+        
+        int positionI = infos.getPositionI();
+        int positionJ = infos.getPositionJ();
+        
+        Paire paireI = infos.getClientI();
+        Paire paireJ = infos.getClientJ();
+        
+        this.paires.set(positionI, paireJ);
+        this.paires.set(positionJ, paireI);
+        
+        this.beneficeTotal += infos.getDeltaBenefice(); //MAJ cout total
+        
+        if (!this.check()){
+            System.out.println("Mauvais échange des clients");
+            System.out.println(infos);
+            System.exit(-1); //Termine le programme
+        }
+        
+        return true;
+    }
+    
+    
+    
+    public int deltaBeneficeEchange(int positionI, int positionJ) {
+        if(!isPositionInsertionValide(positionI)){
+            //System.out.println("posI Invalid");
+            return Integer.MAX_VALUE;
+        }
+        if(!isPositionInsertionValide(positionJ)){
+            //System.out.println("posJ Invalid");
+            return Integer.MAX_VALUE;
+        }
+        if(positionI == positionJ){
+            //System.out.println("posI = posJ");
+            return Integer.MAX_VALUE;
+        }
+        if(!(positionI<positionJ)){
+            //System.out.println("!(positionI<positionJ)");
+            return Integer.MAX_VALUE;
+        }
+        
+        
+        if(positionJ-positionI == 1){
+            //System.out.println("Cons?cutif");
+            return deltaBeneficeEchangeConsecutif(positionI);
+        }
+        //System.out.println("Pas cons?cutif");
+        return deltaBeneficeRemplacement(positionI,this.getCurrent(positionJ))+deltaBeneficeRemplacement(positionJ,this.getCurrent(positionI));
+    }    
+    
+    
 }

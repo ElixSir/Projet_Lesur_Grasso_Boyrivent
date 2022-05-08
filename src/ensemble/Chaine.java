@@ -141,7 +141,7 @@ public class Chaine extends Echanges {
     }
     
     
-    public Paire getNext(int position){
+    public Participant getNext(int position){
         if(!this.isPositionInsertionValide(position)) return null;
         if(position == this.paires.size()){
             return null;

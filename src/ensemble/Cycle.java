@@ -120,10 +120,10 @@ public class Cycle extends Echanges {
         return maxCycle;
     }
 
-    public Paire getNext(int position){
-        if(!this.isPositionInsertionValide(position)) return null;
-        if(position >= this.paires.size()){
-            return this.paires.get(position - this.paires.size()); // Si on d�passe on reviens au d�but + n 
+    public Participant getNext(int position){
+       // if(!this.isPositionInsertionValide(position)) return null;
+        if(position >= this.paires.size()-1){
+            return this.paires.get(position - (this.paires.size()-1)); // Si on d�passe on reviens au d�but + n 
         }
         return this.paires.get(position +1);
     }
@@ -179,11 +179,10 @@ public class Cycle extends Echanges {
         }
         else if(this.getSize() == 1)
         {
-            Participant pPrec = this.getCurrent(position);
-            Participant pCour = this.getCurrent(position);
+            Participant pFirst = this.paires.getFirst();
             
-            deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
-            deltaBenefice += paireToAdd.getBeneficeVers(pCour);
+            deltaBenefice += pFirst.getBeneficeVers(paireToAdd);
+            deltaBenefice += paireToAdd.getBeneficeVers(pFirst);
         }
         else{
             Participant pPrec = this.getPrec(position);

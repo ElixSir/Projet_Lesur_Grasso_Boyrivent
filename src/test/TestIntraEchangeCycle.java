@@ -6,7 +6,11 @@ package test;
  */
 
 
+import ensemble.Cycle;
 import instance.Instance;
+import instance.reseau.Paire;
+import io.InstanceReader;
+import operateur.InsertionPaire;
 import operateur.IntraEchangeCycle;
 import operateur.OperateurIntraEchange;
 import operateur.OperateurLocal;
@@ -19,62 +23,51 @@ import operateur.TypeOperateurLocal;
 public class TestIntraEchangeCycle {
     
     public static void main(String[] args) {
-       /* int id = 1;
-        Instance inst = new Instance("test", 100, d);
-        Client c1 = new Client(10, id++, 10, 0);
-        Client c2 = new Client(10, id++, 20, 0);
-        Client c3 = new Client(10, id++, 30, 0);
-        Client c4 = new Client(10, id++, 40, 0);
-        Client c5 = new Client(10, id++, 50, 0);
+
         
-        inst.ajouterClient(c1);
-        inst.ajouterClient(c2);
-        inst.ajouterClient(c3);
-        inst.ajouterClient(c4);
-        inst.ajouterClient(c5);
         
-        Tournee t = new Tournee(inst);
+        try{
+        InstanceReader read = new InstanceReader("instancesInitiales/instancedetest.txt");
+        Instance i = read.readInstance();
         
-        t.ajouterClient(c2);
-        t.ajouterClient(c1);
-        t.ajouterClient(c3);
-        t.ajouterClient(c4);
-        t.ajouterClient(c5);
+        Cycle c = new Cycle(i);
         
-        System.out.println(t.deltaCoutEchange(0,1)); //-20
-        System.out.println(t.deltaCoutEchange(3,4)); //0
-        System.out.println(t.deltaCoutEchange(1,4)); //0
-        System.out.println(t.deltaCoutEchange(1,5)); //Infinity
-        System.out.println(t.deltaCoutEchange(2,3)); //20
+        Paire p1 = new Paire(1);
+        Paire p2 = new Paire(2);
+        Paire p3 = new Paire(3);
+        Paire p4 = new Paire(4);
         
-        IntraEchange op = new IntraEchange(t,0,1); //-20
-        IntraEchange op1 = new IntraEchange(t,3,4); //0
-        OperateurLocal op2 = OperateurIntraTournee.getOperateurIntra(TypeOperateurLocal.INTRA_ECHANGE,t,1,4);
-        IntraEchange op3 = new IntraEchange(t,1,5); //Infinity
-        IntraEchange op4 = new IntraEchange(t,2,3); //20
-        IntraEchange op5 = new IntraEchange(t,1,0); //20
+        InsertionPaire insertion1 = new InsertionPaire(c,0, p1);
+        insertion1.doMouvementIfRealisable();
+        InsertionPaire insertion2 = new InsertionPaire(c,1, p2);
+        insertion2.doMouvementIfRealisable();
+        InsertionPaire insertion3 = new InsertionPaire(c,2, p3);
+        insertion3.doMouvementIfRealisable();
+        InsertionPaire insertion4 = new InsertionPaire(c,3, p4);
+        insertion4.doMouvementIfRealisable();
         
-        System.out.println(op); //-20
-        System.out.println(op1); //0
-        System.out.println(op2); //0
-        System.out.println(op3); //Infinity
-        System.out.println(op4); //20
+            System.out.println("Size : "+c.getPaires().size());
         
-        System.out.println(op.isMouvementRealisable()); //true
-        System.out.println(op.isMouvementAmeliorant()); //true
+        IntraEchangeCycle echange2 = new IntraEchangeCycle(c,0, 1);
+        //InsertionPaire insertion3 = new InsertionPaire(c,1, p2);
         
-        System.out.println(op1.isMouvementRealisable()); //true
-        System.out.println(op1.isMouvementAmeliorant()); //false car deltaCout=0
+            System.out.println("Benefice : "+ c.getBeneficeTotal());
+            System.out.println(c);
+            System.out.println("_________________");
+            echange2.doMouvementIfRealisable();
+            System.out.println(c);
+            System.out.println("Benefice :" +c.getBeneficeTotal());
+            
+            
+            
         
-        System.out.println(op3.isMouvementRealisable()); //false
-        System.out.println(op3.isMouvementAmeliorant()); //false car deltaCout infini;
+        }catch(Exception ex){
+            System.out.println(ex);
+        }
         
-        System.out.println(op4.isMouvementRealisable()); //true
-        System.out.println(op4.isMouvementAmeliorant()); //false car deltaCout=20
-        */
 
 
-        System.out.println("TestIntraEchangeCycle");
+
      
     }
             
