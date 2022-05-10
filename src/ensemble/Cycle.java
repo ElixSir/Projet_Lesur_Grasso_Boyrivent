@@ -171,7 +171,7 @@ public class Cycle extends Echanges {
 
     
     public int deltaCoutInsertion(int position, Paire paireToAdd){
-        if (!isPositionInsertionValide(position) || paireToAdd == null) return Integer.MAX_VALUE;
+        if (!isPositionInsertionValide(position) || paireToAdd == null) return -1;
         int deltaBenefice = 0;
                 
         if(this.paires.isEmpty()){
@@ -181,16 +181,17 @@ public class Cycle extends Echanges {
         {
             Participant pFirst = this.paires.getFirst();
             
-            deltaBenefice += pFirst.getBeneficeVers(paireToAdd);
-            deltaBenefice += paireToAdd.getBeneficeVers(pFirst);
+            deltaBenefice = this.addBenefice(deltaBenefice, pFirst.getBeneficeVers(paireToAdd));
+            deltaBenefice = this.addBenefice(deltaBenefice, paireToAdd.getBeneficeVers(pFirst));
+          
         }
         else{
             Participant pPrec = this.getPrec(position);
             Participant pCour = this.getCurrent(position);
             
-            deltaBenefice -= pPrec.getBeneficeVers(pCour);
-            deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
-            deltaBenefice += paireToAdd.getBeneficeVers(pCour);
+            deltaBenefice = this.addBenefice(deltaBenefice, -pPrec.getBeneficeVers(pCour));
+            deltaBenefice = this.addBenefice(deltaBenefice, pPrec.getBeneficeVers(paireToAdd));
+            deltaBenefice = this.addBenefice(deltaBenefice, paireToAdd.getBeneficeVers(pCour));
         }
         
         return deltaBenefice;

@@ -50,8 +50,10 @@ public abstract class Participant {
             return t.getBenefice();
         }
         
-        return Integer.MAX_VALUE;
+        return -1;
     }
+    
+ 
     
     public LinkedList<Transplantation> getTransplantations() {
         return new LinkedList(this.transplantations.values());

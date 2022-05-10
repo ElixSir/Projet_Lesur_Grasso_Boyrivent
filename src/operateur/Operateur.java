@@ -17,7 +17,7 @@ public abstract class Operateur {
     protected int deltaBenefice;
 
     public Operateur(){
-        this.deltaBenefice = Integer.MAX_VALUE;
+        this.deltaBenefice = -1;
     }
     
     public Operateur(Echanges echange) {
@@ -34,14 +34,14 @@ public abstract class Operateur {
      * @return 
      */
     public boolean isMouvementRealisable(){
-        if(this.deltaBenefice >= Integer.MAX_VALUE-10000 || this.deltaBenefice <= Integer.MIN_VALUE+10000){
+        if(this.deltaBenefice == -1){
             return false;
         }
         return true;
     }
     
     public boolean isMouvementAmeliorant(){
-        if(deltaBenefice < 0)
+        if(deltaBenefice > 0)
             return true;
         return false;
     }
@@ -60,10 +60,10 @@ public abstract class Operateur {
         if(op == null){
             return true;
         }
-        if(op.getDeltaBenefice() <= this.getDeltaBenefice() ){
-            return false;
+        if(this.getDeltaBenefice() > op.getDeltaBenefice()){
+            return true;
         }
-        return true;
+        return false;
     }
 
     protected abstract int evalDeltaBenefice();

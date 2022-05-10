@@ -95,7 +95,7 @@ public class Chaine extends Echanges {
     @Override
     protected boolean isPaireInserable(Paire p) {
 
-        for (int i = 0; i < this.getSize()-1; i++) {
+        for (int i = 0; i < this.getSize(); i++) {
             if (isPaireInserablePosition(i, p)) {
                 return true;
             }
@@ -106,14 +106,14 @@ public class Chaine extends Echanges {
     }
     
     public int deltaCoutInsertion(int position, Paire paireToAdd){
-        if(!this.isPaireAjoutableFin(paireToAdd)) return Integer.MAX_VALUE;
+        if(!this.isPaireAjoutableFin(paireToAdd)) return -1;
         int deltaBenefice = 0;
                 
         Participant pPrec = null;
         Participant pCour = null;
         
         if(this.paires.isEmpty()){
-            deltaBenefice = this.altruiste.getBeneficeVers(paireToAdd);
+            deltaBenefice = this.addBenefice(deltaBenefice, this.altruiste.getBeneficeVers(paireToAdd));
             return deltaBenefice;
         }
         else if(position == 0){
@@ -122,10 +122,14 @@ public class Chaine extends Echanges {
         }
         else if(position == this.getSize()-1){
             pPrec = this.getPrec(position);
-            deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
+            deltaBenefice = this.addBenefice(deltaBenefice, pPrec.getBeneficeVers(paireToAdd));
         }
         else{
-           
+           //probleme ici avec get pPrec
+           //position = 2 alors que seulement l'altruiste et la paire,
+           //mais si dans le test préalable on fait size - 1, on ne
+           //rentre même pas dans la boucle avec i car getSize - 1 = 0
+           //voir classe Echange ligne 162
             pPrec = this.getPrec(position);
             pCour = this.getCurrent(position);
         }
@@ -133,10 +137,10 @@ public class Chaine extends Echanges {
         {
             int size = this.getSize();
         }
-        deltaBenefice -= pPrec.getBeneficeVers(pCour);
-        deltaBenefice += pPrec.getBeneficeVers(paireToAdd);
-        deltaBenefice += paireToAdd.getBeneficeVers(pCour);
-        
+        deltaBenefice = this.addBenefice(deltaBenefice, - pPrec.getBeneficeVers(pCour));
+        deltaBenefice = this.addBenefice(deltaBenefice, pPrec.getBeneficeVers(paireToAdd));
+        deltaBenefice = this.addBenefice(deltaBenefice, paireToAdd.getBeneficeVers(pCour));
+
         return deltaBenefice;
     }
     

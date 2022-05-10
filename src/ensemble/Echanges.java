@@ -51,7 +51,7 @@ public abstract class Echanges {
             return false;
         }
 
-        if (this.deltaCoutInsertion(position, p) >= Integer.MAX_VALUE) {
+        if (this.deltaCoutInsertion(position, p) == -1) {
             return false;
         }
 
@@ -87,6 +87,20 @@ public abstract class Echanges {
         this.beneficeTotal = Cycle.beneficeTotalCycle(paires);
         
         return true;
+    }
+    
+    /**
+     * Ajoute le benefice au benefice total en testant les paramètres
+     *
+     * @param benefice
+     * @param beneficeToAdd
+     * @return
+     */
+    public int addBenefice(int benefice, int beneficeToAdd) {
+        if (benefice == -1 || beneficeToAdd == -1) {
+            return -1;
+        }
+        return benefice + beneficeToAdd;
     }
     
     protected Paire getLastPaire() {
@@ -138,11 +152,16 @@ public abstract class Echanges {
         if (!isPaireInserable(paireToInsert)) {
             return insMeilleur;
         }
+        if(this instanceof Chaine)
+        {
+            System.out.println("Bravo2");
+        }
 
         InsertionPaire insActu;
         for (int pos = 0; pos <= this.getSize(); pos++) {
             insActu = new InsertionPaire(this, pos, paireToInsert);
             if (insActu.isMeilleur(insMeilleur)) {
+                //problème : Les chaines ne rentrent jamais
                 insMeilleur = insActu;
             }
         }

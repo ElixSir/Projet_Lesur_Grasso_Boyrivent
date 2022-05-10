@@ -65,7 +65,7 @@ public class MeilleureInsertion implements Solveur{
         Instance instance1;
 
         try {
-            InstanceReader read = new InstanceReader("instancesInitiales/KEP_p100_n11_k3_l13.txt");
+            InstanceReader read = new InstanceReader("instancesInitiales/KEP_p100_n11_k5_l17.txt");
             instance1 = read.readInstance();
 
             MeilleureInsertion meilleureInsertion = new MeilleureInsertion();

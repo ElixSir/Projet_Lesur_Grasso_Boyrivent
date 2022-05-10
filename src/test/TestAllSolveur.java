@@ -117,11 +117,11 @@ public class TestAllSolveur {
         //System.out.println("Meilleur B�n�fice Cycle");
         //solveurs.add(new CycleMeilleurBenef());
         
-       /* System.out.println("Large Cycle");
+        System.out.println("Large Cycle");
         solveurs.add(new LargeCycles());
         
         System.out.println("Arbre");
-        solveurs.add(new ArbreSolveur());*/
+        solveurs.add(new ArbreSolveur());
         
         solveurs.add(new MeilleureInsertion());
 

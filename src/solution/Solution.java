@@ -327,6 +327,7 @@ public class Solution {
         for (Chaine c : this.chaines.values()) {
             insActu = c.getMeilleureInsertion(paireToInsert);
             if (insActu.isMeilleur(insMeilleur)) {
+                //problème ici, on n'arrive jamais dans la boucle
                 insMeilleur = insActu;
             }
         }

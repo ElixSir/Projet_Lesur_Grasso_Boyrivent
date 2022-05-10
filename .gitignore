@@ -1,5 +1,6 @@
-#delete xml files 
-/target/
+target/
 annexe/
-/dist/
-/build/
+dist/
+build/
+nbproject/
+results.csv
