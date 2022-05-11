@@ -103,6 +103,13 @@ public abstract class Echanges {
         return benefice + beneficeToAdd;
     }
     
+    public int DelBenefice(int benefice, int beneficeToAdd) {
+        if (benefice == -1 || beneficeToAdd == -1) {
+            return -1;
+        }
+        return benefice - beneficeToAdd;
+    }
+    
     protected Paire getLastPaire() {
         return this.paires.getLast();
     }
@@ -125,7 +132,7 @@ public abstract class Echanges {
     protected boolean isPositionInsertionValide(int position){
         //on ne prend pas en compte l'altruiste donc la liste commence ï¿½ 1 donc dï¿½calage de 1
 
-        if(position >= 0 && position <= this.getSize()){ // && position < this.getSize() Si on met ça impossible d'inserer en 
+        if(position >= 0 && position < this.getSize()){ // && position < this.getSize() Si on met ça impossible d'inserer en 
             return true;
         }
         return false;
@@ -148,17 +155,11 @@ public abstract class Echanges {
      */
     public InsertionPaire getMeilleureInsertion(Paire paireToInsert) {
         InsertionPaire insMeilleur = new InsertionPaire();
-
         if (!isPaireInserable(paireToInsert)) {
             return insMeilleur;
         }
-        if(this instanceof Chaine)
-        {
-            System.out.println("Bravo2");
-        }
-
         InsertionPaire insActu;
-        for (int pos = 0; pos <= this.getSize(); pos++) {
+        for (int pos = 0; pos <= this.paires.size(); pos++) {
             insActu = new InsertionPaire(this, pos, paireToInsert);
             if (insActu.isMeilleur(insMeilleur)) {
                 //problème : Les chaines ne rentrent jamais
@@ -188,7 +189,7 @@ public abstract class Echanges {
 
         Paire paire = infos.getPaire();
 
-        this.beneficeTotal += infos.getDeltaBenefice();
+        this.beneficeTotal = this.addBenefice(beneficeTotal, infos.getDeltaBenefice());
         this.paires.add(infos.getPosition(), paire);
 
         if (!this.check()) {
@@ -214,12 +215,9 @@ public abstract class Echanges {
             return -1;
         }
         
-        /*if(this.paires.size() == 2){ // si un cycle de 2 
-            Participant paireI = this.getCurrent(positionI);
-            Participant paireJ = this.getNext(positionI);
-            return paireI.getBeneficeVers(paireJ) + paireJ.getBeneficeVers(paireI);
-           
-        }*/
+        if(this.paires.size() == 2){ // si un cycle de 2 
+            return 0;
+        }
         
         
         int deltaCout = 0;
@@ -230,13 +228,13 @@ public abstract class Echanges {
         Participant apresJ = this.getNext(positionI+1);
         
         
-        deltaCout -= avantI.getBeneficeVers(paireI);
-        deltaCout -= paireI.getBeneficeVers(paireJ);
-        deltaCout -= paireJ.getBeneficeVers(apresJ);
+        deltaCout = this.DelBenefice(deltaCout, avantI.getBeneficeVers(paireI));
+        deltaCout = this.DelBenefice(deltaCout, paireI.getBeneficeVers(paireJ));
+        deltaCout = this.DelBenefice(deltaCout, paireJ.getBeneficeVers(apresJ));
         
-        deltaCout += avantI.getBeneficeVers(paireJ);
-        deltaCout += paireJ.getBeneficeVers(paireI);
-        deltaCout += paireI.getBeneficeVers(apresJ);
+        deltaCout = this.addBenefice(deltaCout, avantI.getBeneficeVers(paireJ));
+        deltaCout = this.addBenefice(deltaCout, paireJ.getBeneficeVers(paireI));
+        deltaCout = this.addBenefice(deltaCout, paireI.getBeneficeVers(apresJ));
         
         
         return deltaCout;
@@ -255,11 +253,11 @@ public abstract class Echanges {
         Participant avantI = this.getPrec(position);
         Participant apresI = this.getNext(position);
         
-        deltaCout-= avantI.getBeneficeVers(paireI);
-        deltaCout-= paireI.getBeneficeVers(apresI);
+        deltaCout =  this.DelBenefice(deltaCout, avantI.getBeneficeVers(paireI));
+        deltaCout =  this.DelBenefice(deltaCout, paireI.getBeneficeVers(apresI));
         
-        deltaCout+= avantI.getBeneficeVers(paireJ);
-        deltaCout+= paireJ.getBeneficeVers(apresI);
+        deltaCout =  this.addBenefice(deltaCout, avantI.getBeneficeVers(paireJ));
+        deltaCout =  this.addBenefice(deltaCout, paireJ.getBeneficeVers(apresI));
         
         return deltaCout;
     }
@@ -278,7 +276,7 @@ public abstract class Echanges {
         this.paires.set(positionI, paireJ);
         this.paires.set(positionJ, paireI);
         
-        this.beneficeTotal += infos.getDeltaBenefice(); //MAJ cout total
+        this.beneficeTotal = this.addBenefice(beneficeTotal, infos.getDeltaBenefice()) ; //MAJ cout total
         
         if (!this.check()){
             System.out.println("Mauvais échange des clients");
@@ -294,21 +292,20 @@ public abstract class Echanges {
     public int deltaBeneficeEchange(int positionI, int positionJ) {
         if(!isPositionInsertionValide(positionI)){
             //System.out.println("posI Invalid");
-            return Integer.MAX_VALUE;
+            return -1;
         }
         if(!isPositionInsertionValide(positionJ)){
             //System.out.println("posJ Invalid");
-            return Integer.MAX_VALUE;
+            return -1;
         }
         if(positionI == positionJ){
             //System.out.println("posI = posJ");
-            return Integer.MAX_VALUE;
+            return -1;
         }
         if(!(positionI<positionJ)){
             //System.out.println("!(positionI<positionJ)");
-            return Integer.MAX_VALUE;
+            return -1;
         }
-        
         
         if(positionJ-positionI == 1){
             //System.out.println("Cons?cutif");

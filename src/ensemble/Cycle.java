@@ -94,7 +94,7 @@ public class Cycle extends Echanges {
         if( this.getSize() == 0 ) return true;
         
         Paire pLast = this.getLastPaire(),
-                pFirst = this.getFirstPaire();
+        pFirst = this.getFirstPaire();
         
         return (pLast.getBeneficeVers(p) >= 0 && p.getBeneficeVers(pFirst) >= 0 );
     }
@@ -151,10 +151,10 @@ public class Cycle extends Echanges {
             Paire p = this.getFirstPaire();
             for(int i = 1; i < this.getSize(); i++) {
                 Paire pcurr = this.get(i);
-                beneficeTotal += p.getBeneficeVers(pcurr);
+                beneficeTotal = this.addBenefice(beneficeTotal, p.getBeneficeVers(pcurr));
                 p = pcurr;
             }
-            beneficeTotal += this.getLastPaire().getBeneficeVers(this.getFirstPaire());
+            beneficeTotal = this.addBenefice(beneficeTotal, this.getLastPaire().getBeneficeVers(this.getFirstPaire()));
         } 
         
         if( beneficeTotal != this.getBeneficeTotal()) {
