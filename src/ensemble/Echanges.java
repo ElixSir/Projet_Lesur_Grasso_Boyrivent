@@ -208,12 +208,9 @@ public abstract class Echanges {
             return -1;
         }
         
-        /*if(this.paires.size() == 2){ // si un cycle de 2 
-            Participant paireI = this.getCurrent(positionI);
-            Participant paireJ = this.getNext(positionI);
-            return paireI.getBeneficeVers(paireJ) + paireJ.getBeneficeVers(paireI);
-           
-        }*/
+        if(this.paires.size() == 2){ // si un cycle de 2 
+            return 0;
+        }
         
         
         int deltaCout = 0;
@@ -272,7 +269,7 @@ public abstract class Echanges {
         this.paires.set(positionI, paireJ);
         this.paires.set(positionJ, paireI);
         
-        this.beneficeTotal += infos.getDeltaBenefice(); //MAJ cout total
+        this.beneficeTotal = this.addBenefice(beneficeTotal, infos.getDeltaBenefice()) ; //MAJ cout total
         
         if (!this.check()){
             System.out.println("Mauvais échange des clients");
@@ -288,19 +285,19 @@ public abstract class Echanges {
     public int deltaBeneficeEchange(int positionI, int positionJ) {
         if(!isPositionInsertionValide(positionI)){
             //System.out.println("posI Invalid");
-            return Integer.MAX_VALUE;
+            return -1;
         }
         if(!isPositionInsertionValide(positionJ)){
             //System.out.println("posJ Invalid");
-            return Integer.MAX_VALUE;
+            return -1;
         }
         if(positionI == positionJ){
             //System.out.println("posI = posJ");
-            return Integer.MAX_VALUE;
+            return -1;
         }
         if(!(positionI<positionJ)){
             //System.out.println("!(positionI<positionJ)");
-            return Integer.MAX_VALUE;
+            return -1;
         }
         
         
