@@ -95,7 +95,7 @@ public class Chaine extends Echanges {
     @Override
     protected boolean isPaireInserable(Paire p) {
 
-        for (int i = 0; i < this.getSize(); i++) {
+        for (int i = 0; i <= this.getSize(); i++) {
             if (isPaireInserablePosition(i, p)) {
                 return true;
             }
@@ -106,7 +106,7 @@ public class Chaine extends Echanges {
     }
     
     public int deltaCoutInsertion(int position, Paire paireToAdd){
-        if(!this.isPaireAjoutableFin(paireToAdd)) return -1;
+        if (!isPositionInsertionValide(position) || paireToAdd == null) return -1;
         int deltaBenefice = 0;
                 
         Participant pPrec = null;
@@ -120,7 +120,7 @@ public class Chaine extends Echanges {
             pPrec = this.altruiste;
             pCour = this.getCurrent(position);
         }
-        else if(position == this.getSize()-1){
+        else if(position == this.paires.size()){
             pPrec = this.getPrec(position);
             deltaBenefice = this.addBenefice(deltaBenefice, pPrec.getBeneficeVers(paireToAdd));
         }
@@ -156,7 +156,7 @@ public class Chaine extends Echanges {
     public void printChaine(PrintWriter ecriture) {
         
         String s =  this.altruiste.getId() + "\t";
-        for (int j = 0; j < this.getSize() - 1; j++) {
+        for (int j = 0; j < this.getSize(); j++) {
             Paire paire = this.get(j);
             s += paire.getId() + "\t";
         }
@@ -174,11 +174,11 @@ public class Chaine extends Echanges {
             
             Altruiste a = this.getAltruiste();
             Paire p = this.getFirstPaire();
-            beneficeTotal += a.getBeneficeVers(p);
+            beneficeTotal = this.addBenefice(beneficeTotal,a.getBeneficeVers(p));
             
             for(int i = 1; i < this.getSize() - 1; i++) {
                 Paire pcurr = this.get(i);
-                beneficeTotal += p.getBeneficeVers(pcurr);
+                beneficeTotal = this.addBenefice(beneficeTotal, p.getBeneficeVers(pcurr)) ;
                 p = pcurr;
             }
         } 
@@ -190,6 +190,12 @@ public class Chaine extends Echanges {
         
         if( this.getSize() > this.maxChaine ) {
             System.err.println("[CHECK - Chaine] : La taille totale est supérieur à la capacité : ( taille totale : " + this.getSize() + ", capacité : " + this.maxChaine  + " )" );
+            checker = false;
+        }
+        
+        if( beneficeTotal == -1)
+        {
+            System.err.println("[CHECK - Chaine] : Le bénéfice total calculé n'est pas correcte : ( classe : " + this.getBeneficeTotal() + ", calculé : " + beneficeTotal + " )");
             checker = false;
         }
         

@@ -125,7 +125,7 @@ public abstract class Echanges {
     protected boolean isPositionInsertionValide(int position){
         //on ne prend pas en compte l'altruiste donc la liste commence ï¿½ 1 donc dï¿½calage de 1
 
-        if(position >= 0 && position <= this.getSize()){ // && position < this.getSize() Si on met ça impossible d'inserer en 
+        if(position >= 0 && position < this.getSize()){ // && position < this.getSize() Si on met ça impossible d'inserer en 
             return true;
         }
         return false;
@@ -148,17 +148,11 @@ public abstract class Echanges {
      */
     public InsertionPaire getMeilleureInsertion(Paire paireToInsert) {
         InsertionPaire insMeilleur = new InsertionPaire();
-
         if (!isPaireInserable(paireToInsert)) {
             return insMeilleur;
         }
-        if(this instanceof Chaine)
-        {
-            System.out.println("Bravo2");
-        }
-
         InsertionPaire insActu;
-        for (int pos = 0; pos <= this.getSize(); pos++) {
+        for (int pos = 0; pos <= this.paires.size(); pos++) {
             insActu = new InsertionPaire(this, pos, paireToInsert);
             if (insActu.isMeilleur(insMeilleur)) {
                 //problème : Les chaines ne rentrent jamais
