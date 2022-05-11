@@ -156,7 +156,7 @@ public class Chaine extends Echanges {
     public void printChaine(PrintWriter ecriture) {
         
         String s =  this.altruiste.getId() + "\t";
-        for (int j = 0; j < this.getSize(); j++) {
+        for (int j = 0; j < this.getSize()-1; j++) {
             Paire paire = this.get(j);
             s += paire.getId() + "\t";
         }
@@ -204,7 +204,7 @@ public class Chaine extends Echanges {
 
     @Override
     public String toString(){
-           String s = "Chaine{" + "maxChaine=" + maxChaine + ", altruiste=" + altruiste;
+           String s = "Chaine{" + "maxChaine=" + maxChaine + ", altruiste=" + altruiste + ", paires=";
             
             for(Paire p: this.getPaires()){
                 s+= p.getId()+",";
