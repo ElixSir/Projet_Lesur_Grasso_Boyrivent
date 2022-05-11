@@ -34,6 +34,7 @@ public class Cycle extends Echanges {
     
     public static boolean checkCycleValide(LinkedList<Paire> cycle) {
         if(null == cycle) return false;
+        if( cycle.size() < 2 ) return false; 
         boolean checked = true;
         
         if(cycle.isEmpty()) 

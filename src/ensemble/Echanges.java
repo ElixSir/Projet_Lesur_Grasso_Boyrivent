@@ -29,7 +29,7 @@ public abstract class Echanges {
     public boolean ajouterPaire(Paire p) {
         if( null == p || !this.isPaireAjoutableFin(p) ) return false;
         
-        //this.beneficeTotal += this.deltaBenefice(p); 
+        this.beneficeTotal += this.deltaBenefice(p); 
         this.paires.add(p);
                 
         return true;
