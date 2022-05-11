@@ -103,6 +103,13 @@ public abstract class Echanges {
         return benefice + beneficeToAdd;
     }
     
+    public int DelBenefice(int benefice, int beneficeToAdd) {
+        if (benefice == -1 || beneficeToAdd == -1) {
+            return -1;
+        }
+        return benefice - beneficeToAdd;
+    }
+    
     protected Paire getLastPaire() {
         return this.paires.getLast();
     }
@@ -182,7 +189,7 @@ public abstract class Echanges {
 
         Paire paire = infos.getPaire();
 
-        this.beneficeTotal += infos.getDeltaBenefice();
+        this.beneficeTotal = this.addBenefice(beneficeTotal, infos.getDeltaBenefice());
         this.paires.add(infos.getPosition(), paire);
 
         if (!this.check()) {
@@ -221,13 +228,13 @@ public abstract class Echanges {
         Participant apresJ = this.getNext(positionI+1);
         
         
-        deltaCout -= avantI.getBeneficeVers(paireI);
-        deltaCout -= paireI.getBeneficeVers(paireJ);
-        deltaCout -= paireJ.getBeneficeVers(apresJ);
+        deltaCout = this.DelBenefice(deltaCout, avantI.getBeneficeVers(paireI));
+        deltaCout = this.DelBenefice(deltaCout, paireI.getBeneficeVers(paireJ));
+        deltaCout = this.DelBenefice(deltaCout, paireJ.getBeneficeVers(apresJ));
         
-        deltaCout += avantI.getBeneficeVers(paireJ);
-        deltaCout += paireJ.getBeneficeVers(paireI);
-        deltaCout += paireI.getBeneficeVers(apresJ);
+        deltaCout = this.addBenefice(deltaCout, avantI.getBeneficeVers(paireJ));
+        deltaCout = this.addBenefice(deltaCout, paireJ.getBeneficeVers(paireI));
+        deltaCout = this.addBenefice(deltaCout, paireI.getBeneficeVers(apresJ));
         
         
         return deltaCout;
@@ -246,11 +253,11 @@ public abstract class Echanges {
         Participant avantI = this.getPrec(position);
         Participant apresI = this.getNext(position);
         
-        deltaCout-= avantI.getBeneficeVers(paireI);
-        deltaCout-= paireI.getBeneficeVers(apresI);
+        deltaCout =  this.DelBenefice(deltaCout, avantI.getBeneficeVers(paireI));
+        deltaCout =  this.DelBenefice(deltaCout, paireI.getBeneficeVers(apresI));
         
-        deltaCout+= avantI.getBeneficeVers(paireJ);
-        deltaCout+= paireJ.getBeneficeVers(apresI);
+        deltaCout =  this.addBenefice(deltaCout, avantI.getBeneficeVers(paireJ));
+        deltaCout =  this.addBenefice(deltaCout, paireJ.getBeneficeVers(apresI));
         
         return deltaCout;
     }
@@ -299,7 +306,6 @@ public abstract class Echanges {
             //System.out.println("!(positionI<positionJ)");
             return -1;
         }
-        
         
         if(positionJ-positionI == 1){
             //System.out.println("Cons?cutif");

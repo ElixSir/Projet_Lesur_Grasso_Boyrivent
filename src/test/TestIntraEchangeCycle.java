@@ -51,7 +51,7 @@ public class TestIntraEchangeCycle {
         
             System.out.println("Size : "+c.getPaires().size());
         
-        IntraEchangeCycle echange2 = new IntraEchangeCycle(c,1, 2);
+        IntraEchangeCycle echange2 = new IntraEchangeCycle(c,0, 2);
         //InsertionPaire insertion3 = new InsertionPaire(c,1, p2);
         
             System.out.println("Benefice : "+ c.getBeneficeTotal());
