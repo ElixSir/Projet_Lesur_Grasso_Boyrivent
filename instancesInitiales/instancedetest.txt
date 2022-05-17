@@ -2,13 +2,13 @@
 9
 
 // N : Nombre de donneurs altruistes
-0
+1
 
 // K : Taille max cycles
 4
 
 // L : Taille max chaines
-0
+5
 
 // Matrice des benefices medicaux des echanges
 // Les N premieres lignes correspondent aux donneurs altruistes
@@ -24,4 +24,5 @@
 10	1	1	1	8	1	8	1	1
 1	1	1	8	6	7	1	9	4
 1	1	8	1	1	1	1	1	1
+1	1	1	1	1	2	1	1	1
 1	1	1	1	1	2	1	1	1

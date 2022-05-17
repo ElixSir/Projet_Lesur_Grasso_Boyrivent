@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import operateur.InsertionPaire;
+import operateur.IntraEchange;
 
 /**
  *
@@ -164,6 +165,11 @@ public class Chaine extends Echanges {
         ecriture.print(s + "\n");
     }
 
+    public int deltaBeneficeRemplacement(int position, Participant paireJ){
+        
+        return 0;
+    }
+    
     @Override
     public boolean check() {
         boolean checker = true;
@@ -213,6 +219,27 @@ public class Chaine extends Echanges {
         return s;
     }
 
+    
+     public int deltaBeneficeEchange(int positionI, int positionJ) {
+
+        return 0;
+    }    
+    
+    public  boolean doEchange(IntraEchange infos){
+        if(infos == null) return false;
+        if(!infos.isMouvementRealisable()) return false; 
+        
+          /// CODE HERE
+        
+        if (!this.check()){
+            System.out.println("Mauvais échange des clients");
+            System.out.println(infos);
+            System.exit(-1); //Termine le programme
+        }
+        
+        return true;
+    }
+     
     @Override
     protected int getMaxEchange() {
         return this.maxChaine;
