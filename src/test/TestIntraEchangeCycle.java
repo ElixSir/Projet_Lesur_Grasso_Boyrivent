@@ -6,6 +6,7 @@ package test;
  */
 
 
+import ensemble.Chaine;
 import ensemble.Cycle;
 import instance.Instance;
 import instance.reseau.Paire;
@@ -30,7 +31,7 @@ public class TestIntraEchangeCycle {
         InstanceReader read = new InstanceReader("instancesInitiales/instancedetest.txt");
         Instance i = read.readInstance();
         
-        Cycle c = new Cycle(i);
+        Chaine c = new Chaine(i, i.getAltruistes().getFirst());
         
        
         
