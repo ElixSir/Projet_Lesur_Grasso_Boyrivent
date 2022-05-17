@@ -11,7 +11,7 @@ import instance.Instance;
 import instance.reseau.Participant;
 import java.util.LinkedList;
 import operateur.InsertionPaire;
-import operateur.IntraEchangeCycle;
+import operateur.IntraEchange;
 
 /**
  *
@@ -85,6 +85,29 @@ public class Cycle extends Echanges {
         
         
         return true;
+    }
+    
+    public int deltaBeneficeRemplacement(int position, Participant paireJ){
+                if(this.paires.size() < 2){
+            return -1;
+        }
+        
+        int deltaCout = 0;
+
+        Participant paireI = this.getCurrent(position);
+        
+        Participant avantI = this.getPrec(position);
+        Participant apresI = this.getNext(position);
+        
+        //deltaCout =  this.DelBenefice(deltaCout, avantI.getBeneficeVers(paireI));
+        //deltaCout =  this.DelBenefice(deltaCout, paireI.getBeneficeVers(apresI));
+        deltaCout -= avantI.getBeneficeVers(paireI);
+        deltaCout -= paireI.getBeneficeVers(apresI);
+        System.out.println("Apres moins : "+ deltaCout);
+        deltaCout +=  avantI.getBeneficeVers(paireJ);
+        deltaCout += paireJ.getBeneficeVers(apresI);
+        System.out.println(" Apres Plus : "+deltaCout);
+        return deltaCout;
     }
     
     @Override
@@ -190,7 +213,7 @@ public class Cycle extends Echanges {
             Participant pPrec = this.getPrec(position);
             Participant pCour = this.getCurrent(position);
             
-            deltaBenefice = this.addBenefice(deltaBenefice, -pPrec.getBeneficeVers(pCour));
+            deltaBenefice = this.DelBenefice(deltaBenefice, pPrec.getBeneficeVers(pCour));
             deltaBenefice = this.addBenefice(deltaBenefice, pPrec.getBeneficeVers(paireToAdd));
             deltaBenefice = this.addBenefice(deltaBenefice, paireToAdd.getBeneficeVers(pCour));
         }

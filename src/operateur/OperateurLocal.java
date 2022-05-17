@@ -67,7 +67,7 @@ public abstract class OperateurLocal extends Operateur{
             case INTRA_ECHANGE_CHAINE:
                 return null;//new IntraEchangeChaine();
             case INTRA_ECHANGE_CYCLE:
-                return new IntraEchangeCycle();
+                return new IntraEchange();
             default:
                 return null;
         }
@@ -82,7 +82,7 @@ public abstract class OperateurLocal extends Operateur{
             case INTRA_ECHANGE_CHAINE:
                 return null;//new IntraEchangeChaine(echange, positionI, positionJ);
             case INTRA_ECHANGE_CYCLE:
-                return new IntraEchangeCycle(echange, positionI, positionJ);
+                return new IntraEchange(echange, positionI, positionJ);
             default:
                 return null;
         }

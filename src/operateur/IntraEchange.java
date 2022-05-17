@@ -11,13 +11,13 @@ import ensemble.Echanges;
  *
  * @author Bart
  */
-public class IntraEchangeCycle extends OperateurIntraEchange {
+public class IntraEchange extends OperateurIntraEchange {
 
-    public IntraEchangeCycle() {
+    public IntraEchange() {
         super();
     }
 
-    public IntraEchangeCycle(Echanges echange, int positionI, int positionJ) {
+    public IntraEchange(Echanges echange, int positionI, int positionJ) {
         super(positionI, positionJ, echange);
     }
 

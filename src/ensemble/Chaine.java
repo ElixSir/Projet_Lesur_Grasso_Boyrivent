@@ -164,6 +164,11 @@ public class Chaine extends Echanges {
         ecriture.print(s + "\n");
     }
 
+    public int deltaBeneficeRemplacement(int position, Participant paireJ){
+        
+        return 0;
+    }
+    
     @Override
     public boolean check() {
         boolean checker = true;
