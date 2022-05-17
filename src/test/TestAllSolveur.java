@@ -6,8 +6,8 @@
 package test;
 
 // TO CHECK : import des classes Instance, InstanceReader et ReaderException
-import ensemble.Chaine;
-import ensemble.Cycle;
+import solution.ensemble.Chaine;
+import solution.ensemble.Cycle;
 import instance.Instance;
 import instance.reseau.Paire;
 import io.InstanceReader;

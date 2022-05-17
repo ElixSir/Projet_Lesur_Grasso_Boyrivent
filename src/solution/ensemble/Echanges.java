@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ensemble;
+package solution.ensemble;
 
 import instance.reseau.Paire;
 import instance.reseau.Participant;

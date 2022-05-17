@@ -4,9 +4,9 @@
  */
 package solution;
 
-import ensemble.Chaine;
-import ensemble.Cycle;
-import ensemble.Echanges;
+import solution.ensemble.Chaine;
+import solution.ensemble.Cycle;
+import solution.ensemble.Echanges;
 import instance.Instance;
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;

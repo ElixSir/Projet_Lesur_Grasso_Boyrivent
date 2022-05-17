@@ -4,8 +4,13 @@
  */
 package solveur;
 
-import ensemble.Chaine;
-import ensemble.Cycle;
+import solution.ensemble.Chaine;
+import solution.ensemble.Cycle;
+import ilog.concert.IloException;
+import ilog.concert.IloIntVar;
+import ilog.concert.IloLinearNumExpr;
+import ilog.concert.IloNumVar;
+import ilog.cplex.IloCplex;
 import instance.Instance;
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;
@@ -14,6 +19,8 @@ import instance.reseau.Transplantation;
 import io.InstanceReader;
 import io.exception.ReaderException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import solution.Solution;
 
 /**
@@ -21,54 +28,163 @@ import solution.Solution;
  * @author Clem
  */
 public class EncoreUnArbre implements Solveur{
+    
+    private IloCplex iloCplex;
+    private IloIntVar[] x;
+    private LinkedList<Paire> paires;
+    private LinkedList<Altruiste> altruistes;
+    private LinkedList<LinkedList<Participant>> echangesPossibles;
+    private int nbAltruistes;
+    private int nbPaires;
 
     @Override
     public String getNom() {
         return "Eh oui un arbre";
     }
     
-    private void rechercheCycle(Paire paire,int maxtailleCycle, LinkedList<LinkedList<Participant>> echangesPossibles, LinkedList<Participant> cycle, Participant next) {
+    private void contrainte1() throws IloException {
+        LinkedList<Integer> echangesPaire;
+        LinkedList<Participant> temp;
         
-        cycle.add(next);
-        // this.printCycle(cycle);
-        
-        if(next.getBeneficeVers(paire) >= 0) {
-            echangesPossibles.add(new LinkedList(cycle));
-        }
-        
-        if(cycle.size() >= maxtailleCycle) return;
-        
-        for(Transplantation t: next.getTransplantations()) {
-            Paire p = t.getBeneficiaire();
-
-            if( !cycle.contains(p) ) {
-                this.rechercheCycle(paire, maxtailleCycle, echangesPossibles, cycle, p);
-
-                cycle.remove(p);
+        for (Paire p : this.paires) {
+            echangesPaire = new LinkedList();
+            
+            for (int i = 0; i < this.echangesPossibles.size(); i++) {
+                temp = this.echangesPossibles.get(i);
+                if( temp.contains(p) ) {
+                    echangesPaire.add(i);
+                }
             }
+
+            
+            IloLinearNumExpr expr = this.iloCplex.linearNumExpr();
+            for (Integer i : echangesPaire) {
+                expr.addTerm(x[i], 1);
+            }
+            
+            this.iloCplex.addLe(expr, 1);
         }
     }
     
-    private void rechercheChaine(Altruiste altruiste, int maxtailleChaine, LinkedList<LinkedList<Participant>> echangesPossibles, LinkedList<Participant> chaine, Participant next) {
+    private void contrainte2() throws IloException {
+        LinkedList<Integer> chainesDonneurAltruiste;
+        LinkedList<Participant> temp;
         
-        chaine.add(next);
-        
-        if(chaine.size() >= maxtailleChaine) {
-            echangesPossibles.add(new LinkedList<>(chaine) );
-            return;
-        } else if( chaine.size() >= 2 ){
-            echangesPossibles.add(new LinkedList<>(chaine) );
-        }
-        
-        for(Transplantation t: next.getTransplantations()) {
-            Paire p = t.getBeneficiaire();
-
-            if(!chaine.contains(p) ) {
-                this.rechercheChaine(altruiste, maxtailleChaine, echangesPossibles, chaine, p);
-
-                chaine.remove(p);
+        for (Altruiste a : this.altruistes) {
+            chainesDonneurAltruiste = new LinkedList();
+            
+            for (int i = 0; i < this.echangesPossibles.size(); i++) {
+                temp = this.echangesPossibles.get(i);
+                Participant tempFirstE = temp.getFirst();
+                if( tempFirstE instanceof Altruiste && tempFirstE.equals(a) ) {
+                    chainesDonneurAltruiste.add(i);
+                }
             }
+            
+            IloLinearNumExpr expr = this.iloCplex.linearNumExpr();
+            for (Integer i : chainesDonneurAltruiste) {
+                expr.addTerm(x[i], 1);
+            }
+            
+            this.iloCplex.addLe(expr, 1);
         }
+    }
+    
+    private void objective() throws IloException {
+        IloLinearNumExpr expr = this.iloCplex.linearNumExpr();
+        int benefice;
+        
+        for (int i = 0; i < this.echangesPossibles.size(); i++) {
+            LinkedList<Participant> e = this.echangesPossibles.get(i);
+            benefice = this.getbenefEchange(e);
+            expr.addTerm(x[i], benefice);
+        }
+        this.iloCplex.addMaximize(expr);
+    }
+    
+    private void defXVarDecision() throws IloException {
+        int nbEchanges = this.echangesPossibles.size();
+        
+        this.x = new IloIntVar[nbEchanges];
+        
+        for (int i = 0; i < nbEchanges; ++i) {
+            x[i] = iloCplex.boolVar("x" + i );
+        }
+    }
+    
+    private void buildModel() throws IloException {
+        this.iloCplex = new IloCplex();
+        this.defXVarDecision();
+        // System.out.println("Fin X var");
+        this.objective();
+        // System.out.println("Fin objective");
+        this.contrainte1();
+        // System.out.println("Fin contrainte 1");
+        this.contrainte2();
+        // System.out.println("Fin contrainte 2");
+    }
+
+    @Override
+    public Solution solve(Instance instance) {
+        
+        Solution s = new Solution(instance);
+        
+        this.altruistes = instance.getAltruistes();
+        this.paires = instance.getPaires();
+
+        int tailleLimite = 5;
+
+        RechercheRecursiveAllEchanges r = new RechercheRecursiveAllEchanges(instance, tailleLimite);
+
+        this.echangesPossibles = r.recherche();
+        
+        /*
+        */
+        System.out.println("Fin de recherche des echanges possiblie pour une taille d'échange de " + tailleLimite + ". " 
+                + this.echangesPossibles.size() + " trouvées");
+        
+        try {
+            this.buildModel();
+            System.out.println("fin build");
+            
+            iloCplex.exportModel("model_" + instance.getNom() + ".lp");
+            iloCplex.setParam(IloCplex.DoubleParam.TimeLimit, 60);
+            
+            if(iloCplex.solve()){
+                System.out.println("ok");
+                System.out.println(iloCplex.getStatus());
+                System.out.println(iloCplex.getObjValue());
+                System.out.println(iloCplex.getBestObjValue());
+                //System.out.println(iloCplex.getValue(var));
+                
+                int nbParticipants = this.nbAltruistes + this.nbPaires;
+                for (int i = 1; i < this.echangesPossibles.size(); i++) {
+                    if(iloCplex.getValue(this.x[i]) >= 1)
+                    {
+                        LinkedList<Participant> e = new LinkedList(this.echangesPossibles.get(i));
+                        
+                        if( e.getFirst() instanceof Altruiste) {
+                            Altruiste a = (Altruiste) e.pop();
+                            
+                            s.ajouterAltruisteNouvelleChaine(a);
+                            
+                            for (Participant participant : e) {
+                                s.ajouterPaireChaineByAltruiste(a, (Paire)participant);
+                            }
+                        } else {
+                            LinkedList<Paire> ep = new LinkedList(e);
+                            s.ajouterNouveauCycle(ep);
+                        }
+                    }
+                }
+                      
+            }
+        } catch (IloException ex) {
+            Logger.getLogger(EncoreUnArbre.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        s.clean();
+        return s;
     }
     
     private int getbenefEchange(LinkedList<Participant> ech) {
@@ -97,91 +213,6 @@ public class EncoreUnArbre implements Solveur{
         }
         
         return res;
-    }
-    
-    private class E {
-        
-        private LinkedList<Participant> echange;
-        private LinkedList<LinkedList<Participant>> echangePossible;
-        
-        public E(LinkedList<Participant> echange, LinkedList<LinkedList<Participant>> allEchanges) {
-            this.echange = echange;
-            this.echangePossible = new LinkedList<>();
-            this.ajouterEchangesPossible(allEchanges);
-        }
-        
-        private void ajouterEchangesPossible(LinkedList<LinkedList<Participant>> all) {
-            
-            for (LinkedList<Participant> e : all) {
-                for (Participant participant : e) {
-                    if( !this.echange.contains(participant) ) {
-                        this.echangePossible.add(new LinkedList(e));
-                    }
-                }
-            }
-        }
-        
-        public LinkedList<LinkedList<Participant>> getEchangesCompatible() {
-            return new LinkedList(echangePossible);
-        }
-        
-        public int nbEchangesCompatible() {
-            return this.echange.size();
-        }
-    }
-    
-    
-    private LinkedList<LinkedList<Participant>> bestEchangesValable(LinkedList<LinkedList<Participant>> ech) {
-        LinkedList<LinkedList<Participant>> echangesBrut = new LinkedList<>(ech);
-        LinkedList<E> echanges = new LinkedList<>();
-        
-        LinkedList<LinkedList<Participant>> bestEchangesValable = new LinkedList<>();
-        
-        for (LinkedList<Participant> echangeBrut : echangesBrut) {
-            E e = new E(echangeBrut,echangesBrut);
-            // System.out.println(":" + e.nbEchangesCompatible());
-            echanges.add(e);
-        }
-        
-        return bestEchangesValable;
-    }
-
-    @Override
-    public Solution solve(Instance instance) {
-        Solution s = new Solution(instance);
-        
-        LinkedList<Paire> paires = instance.getPaires();
-        LinkedList<Altruiste> altruistes = instance.getAltruistes();
-        
-        int limiteTaille = 5;
-        
-        int tailleChaineLimite = limiteTaille;
-        int tailleCycleLimite = limiteTaille;
-        
-        int maxTailleChaine = (instance.getMaxChaines() > tailleChaineLimite )? tailleChaineLimite: instance.getMaxChaines() ;
-        int maxTailleCycle = (instance.getMaxCycles() > tailleCycleLimite)? tailleCycleLimite: instance.getMaxCycles();
-        
-        LinkedList<Participant> participants = new LinkedList<>(paires);
-        participants.addAll(altruistes);
-        
-        LinkedList<LinkedList<Participant>> echangesPossibles = new LinkedList<>();
-        
-        LinkedList<Participant> temp;
-        
-        for (Participant p : participants) {
-
-            temp = new LinkedList<>();
-            
-            if( p instanceof Paire ) {
-                this.rechercheCycle((Paire)p, maxTailleCycle, echangesPossibles, temp, p);
-            } else if( p instanceof Altruiste ) {
-                Altruiste a = (Altruiste)p;
-                this.rechercheChaine(a, maxTailleChaine, echangesPossibles, temp, p);
-            }
-        }
-        
-        s.clean();
-        return s;
     }
     
     private void printPaireTransplantation(Participant p) {

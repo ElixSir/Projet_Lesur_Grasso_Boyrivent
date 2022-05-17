@@ -5,7 +5,7 @@
  */
 package operateur;
 
-import ensemble.Echanges;
+import solution.ensemble.Echanges;
 import instance.reseau.Paire;
 
 /**

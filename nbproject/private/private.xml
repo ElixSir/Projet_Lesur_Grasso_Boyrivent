@@ -3,33 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/io/InstanceReader.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/solveur/ChainesMeilleurBenef.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/operateur/Operateur.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/instance/Instance.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/test/TestMeilleureInsertion.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/solveur/LargeCycles.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/instance/reseau/Participant.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/test/TestAllSolveur.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/solveur/SolutionSimple.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/solveur/MeilleureInsertion.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/operateur/InsertionPaire.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/solveur/InsertionSimple.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/solution/Solution.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/instance/reseau/Paire.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/test/TestIntraEchangeCycle.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/operateur/OperateurInterEchange.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/operateur/TypeOperateurLocal.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/ensemble/Chaine.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/solveur/InsertionBestLocal.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/instance/reseau/Transplantation.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/operateur/OperateurIntraEchange.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/solveur/RechercheLocale.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/solveur/Solveur.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/operateur/IntraEchangeCycle.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/ensemble/Echanges.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/ensemble/Cycle.java</file>
-            <file>file:/C:/Users/Bart/Documents/NetBeansProjects/Projet_Lesur_Grasso_Boyrivent/src/operateur/OperateurLocal.java</file>
+            <file>file:/C:/Users/Clem/Documents/NetBeansProjects/projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/LargeCycles.java</file>
+            <file>file:/C:/Users/Clem/Documents/NetBeansProjects/projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/EncoreUnArbre.java</file>
+            <file>file:/C:/Users/Clem/Documents/NetBeansProjects/projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/ArbreSolveur.java</file>
+            <file>file:/C:/Users/Clem/Documents/NetBeansProjects/projects/Projet_Lesur_Grasso_Boyrivent/src/solveur/RechercheRecursiveAllEchanges.java</file>
+            <file>file:/C:/Users/Clem/Documents/NetBeansProjects/projects/Projet_Lesur_Grasso_Boyrivent/src/ensemble/Echanges.java</file>
+            <file>file:/C:/Users/Clem/Documents/NetBeansProjects/projects/Projet_Lesur_Grasso_Boyrivent/src/ensemble/Cycle.java</file>
         </group>
     </open-files>
 </project-private>
