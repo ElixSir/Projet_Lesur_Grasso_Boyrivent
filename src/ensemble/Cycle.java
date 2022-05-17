@@ -167,6 +167,32 @@ public class Cycle extends Echanges {
         return deltaBeneficeRemplacement(positionI,this.getCurrent(positionJ))+deltaBeneficeRemplacement(positionJ,this.getCurrent(positionI));
     }    
     
+    public boolean doEchange(IntraEchange infos){
+        if(infos == null) return false;
+        if(!infos.isMouvementRealisable()) return false; 
+        
+        int positionI = infos.getPositionI();
+        int positionJ = infos.getPositionJ();
+        
+        Paire paireI = infos.getClientI();
+        Paire paireJ = infos.getClientJ();
+        
+        this.paires.set(positionI, paireJ);
+        this.paires.set(positionJ, paireI);
+        
+
+        this.beneficeTotal = this.addBenefice(beneficeTotal, infos.getDeltaBenefice()) ; //MAJ cout total
+        
+        
+        if (!this.check()){
+            System.out.println("Mauvais échange des clients");
+            System.out.println(infos);
+            System.exit(-1); //Termine le programme
+        }
+        
+        return true;
+    }
+        
     @Override
     public boolean isPaireAjoutableFin(Paire p) {
         if( null == p || this.getSize()  >= this.maxCycle ) return false;

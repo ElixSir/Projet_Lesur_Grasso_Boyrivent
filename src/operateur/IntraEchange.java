@@ -51,7 +51,7 @@ public class IntraEchange extends OperateurIntraEchange {
 
     @Override
     protected boolean doMouvement() {
-        return this.echange.doEchangeCycle(this);
+        return this.echange.doEchange(this);
     }
     
 }

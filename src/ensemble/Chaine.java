@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import operateur.InsertionPaire;
+import operateur.IntraEchange;
 
 /**
  *
@@ -224,6 +225,21 @@ public class Chaine extends Echanges {
         return 0;
     }    
     
+    public  boolean doEchange(IntraEchange infos){
+        if(infos == null) return false;
+        if(!infos.isMouvementRealisable()) return false; 
+        
+          /// CODE HERE
+        
+        if (!this.check()){
+            System.out.println("Mauvais échange des clients");
+            System.out.println(infos);
+            System.exit(-1); //Termine le programme
+        }
+        
+        return true;
+    }
+     
     @Override
     protected int getMaxEchange() {
         return this.maxChaine;
