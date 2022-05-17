@@ -52,21 +52,13 @@ public abstract class OperateurLocal extends Operateur{
     
     public static OperateurLocal getOperateur(TypeOperateurLocal type){
         switch(type){
-            case INTER_DEPLACEMENT_CHAINE:
-                return null; // new InterDeplacementChaine();
-            case INTER_DEPLACEMENT_CYCLE: 
-                return null;// new InterDeplacementCycle();
-            case INTER_ECHANGE_CHAINE:
-                return null;//new InterEchangeChaine();
-            case INTER_ECHANGE_CYCLE:
-                return null;//new InterEchangeCycle();
-            case INTRA_DEPLACEMENT_CHAINE:
-                return null;//new IntraDeplacementChaine();
-            case INTRA_DEPLACEMENT_CYCLE:
-                return null;//new IntraDeplacementCycle();
-            case INTRA_ECHANGE_CHAINE:
-                return null;//new IntraEchangeChaine();
-            case INTRA_ECHANGE_CYCLE:
+            case INTER_DEPLACEMENT:
+                return null; // new InterDeplacement();
+            case INTER_ECHANGE:
+                return null;//new InterEchange();
+            case INTRA_DEPLACEMENT:
+                return null;//new IntraDeplacement();
+            case INTRA_ECHANGE:
                 return new IntraEchange();
             default:
                 return null;
@@ -75,13 +67,9 @@ public abstract class OperateurLocal extends Operateur{
     
     public static OperateurIntraEchange getOperateurIntra(TypeOperateurLocal type, Echanges echange, int positionI, int positionJ) {
         switch(type) {
-            case INTRA_DEPLACEMENT_CHAINE:
-                return null;//new IntraDeplacementChaine(echange, positionI, positionJ);
-            case INTRA_DEPLACEMENT_CYCLE:
-                return null;//new IntraDeplacementCycle(echange, positionI, positionJ);
-            case INTRA_ECHANGE_CHAINE:
-                return null;//new IntraEchangeChaine(echange, positionI, positionJ);
-            case INTRA_ECHANGE_CYCLE:
+            case INTRA_DEPLACEMENT:
+                return null;//new IntraDeplacement(echange, positionI, positionJ);
+            case INTRA_ECHANGE:
                 return new IntraEchange(echange, positionI, positionJ);
             default:
                 return null;
@@ -90,14 +78,10 @@ public abstract class OperateurLocal extends Operateur{
     
      public static OperateurInterEchange getOperateurInter(TypeOperateurLocal type, Echanges echange, Echanges autreEchange, int positionI, int positionJ) {
         switch(type) {
-            case INTER_DEPLACEMENT_CHAINE:
-                return null;//new InterDeplacementChaine(echange, autreEchange, positionI, positionJ);
-            case INTER_DEPLACEMENT_CYCLE:
-                return null;//new InterDeplacementCycle(echange, autreEchange, positionI, positionJ);
-            case INTER_ECHANGE_CHAINE:
-                return null;//new InterEchangeChaine(echange, autreEchange, positionI, positionJ);
-            case INTER_ECHANGE_CYCLE:
-                return null;//new InterEchangeCycle(echange, autreEchange, positionI, positionJ);
+            case INTER_DEPLACEMENT:
+                return null;//new InterDeplacement(echange, autreEchange, positionI, positionJ);
+            case INTER_ECHANGE:
+                return null;//new InterEchange(echange, autreEchange, positionI, positionJ);
             default:
                 return null;
         }
