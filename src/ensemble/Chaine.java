@@ -218,6 +218,12 @@ public class Chaine extends Echanges {
         return s;
     }
 
+    
+     public int deltaBeneficeEchange(int positionI, int positionJ) {
+
+        return 0;
+    }    
+    
     @Override
     protected int getMaxEchange() {
         return this.maxChaine;

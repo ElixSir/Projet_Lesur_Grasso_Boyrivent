@@ -206,36 +206,7 @@ public abstract class Echanges {
     
     
      
-    private int deltaBeneficeEchangeConsecutif(int positionI){
-        
-        if(this.paires.size() < 2){
-            return -1;
-        }
-        
-        if(this.paires.size() == 2){ // si un cycle de 2 
-            return 0;
-        }
-        
-        
-        int deltaCout = 0;
-        
-        Participant paireI = this.getCurrent(positionI);
-        Participant paireJ = this.getNext(positionI);
-        Participant avantI = this.getPrec(positionI);
-        Participant apresJ = this.getNext(positionI+1);
-        
-        
-        deltaCout = this.DelBenefice(deltaCout, avantI.getBeneficeVers(paireI));
-        deltaCout = this.DelBenefice(deltaCout, paireI.getBeneficeVers(paireJ));
-        deltaCout = this.DelBenefice(deltaCout, paireJ.getBeneficeVers(apresJ));
-        
-        deltaCout = this.addBenefice(deltaCout, avantI.getBeneficeVers(paireJ));
-        deltaCout = this.addBenefice(deltaCout, paireJ.getBeneficeVers(paireI));
-        deltaCout = this.addBenefice(deltaCout, paireI.getBeneficeVers(apresJ));
-        
-        
-        return deltaCout;
-    }
+
     
     protected abstract int deltaBeneficeRemplacement(int position, Participant paireJ);
     
@@ -269,31 +240,7 @@ public abstract class Echanges {
     
     
     
-    public int deltaBeneficeEchange(int positionI, int positionJ) {
-        if(!isPositionInsertionValide(positionI)){
-            System.out.println("posI Invalid");
-            return -1;
-        }
-        if(!isPositionInsertionValide(positionJ)){
-            System.out.println("posJ Invalid");
-            return -1;
-        }
-        if(positionI == positionJ){
-            System.out.println("posI = posJ");
-            return -1;
-        }
-        if(!(positionI<positionJ)){
-            System.out.println("!(positionI<positionJ)");
-            return -1;
-        }
-        
-        if(positionJ-positionI == 1 || positionJ-positionI == this.paires.size()-1){
-            System.out.println("Cons?cutif");
-            return deltaBeneficeEchangeConsecutif(positionI);
-        }
-        System.out.println("Pas cons?cutif");
-        return deltaBeneficeRemplacement(positionI,this.getCurrent(positionJ))+deltaBeneficeRemplacement(positionJ,this.getCurrent(positionI));
-    }    
+    public abstract int deltaBeneficeEchange(int positionI, int positionJ); 
     
     
 }
