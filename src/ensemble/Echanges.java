@@ -51,7 +51,7 @@ public abstract class Echanges {
             return false;
         }
 
-        if (this.deltaCoutInsertion(position, p) == -1) {
+        if (this.deltaBeneficeInsertion(position, p) == -1) {
             return false;
         }
 
@@ -90,7 +90,7 @@ public abstract class Echanges {
     }
     
     /**
-     * Ajoute le benefice au benefice total en testant les paramètres
+     * Ajoute le benefice au benefice total en testant les paramï¿½tres
      *
      * @param benefice
      * @param beneficeToAdd
@@ -103,7 +103,10 @@ public abstract class Echanges {
         return benefice + beneficeToAdd;
     }
     
-    public int DelBenefice(int benefice, int beneficeToAdd) {
+    public int delBenefice(int benefice, int beneficeToAdd) {
+        if (benefice == -1 || beneficeToAdd == -1) {
+            return -1;
+        }
         return benefice - beneficeToAdd;
     }
     
@@ -126,18 +129,38 @@ public abstract class Echanges {
     }
 
     
+    /**
+     * renvoie un boolï¿½en indiquant si position correspond ï¿½ une position d'insertion valide
+     * d?une paire dans l'echange (donc entre 0 et le nombre de paires).
+     *
+     * @param position
+     * @return
+     */
     protected boolean isPositionInsertionValide(int position){
-        //on ne prend pas en compte l'altruiste donc la liste commence ï¿½ 1 donc dï¿½calage de 1
 
-        if(position >= 0 && position < this.getSize()){ // && position < this.getSize() Si on met ça impossible d'inserer en 
-            return true;
+        if (position < 0 || position > this.paires.size()) {
+            return false;
         }
-        return false;
+        return true;
     }
-   
+    
+    /**
+     * renvoie un boolï¿½en indiquant si position correspond ï¿½ une position valide
+     * d?une paire dans l'echange (donc entre 0 et le nombre de paire ?1).
+     *
+     * @param position
+     * @return
+     */
+    protected boolean isPositionValide(int position) {
+        if (position < 0 || position > this.paires.size() - 1) {
+            return false;
+        }
+        return true;
+    }
+    
     protected abstract int getMaxEchange();
     
-    public abstract int deltaCoutInsertion(int position, Paire paireToAdd);  
+    public abstract int deltaBeneficeInsertion(int position, Paire paireToAdd);  
         
     public abstract Participant getPrec(int position);
     
@@ -159,7 +182,7 @@ public abstract class Echanges {
         for (int pos = 0; pos <= this.paires.size(); pos++) {
             insActu = new InsertionPaire(this, pos, paireToInsert);
             if (insActu.isMeilleur(insMeilleur)) {
-                //problème : Les chaines ne rentrent jamais
+                //problï¿½me : Les chaines ne rentrent jamais
                 insMeilleur = insActu;
             }
         }
@@ -225,9 +248,9 @@ public abstract class Echanges {
         Participant apresJ = this.getNext(positionI+1);
         
         
-        deltaCout = this.DelBenefice(deltaCout, avantI.getBeneficeVers(paireI));
-        deltaCout = this.DelBenefice(deltaCout, paireI.getBeneficeVers(paireJ));
-        deltaCout = this.DelBenefice(deltaCout, paireJ.getBeneficeVers(apresJ));
+        deltaCout = this.delBenefice(deltaCout, avantI.getBeneficeVers(paireI));
+        deltaCout = this.delBenefice(deltaCout, paireI.getBeneficeVers(paireJ));
+        deltaCout = this.delBenefice(deltaCout, paireJ.getBeneficeVers(apresJ));
         
         deltaCout = this.addBenefice(deltaCout, avantI.getBeneficeVers(paireJ));
         deltaCout = this.addBenefice(deltaCout, paireJ.getBeneficeVers(paireI));
@@ -259,7 +282,7 @@ public abstract class Echanges {
         
         
         if (!this.check()){
-            System.out.println("Mauvais échange des clients");
+            System.out.println("Mauvais ï¿½change des clients");
             System.out.println(infos);
             System.exit(-1); //Termine le programme
         }

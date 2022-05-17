@@ -45,7 +45,7 @@ public class MeilleureInsertion implements Solveur{
                 paires.remove(paires.getFirst());
             }
         }
-       // s.clean();
+        s.clean();
         return s;
     }
 

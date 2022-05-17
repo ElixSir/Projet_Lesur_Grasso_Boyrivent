@@ -37,7 +37,7 @@ public class InsertionPaire extends Operateur {
     @Override
     protected int evalDeltaBenefice() {
         if(this.echange == null) return -1;
-        return this.echange.deltaCoutInsertion(this.position, this.paire);
+        return this.echange.deltaBeneficeInsertion(this.position, this.paire);
     }
 
     @Override

@@ -105,7 +105,7 @@ public class Chaine extends Echanges {
         return false;
     }
     
-    public int deltaCoutInsertion(int position, Paire paireToAdd){
+    public int deltaBeneficeInsertion(int position, Paire paireToAdd){
         if (!isPositionInsertionValide(position) || paireToAdd == null) return -1;
         int deltaBenefice = 0;
                 
@@ -125,11 +125,6 @@ public class Chaine extends Echanges {
             deltaBenefice = this.addBenefice(deltaBenefice, pPrec.getBeneficeVers(paireToAdd));
         }
         else{
-           //probleme ici avec get pPrec
-           //position = 2 alors que seulement l'altruiste et la paire,
-           //mais si dans le test préalable on fait size - 1, on ne
-           //rentre même pas dans la boucle avec i car getSize - 1 = 0
-           //voir classe Echange ligne 162
             pPrec = this.getPrec(position);
             pCour = this.getCurrent(position);
         }
@@ -144,6 +139,67 @@ public class Chaine extends Echanges {
         return deltaBenefice;
     }
     
+    /**
+     * renvoie le coût engendré par la suppression de la paire i à la position
+     * position de la tournée On fait trois trajets : on enlève la
+     * transplantation de i-1 à i, on enlève la transplantation de i à i+1, on
+     * ajoute la transplantation de i-1 à i+1
+     * @param position
+     * @return
+     */
+    @Override
+    public int deltaBeneficeSuppression(int position) {
+        if (!this.isPositionValide(position)) {
+            return -1;
+        }
+        int deltaBenefice = 0;
+        if (paires.size() == 1) {
+            //on enleve le benefice de la transplantation de l'altruiste vers la paire
+            deltaBenefice = this.delBenefice(deltaBenefice, this.altruiste.getBeneficeVers(this.getFirstPaire()));
+        } else {
+
+            Participant pPrec = this.getPrec(position);
+            Participant pCurr = this.getCurrent(position);
+            Participant pSuiv = this.getNext(position);
+
+            //on enlève le trajet de i-1 à i
+            deltaBenefice = this.delBenefice(deltaBenefice, pPrec.getBeneficeVers(pCurr));
+            //on enlève le trajet de i à i+1
+            deltaBenefice = this.delBenefice(deltaBenefice, pCurr.getBeneficeVers(pSuiv));
+            //on ajoute le trajet i-1 à i+1
+            deltaBenefice = this.addBenefice(deltaBenefice, pPrec.getBeneficeVers(pSuiv));
+
+        }
+
+        return deltaBenefice;
+
+    }
+    
+    
+    
+    /**
+     * Renvoie le coût engendré par le déplacement dans la même tournée du
+     * client à la position positionI avant le point à la position positionJ.
+     * Cette méthode renverra l?infini si une des positions passées en paramètre
+     * est incorrecte, ou si les deux positions ne sont pas compatibles pour un
+     * déplacement.
+     *
+     * @param positionI
+     * @param positionJ
+     * @return
+     */
+    /*@Override
+    public int deltaCoutDeplacement(int positionI, int positionJ) {
+        if (positionDeplacementValides(positionI, positionJ)
+                && this.deltaBeneficeSuppression(positionI) != -1
+                && this.deltaBeneficeInsertion(positionJ, clients.get(positionI))) != -1) {
+            int deltaCoutDeplacement = this.deltaBeneficeSuppression(positionI)
+                    + this.deltaBeneficeInsertion(positionJ, clients.get(positionI));
+            return deltaCoutDeplacement;
+        }
+        return -1;
+
+    }*/
     
     public Participant getNext(int position){
         if(!this.isPositionInsertionValide(position)) return null;
@@ -241,4 +297,5 @@ public class Chaine extends Echanges {
         }
         return this.paires.get(position);
     }
+
 }

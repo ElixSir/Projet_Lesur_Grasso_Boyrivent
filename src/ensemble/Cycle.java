@@ -81,7 +81,7 @@ public class Cycle extends Echanges {
         if(!isPositionInsertionValide(position)) return false;
         if( this.getSize() >= this.maxCycle ) return false;
         
-        if(this.deltaCoutInsertion(position, p) >= Integer.MAX_VALUE) return false;
+        if(this.deltaBeneficeInsertion(position, p) >= Integer.MAX_VALUE) return false;
         
         
         return true;
@@ -193,8 +193,49 @@ public class Cycle extends Echanges {
         return checker;
     }
 
+    /**
+     * renvoie le coût engendré par la suppression de la paire i à la position
+     * position de la tournée On fait trois trajets : on enlève la
+     * transplantation de i-1 à i, on enlève la transplantation de i à i+1, on
+     * ajoute la transplantation de i-1 à i+1
+     *
+     * @param position
+     * @return
+     */
+    @Override
+    public int deltaBeneficeSuppression(int position) {
+        if (!this.isPositionValide(position)) {
+            return -1;
+        }
+        int deltaBenefice = 0;
+        if (paires.size() == 2) {
+            //on enleve le benefice de la transplantation de l'altruiste vers la paire
+            Participant pPrec = this.getPrec(position);
+            Participant pCurr = this.getCurrent(position);
+            deltaBenefice = this.delBenefice(deltaBenefice, pPrec.getBeneficeVers(pCurr));
+            deltaBenefice = this.delBenefice(deltaBenefice, pCurr.getBeneficeVers(pPrec));
+        } 
+        else if(paires.size() > 2){
+
+            Participant pPrec = this.getPrec(position);
+            Participant pCurr = this.getCurrent(position);
+            Participant pSuiv = this.getNext(position);
+
+            //on enlève le trajet de i-1 à i
+            deltaBenefice = this.delBenefice(deltaBenefice, pPrec.getBeneficeVers(pCurr));
+            //on enlève le trajet de i à i+1
+            deltaBenefice = this.delBenefice(deltaBenefice, pCurr.getBeneficeVers(pSuiv));
+            //on ajoute le trajet i-1 à i+1
+            deltaBenefice = this.addBenefice(deltaBenefice, pPrec.getBeneficeVers(pSuiv));
+
+        }
+
+        return deltaBenefice;
+
+    }
     
-    public int deltaCoutInsertion(int position, Paire paireToAdd){
+    
+    public int deltaBeneficeInsertion(int position, Paire paireToAdd){
         if (!isPositionInsertionValide(position) || paireToAdd == null) return -1;
         int deltaBenefice = 0;
                 
