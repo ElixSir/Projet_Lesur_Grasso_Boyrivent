@@ -6,8 +6,8 @@ package test;
  */
 
 
-import ensemble.Chaine;
-import ensemble.Cycle;
+import solution.ensemble.Chaine;
+import solution.ensemble.Cycle;
 import instance.Instance;
 import instance.reseau.Paire;
 import io.InstanceReader;
@@ -31,7 +31,7 @@ public class TestIntraEchangeCycle {
         InstanceReader read = new InstanceReader("instancesInitiales/instancedetest.txt");
         Instance i = read.readInstance();
         
-        Chaine c = new Chaine(i, i.getAltruistes().getFirst());
+        Cycle c = new Cycle(i);
         
        
         
@@ -53,7 +53,7 @@ public class TestIntraEchangeCycle {
             System.out.println("Size : "+c.getPaires().size());
         
 
-        IntraEchange echange2 = new IntraEchange(c,1, 2);
+        IntraEchange echange2 = new IntraEchange(c,0, 3);
         //InsertionPaire insertion3 = new InsertionPaire(c,1, p2);
         
             System.out.println("Benefice : "+ c.getBeneficeTotal());

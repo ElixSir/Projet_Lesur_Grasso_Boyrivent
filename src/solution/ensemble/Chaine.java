@@ -220,7 +220,7 @@ public class Chaine extends Echanges {
     }
 
     
-     public int deltaBeneficeEchange(int positionI, int positionJ) {
+     public int deltaBeneficeEchange(int positionI, int positionJ, IntraEchange i) {
 
         return 0;
     }    

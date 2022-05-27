@@ -25,6 +25,12 @@ public class Cycle extends Echanges {
         this.maxCycle = i.getMaxCycles();
     }
     
+    public Cycle (Cycle c){
+        this.maxCycle = c.getMaxCycle();
+        this.setPaires(c.getPaires());
+    }
+    
+
     public Cycle(Instance i, LinkedList<Paire> cycle) {
         this(i);
         if(Cycle.checkCycleValide(cycle)) {
@@ -87,7 +93,7 @@ public class Cycle extends Echanges {
         return true;
     }
     
-    public int deltaBeneficeRemplacement(int position, Participant paireJ){
+   /* public int deltaBeneficeRemplacement(int position, Participant paireJ){
                 if(this.paires.size() < 2){
             return -1;
         }
@@ -139,9 +145,41 @@ public class Cycle extends Echanges {
         
         
         return deltaCout;
-    }
+    }*/
+        
+    /*private int deltaBeneficeEchangeConsecutifBout(int positionI){
+        
+        if(this.paires.size() < 2){
+            return -1;
+        }
+        
+        if(this.paires.size() == 2){ // si un cycle de 2 
+            return 0;
+        }
+        
+        
+        int deltaCout = 0;
+        
+        Participant paireI = this.getCurrent(positionI);
+        Participant paireJ = this.getNext(positionI);
+        Participant avantI = this.getPrec(positionI);
+        Participant avantJ = this.getPrec(positionI-1);
+        
+        
+        deltaCout = this.DelBenefice(deltaCout, avantI.getBeneficeVers(paireI));
+        deltaCout = this.DelBenefice(deltaCout, paireI.getBeneficeVers(paireJ));
+        deltaCout = this.DelBenefice(deltaCout, paireJ.getBeneficeVers(avantJ));
+        
+        deltaCout = this.addBenefice(deltaCout, avantI.getBeneficeVers(paireJ));
+        deltaCout = this.addBenefice(deltaCout, paireJ.getBeneficeVers(paireI));
+        deltaCout = this.addBenefice(deltaCout, paireI.getBeneficeVers(avantJ));
+        
+        
+        return deltaCout;
+    }*/
     
-        public int deltaBeneficeEchange(int positionI, int positionJ) {
+    
+    public int deltaBeneficeEchange(int positionI, int positionJ, IntraEchange infos) {
         if(!isPositionInsertionValide(positionI)){
             System.out.println("posI Invalid");
             return -1;
@@ -159,12 +197,37 @@ public class Cycle extends Echanges {
             return -1;
         }
         
-        if(positionJ-positionI == 1 || positionJ-positionI == this.paires.size()-1){
-            System.out.println("Cons?cutif");
-            return deltaBeneficeEchangeConsecutif(positionI);
+        Cycle c = new Cycle(this);
+        
+        
+        Paire paireI = infos.getClientI();
+        Paire paireJ = infos.getClientJ();
+        
+        c.paires.set(positionI, paireJ);
+        c.paires.set(positionJ, paireI);
+        
+        
+         int beneficeTotal = 0;
+        
+        if( c.getSize() > 1) {
+            
+            Paire p = c.getFirstPaire();
+            for(int i = 1; i < c.getSize(); i++) {
+                Paire pcurr = c.get(i);
+                beneficeTotal = c.addBenefice(beneficeTotal, p.getBeneficeVers(pcurr));
+                p = pcurr;
+            }
+            beneficeTotal = c.addBenefice(beneficeTotal, c.getLastPaire().getBeneficeVers(c.getFirstPaire()));
+        } 
+        
+        
+        if( c.getSize() > c.maxCycle ) {
+            System.err.println("[CALCUL CYCLE] : La taille totale est supérieur à la capacité : ( taille totale : " + this.getSize() + ", capacité : " + this.maxCycle  + " )" );
+            return -1;
         }
-        System.out.println("Pas cons?cutif");
-        return deltaBeneficeRemplacement(positionI,this.getCurrent(positionJ))+deltaBeneficeRemplacement(positionJ,this.getCurrent(positionI));
+        
+        
+        return beneficeTotal;
     }    
     
     public boolean doEchange(IntraEchange infos){
@@ -181,7 +244,7 @@ public class Cycle extends Echanges {
         this.paires.set(positionJ, paireI);
         
 
-        this.beneficeTotal = this.addBenefice(beneficeTotal, infos.getDeltaBenefice()) ; //MAJ cout total
+        this.beneficeTotal = infos.getDeltaBenefice(); //MAJ cout total
         
         
         if (!this.check()){

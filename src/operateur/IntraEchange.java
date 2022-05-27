@@ -4,6 +4,7 @@
  */
 package operateur;
 
+import solution.ensemble.Cycle;
 import solution.ensemble.Echanges;
 
 
@@ -46,7 +47,8 @@ public class IntraEchange extends OperateurIntraEchange {
     protected int evalDeltaBenefice() {
         if(echange == null) return -1;
         
-        return this.echange.deltaBeneficeEchange(this.positionI, this.positionJ);
+
+        return this.echange.deltaBeneficeEchange(this.positionI, this.positionJ, this);
     }
 
     @Override

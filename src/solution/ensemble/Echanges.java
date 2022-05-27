@@ -25,6 +25,12 @@ public abstract class Echanges {
         paires = new LinkedList();
     }
     
+
+
+    public void setBeneficeToal(int b){
+        this.beneficeTotal = b;
+    }
+    
     
     public boolean ajouterPaire(Paire p) {
         if( null == p || !this.isPaireAjoutableFin(p) ) return false;
@@ -51,9 +57,9 @@ public abstract class Echanges {
             return false;
         }
 
-        if (this.deltaCoutInsertion(position, p) == -1) {
+       /* if (this.deltaCoutInsertion(position, p) == -1) {
             return false;
-        }
+        }*/
 
         return true;
     }
@@ -77,7 +83,7 @@ public abstract class Echanges {
      * @param paires
      * @return 
      */
-    protected boolean setPaires(LinkedList<Paire> paires) {
+    public boolean setPaires(LinkedList<Paire> paires) {
         if( null == paires) return false;
         
         if( ! (this instanceof Cycle) ) return false;
@@ -208,7 +214,7 @@ public abstract class Echanges {
      
 
     
-    protected abstract int deltaBeneficeRemplacement(int position, Participant paireJ);
+   // protected abstract int deltaBeneficeRemplacement(int position, Participant paireJ);
     
 
     
@@ -216,7 +222,7 @@ public abstract class Echanges {
     
     
     
-    public abstract int deltaBeneficeEchange(int positionI, int positionJ); 
+    public abstract int deltaBeneficeEchange(int positionI, int positionJ, IntraEchange i); 
     
     
 }
