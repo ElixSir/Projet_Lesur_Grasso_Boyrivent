@@ -207,7 +207,7 @@ public abstract class Echanges {
     
 
     public LinkedList<Paire> getPaires() {
-        return new LinkedList<>(paires);
+        return new LinkedList(paires);
     }
     
     

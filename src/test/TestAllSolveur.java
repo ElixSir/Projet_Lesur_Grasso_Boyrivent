@@ -26,6 +26,7 @@ import solution.Solution;
 import solveur.ArbreSolveur;
 import solveur.ChainesMeilleurBenef;
 import solveur.CycleMeilleurBenef;
+import solveur.EncoreUnArbre;
 import solveur.InsertionSimple;
 import solveur.LargeCycles;
 import solveur.MeilleureInsertion;
@@ -117,13 +118,19 @@ public class TestAllSolveur {
         //System.out.println("Meilleur B�n�fice Cycle");
         //solveurs.add(new CycleMeilleurBenef());
         
+        /*
+        */
         System.out.println("Large Cycle");
         solveurs.add(new LargeCycles());
-        
+        /*
         System.out.println("Arbre");
         solveurs.add(new ArbreSolveur());
         
+        System.out.println("Meilleure Insertion");
         solveurs.add(new MeilleureInsertion());
+        */
+        System.out.println("PLNE");     
+        solveurs.add(new EncoreUnArbre());
 
         /*
         Solveur solutionRechercheLocale = new RechercheLocale(solutionSimple);
@@ -438,7 +445,9 @@ public class TestAllSolveur {
      * @param args
      */
     public static void main(String[] args) {
-        TestAllSolveur test = new TestAllSolveur("instancesInitiales");
+        // TestAllSolveur test = new TestAllSolveur("instancesInitiales");
+        TestAllSolveur test = new TestAllSolveur("instancesFinales1");
+        // TestAllSolveur test = new TestAllSolveur("instancesFinales2");
         test.printAllResultats("results", "annexe/");
     }
 

@@ -9,7 +9,6 @@ import solution.ensemble.Cycle;
 import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
 import ilog.concert.IloLinearNumExpr;
-import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
 import instance.Instance;
 import instance.reseau.Altruiste;
@@ -18,10 +17,13 @@ import instance.reseau.Participant;
 import instance.reseau.Transplantation;
 import io.InstanceReader;
 import io.exception.ReaderException;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import solution.Solution;
+import solution.ensemble.Echanges;
 
 /**
  *
@@ -33,7 +35,7 @@ public class EncoreUnArbre implements Solveur{
     private IloIntVar[] x;
     private LinkedList<Paire> paires;
     private LinkedList<Altruiste> altruistes;
-    private LinkedList<LinkedList<Participant>> echangesPossibles;
+    private List<Echanges> echangesPossibles;
     private int nbAltruistes;
     private int nbPaires;
 
@@ -42,6 +44,48 @@ public class EncoreUnArbre implements Solveur{
         return "Eh oui un arbre";
     }
     
+    private void printPourcent(int cur, int fin) {
+        float pourcent = cur / fin;
+        String bar = "";
+        for (int i = 0; i < 20; i++) {
+            if( i < pourcent * 20 ) 
+                bar += "#";
+            else 
+                bar += " ";
+        }
+        System.out.print("[" + bar + "] " + pourcent * 100 + "%\r");
+    }
+    
+    private void contrainte1() throws IloException {
+        
+        int size = this.nbAltruistes + this.nbPaires;
+        IloLinearNumExpr[] exprs = new IloLinearNumExpr[size];
+        
+        for (int i = 0; i < size; i++) {
+            exprs[i] = this.iloCplex.linearNumExpr();
+        }
+
+        for (int i = 0; i < this.echangesPossibles.size(); i++) {
+            Echanges e = this.echangesPossibles.get(i);
+            
+            if( e instanceof Chaine ) {
+                int index = ((Chaine) e).getAltruiste().getId() - 1;
+                exprs[index].addTerm(x[i], 1);
+            } 
+        
+            for (Paire p : e.getPaires()) {
+                int j = p.getId() - 1;
+                
+                exprs[j].addTerm(x[i], 1);
+            }
+            // this.printPourcent(i, this.echangesPossibles.size());
+        }
+        // System.out.println("");
+        for (IloLinearNumExpr expr : exprs) {
+            this.iloCplex.addLe(expr, 1);
+        }
+    }
+    /*
     private void contrainte1() throws IloException {
         LinkedList<Integer> echangesPaire;
         LinkedList<Participant> temp;
@@ -89,14 +133,15 @@ public class EncoreUnArbre implements Solveur{
             this.iloCplex.addLe(expr, 1);
         }
     }
+    */
     
     private void objective() throws IloException {
         IloLinearNumExpr expr = this.iloCplex.linearNumExpr();
         int benefice;
         
         for (int i = 0; i < this.echangesPossibles.size(); i++) {
-            LinkedList<Participant> e = this.echangesPossibles.get(i);
-            benefice = this.getbenefEchange(e);
+            Echanges e = this.echangesPossibles.get(i);
+            benefice = e.getBeneficeTotal();
             expr.addTerm(x[i], benefice);
         }
         this.iloCplex.addMaximize(expr);
@@ -120,7 +165,7 @@ public class EncoreUnArbre implements Solveur{
         // System.out.println("Fin objective");
         this.contrainte1();
         // System.out.println("Fin contrainte 1");
-        this.contrainte2();
+        // this.contrainte2();
         // System.out.println("Fin contrainte 2");
     }
 
@@ -129,14 +174,19 @@ public class EncoreUnArbre implements Solveur{
         
         Solution s = new Solution(instance);
         
+        System.out.println("Instance : " + instance.getNom());
+        
         this.altruistes = instance.getAltruistes();
+        this.nbAltruistes = instance.getNbAltruistes();
         this.paires = instance.getPaires();
+        this.nbPaires = instance.getNbPaires();
 
-        int tailleLimite = 5;
+        int tailleLimite = 6;
 
         RechercheRecursiveAllEchanges r = new RechercheRecursiveAllEchanges(instance, tailleLimite);
 
-        this.echangesPossibles = r.recherche();
+        this.echangesPossibles = new ArrayList( r.recherche() );
+        
         
         /*
         */
@@ -144,36 +194,30 @@ public class EncoreUnArbre implements Solveur{
                 + this.echangesPossibles.size() + " trouvées");
         
         try {
+            long time = System.currentTimeMillis();
             this.buildModel();
-            System.out.println("fin build");
+            time = System.currentTimeMillis() - time;
+            System.out.println("fin build (" + time + " s)");
             
             iloCplex.exportModel("model_" + instance.getNom() + ".lp");
-            iloCplex.setParam(IloCplex.DoubleParam.TimeLimit, 60);
+            iloCplex.setParam(IloCplex.DoubleParam.TimeLimit, 5 * 60);
             
             if(iloCplex.solve()){
+                /*
                 System.out.println("ok");
                 System.out.println(iloCplex.getStatus());
                 System.out.println(iloCplex.getObjValue());
                 System.out.println(iloCplex.getBestObjValue());
+                */
                 //System.out.println(iloCplex.getValue(var));
                 
-                int nbParticipants = this.nbAltruistes + this.nbPaires;
+                // int nbParticipants = this.nbAltruistes + this.nbPaires;
                 for (int i = 1; i < this.echangesPossibles.size(); i++) {
                     if(iloCplex.getValue(this.x[i]) >= 1)
                     {
-                        LinkedList<Participant> e = new LinkedList(this.echangesPossibles.get(i));
+                        Echanges e = this.echangesPossibles.get(i);
                         
-                        if( e.getFirst() instanceof Altruiste) {
-                            Altruiste a = (Altruiste) e.pop();
-                            
-                            s.ajouterAltruisteNouvelleChaine(a);
-                            
-                            for (Participant participant : e) {
-                                s.ajouterPaireChaineByAltruiste(a, (Paire)participant);
-                            }
-                        } else {
-                            LinkedList<Paire> ep = new LinkedList(e);
-                            s.ajouterNouveauCycle(ep);
+                        if(s.ajouterNouvelEchange(e)) {
                         }
                     }
                 }
@@ -182,6 +226,8 @@ public class EncoreUnArbre implements Solveur{
         } catch (IloException ex) {
             Logger.getLogger(EncoreUnArbre.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        System.out.println("[PLNE]: " + instance.getNom());
         
         s.clean();
         return s;
@@ -255,8 +301,15 @@ public class EncoreUnArbre implements Solveur{
         // KEP_p9_n1_k3_l3
         // KEP_p100_n11_k5_l17
         // KEP_p50_n6_k5_l17
+        // KEP_p100_n11_k3_l7
+        // KEP_p250_n83_k5_l17
+        // KEP_p250_n13_k5_l17
+        // KEP_p250_n28_k3_l13
         try {
-            InstanceReader read = new InstanceReader("instancesInitiales/KEP_p100_n11_k5_l17.txt");
+            InstanceReader read = new InstanceReader("instancesFinales1/KEP_p250_n28_k3_l13.txt");
+            // InstanceReader read = new InstanceReader("instancesFinales1/KEP_p250_n28_k3_l13.txt");
+            // InstanceReader read = new InstanceReader("instancesInitiales/KEP_p250_n13_k5_l17.txt");
+            
             Instance i = read.readInstance();
 
             EncoreUnArbre algoSimple = new EncoreUnArbre();

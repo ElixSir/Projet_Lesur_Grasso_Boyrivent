@@ -15,7 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.print.attribute.standard.MediaSize;
 import operateur.InsertionPaire;
 
 
@@ -28,7 +27,6 @@ public class Solution {
 
     private int beneficeTotal;
     private Instance instance;
-    // private LinkedList<Chaine> chaines;
     
     private Map<Altruiste,Chaine> chaines;
     private LinkedList<Cycle> cycles;
@@ -155,6 +153,30 @@ public class Solution {
         
         this.beneficeTotal += Cycle.beneficeTotalCycle(cycle);
                 
+        return true;
+    }
+    
+    public boolean ajouterNouvelEchange(Echanges e) {
+        if( null == e ) {
+            System.out.println("[SOLUTION] null");
+            return false;
+        }
+        
+        if(e instanceof Chaine) {
+            Chaine c = (Chaine) e;
+            
+            if(this.chaines.containsKey(c.getAltruiste()))
+                System.out.println("[SOLUTION] double chaines");
+                
+            this.chaines.put(c.getAltruiste(), c);
+        } else if (e instanceof Cycle) {
+            this.cycles.add((Cycle)e);
+        } else {
+            System.out.println("[SOLUTION] aucun type");
+        }
+        
+        this.beneficeTotal += e.getBeneficeTotal();
+        
         return true;
     }
     

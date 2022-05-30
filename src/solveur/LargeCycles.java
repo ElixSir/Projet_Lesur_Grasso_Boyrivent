@@ -153,6 +153,7 @@ public class LargeCycles implements Solveur {
     
     @Override
     public Solution solve(Instance instance) {
+        System.out.println("[LARGE]: " + instance.getNom());
         Solution s = new Solution(instance);
         LinkedList<Paire> paires = instance.getPaires();
         int maxTailleCycle = instance.getMaxCycles();
@@ -281,13 +282,18 @@ public class LargeCycles implements Solveur {
         // KEP_p9_n1_k3_l3
         // KEP_p100_n11_k5_l17
         // KEP_p50_n6_k5_l17
+        // KEP_p250_n83_k5_l17
         try {
-            InstanceReader read = new InstanceReader("instancesInitiales/KEP_p50_n6_k5_l17.txt");
+            // InstanceReader read = new InstanceReader("instancesInitiales/KEP_p250_n83_k5_l17.txt");
+            InstanceReader read = new InstanceReader("instancesFinales/KEP_p250_n13_k5_l17.txt");
             Instance i = read.readInstance();
 
             LargeCycles algoSimple = new LargeCycles();
 
+            long time = System.currentTimeMillis();
             Solution simple = algoSimple.solve(i);
+            time = System.currentTimeMillis() - time ;
+            System.out.println("fin solve (" + time / 1000 + " s)");
 
             System.out.println("solution valide : " + simple.check());
             
