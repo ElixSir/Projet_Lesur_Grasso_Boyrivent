@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ensemble;
+package solution;
 
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;
@@ -27,6 +27,12 @@ public class Chaine extends Echanges {
         super();
         this.maxChaine = i.getMaxChaines();
         altruiste = null;
+    }
+    
+    public Chaine(Chaine ch) {
+        this.maxChaine = ch.maxChaine;
+        this.altruiste = ch.getAltruiste();
+        this.paires = ch.getPaires();
     }
     
     public Chaine(Instance i, Altruiste altruiste){
@@ -93,12 +99,12 @@ public class Chaine extends Echanges {
     }
 
     @Override
-    protected boolean isPaireInserable(Paire p) {
+    protected boolean isPaireInserable(Paire[] p) {
 
         for (int i = 0; i <= this.getSize(); i++) {
-            if (isPaireInserablePosition(i, p)) {
+            /*if (isPaireInserablePosition(i, p)) {
                 return true;
-            }
+            }*/
 
         }
 
@@ -139,6 +145,50 @@ public class Chaine extends Echanges {
         return deltaBenefice;
     }
     
+    public int beneficeGlobal(int position, int longueur) {
+        if (this.getSize() == 1) return 0;
+        if (isCompatible(position, longueur)) {
+            int beneficeTotalCalcule = 0;
+
+            Altruiste a = this.getAltruiste();
+            Paire p = this.getFirstPaire();
+            beneficeTotalCalcule = this.addBenefice(beneficeTotalCalcule, a.getBeneficeVers(p));
+
+            for (int i = 1; i < this.paires.size(); i++) {
+                Paire pcurr = this.get(i);
+                beneficeTotalCalcule = this.addBenefice(beneficeTotalCalcule, p.getBeneficeVers(pcurr));
+                p = pcurr;
+            }
+            
+            return beneficeTotalCalcule;
+        }
+        return -1;
+    }
+    
+    /**
+     * Est compatible si l'élement avant est compatible avec le premier et soit 
+     * on insère à la dernière place, soit le dernier élement est compatible 
+     * avec le suivant de la chaine
+     * @param position
+     * @param longueur
+     * @param pairesToAdd
+     * @return 
+     */
+    private boolean isCompatible(int positionInsertion, int longueur) {
+        if (this.getSize() == 1) return true;
+        Participant pPrec = this.getPrec(positionInsertion);
+
+        Participant pFirst = this.getCurrent(positionInsertion);
+        Participant pLast = this.getCurrent(positionInsertion + longueur - 1);
+        Participant pNext = this.getNext(positionInsertion + longueur - 1);
+        if (pPrec.getBeneficeVers(pFirst) != -1
+                && ((pNext != null && pLast.getBeneficeVers(pNext) != -1) 
+                    || pNext == null)) {
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * renvoie le coût engendré par la suppression de la paire i à la position
      * position de la tournée On fait trois trajets : on enlève la
@@ -176,34 +226,9 @@ public class Chaine extends Echanges {
     }
     
     
-    
-    /**
-     * Renvoie le coût engendré par le déplacement dans la même tournée du
-     * client à la position positionI avant le point à la position positionJ.
-     * Cette méthode renverra l?infini si une des positions passées en paramètre
-     * est incorrecte, ou si les deux positions ne sont pas compatibles pour un
-     * déplacement.
-     *
-     * @param positionI
-     * @param positionJ
-     * @return
-     */
-    /*@Override
-    public int deltaCoutDeplacement(int positionI, int positionJ) {
-        if (positionDeplacementValides(positionI, positionJ)
-                && this.deltaBeneficeSuppression(positionI) != -1
-                && this.deltaBeneficeInsertion(positionJ, clients.get(positionI))) != -1) {
-            int deltaCoutDeplacement = this.deltaBeneficeSuppression(positionI)
-                    + this.deltaBeneficeInsertion(positionJ, clients.get(positionI));
-            return deltaCoutDeplacement;
-        }
-        return -1;
-
-    }*/
-    
     public Participant getNext(int position){
         if(!this.isPositionInsertionValide(position)) return null;
-        if(position == this.paires.size()){
+        if(position+1 >= this.paires.size()){
             return null;
         }
         return this.paires.get(position +1);
@@ -292,10 +317,11 @@ public class Chaine extends Echanges {
     
     @Override
     public Participant getCurrent(int position) {
-        if (!this.isPositionInsertionValide(position)) {
+        if (!this.isPositionValide(position)) {
             return null;
         }
         return this.paires.get(position);
     }
+
 
 }

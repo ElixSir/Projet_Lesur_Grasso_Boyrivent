@@ -4,7 +4,7 @@
  */
 package operateur;
 
-import ensemble.Echanges;
+import solution.Echanges;
 
 
 /**
@@ -17,14 +17,14 @@ public class IntraEchange extends OperateurIntraEchange {
         super();
     }
 
-    public IntraEchange(Echanges echange, int positionI, int positionJ) {
-        super(positionI, positionJ, echange);
+    public IntraEchange(Echanges echange, int positionI, int positionJ, int longueurI) {
+        super(positionI, positionJ, longueurI, echange);
     }
 
 
     @Override
     public String toString() {
-        return "IntraEchange{" +  "positionI=" + positionI +  ", positionJ=" + positionJ + ", coutDeplacement=" + deltaBenefice +", paireI="+ paireI +", paireJ="+ paireJ+",echange="+this.echange+ '}';
+        return "IntraEchange{" +  "positionI=" + positionI +  ", positionJ=" + positionJ + ", coutDeplacement=" + benefice +", paireI="+ paireI +", paireJ="+ paireJ+",echange="+this.echange+ '}';
     }
     
     
@@ -43,7 +43,7 @@ public class IntraEchange extends OperateurIntraEchange {
     }*/
 
     @Override
-    protected int evalDeltaBenefice() {
+    protected int evalBenefice() {
         if(echange == null) return -1;
         
         return this.echange.deltaBeneficeEchange(this.positionI, this.positionJ);
@@ -53,5 +53,6 @@ public class IntraEchange extends OperateurIntraEchange {
     protected boolean doMouvement() {
         return this.echange.doEchangeCycle(this);
     }
+
     
 }

@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ensemble;
+package solution;
 
 import instance.reseau.Paire;
 import instance.reseau.Participant;
 import java.util.LinkedList;
 import operateur.InsertionPaire;
+import operateur.IntraDeplacement;
 import operateur.IntraEchange;
+import operateur.OperateurLocal;
+import operateur.TypeOperateurLocal;
 
 /**
  *
@@ -42,7 +45,7 @@ public abstract class Echanges {
      * @param p
      * @return
      */
-    protected boolean isPaireInserablePosition(int position, Paire p) {
+   /* protected boolean isPaireInserablePosition(int position, Paire[] p) {
 
         if (!isPositionInsertionValide(position)) {
             return false;
@@ -50,21 +53,21 @@ public abstract class Echanges {
         if (null == p || this.getSize() >= this.getMaxEchange()) {
             return false;
         }
-
+        
         if (this.deltaBeneficeInsertion(position, p) == -1) {
             return false;
         }
 
         return true;
     }
-    
+    */
     
     /**
      * Vï¿½rifie qu'une paire soit insï¿½rable au moins ï¿½ une position dans l'Echanges
      * @param p
      * @return 
      */
-    protected abstract boolean isPaireInserable(Paire p);
+    protected abstract boolean isPaireInserable(Paire[] p);
     
     public abstract int deltaBenefice(Paire p);
     
@@ -77,7 +80,7 @@ public abstract class Echanges {
      * @param paires
      * @return 
      */
-    protected boolean setPaires(LinkedList<Paire> paires) {
+    public boolean setPaires(LinkedList<Paire> paires) {//bizarre
         if( null == paires) return false;
         
         if( ! (this instanceof Cycle) ) return false;
@@ -87,6 +90,20 @@ public abstract class Echanges {
         this.beneficeTotal = Cycle.beneficeTotalCycle(paires);
         
         return true;
+    }
+   
+    /**
+     * Récupére la paire à une certaine position d?un échange
+     *
+     * @param position
+     * @return
+     */
+    public Paire getPairePosition(int position) {
+        if (!isPositionValide(position)) {
+            return null;
+        }
+        return this.getPaires().get(position);
+
     }
     
     /**
@@ -136,7 +153,7 @@ public abstract class Echanges {
      * @param position
      * @return
      */
-    protected boolean isPositionInsertionValide(int position){
+    public boolean isPositionInsertionValide(int position){
 
         if (position < 0 || position > this.paires.size()) {
             return false;
@@ -151,7 +168,7 @@ public abstract class Echanges {
      * @param position
      * @return
      */
-    protected boolean isPositionValide(int position) {
+    public boolean isPositionValide(int position) {
         if (position < 0 || position > this.paires.size() - 1) {
             return false;
         }
@@ -160,7 +177,9 @@ public abstract class Echanges {
     
     protected abstract int getMaxEchange();
     
-    public abstract int deltaBeneficeInsertion(int position, Paire paireToAdd);  
+    public abstract int deltaBeneficeInsertion(int position, Paire paireToAdd); 
+   
+    public abstract int beneficeGlobal(int positionInsertion, int longueur); 
         
     public abstract Participant getPrec(int position);
     
@@ -175,7 +194,7 @@ public abstract class Echanges {
      */
     public InsertionPaire getMeilleureInsertion(Paire paireToInsert) {
         InsertionPaire insMeilleur = new InsertionPaire();
-        if (!isPaireInserable(paireToInsert)) {
+        if (!isPaireInserable(new Paire[] {paireToInsert})) {
             return insMeilleur;
         }
         InsertionPaire insActu;
@@ -191,7 +210,28 @@ public abstract class Echanges {
    
     }
 
-     
+    /** 
+     * renvoie le meilleur opérateur intra-echange de type type pour cette
+     * tournée
+     * TODO : Augmenter la longueur pour l'opérateur (ici 1)
+     * Il faut faire en sorte que l'on teste avec des ensemble de paires, longueur
+     * supérieure à 1
+     * @param type
+     * @return
+     */
+    public OperateurLocal getMeilleurOperateurIntra(TypeOperateurLocal type) {
+        OperateurLocal best = OperateurLocal.getOperateur(type);
+        for (int i = 0; i < this.paires.size(); i++) {
+            for (int j = 0; j < this.paires.size() + 1; j++) {
+                OperateurLocal op = OperateurLocal.getOperateurIntra(type, this, i, j, 1, 0);
+                if (op.isMeilleur(best)) {
+                    best = op;
+                }
+            }
+        }
+        return best;
+    }
+    
         
         /**
      * Ins?re dans l'?change si il y a possibilit?
@@ -220,14 +260,104 @@ public abstract class Echanges {
 
         return true;
     }
+    
+    /**
+     * implémente le mouvement lié à l?opérateur de déplacement intra-echange
+     * infos PositionJ est une case après le véritable emplacement d'insertion
+     *
+     * @param infos
+     * @return
+     */
+    public boolean doDeplacement(IntraDeplacement infos) {
+        if (infos == null || infos.getEchangeFini() == null) {
+            return false;
+        }
+        if (!infos.isMouvementRealisable()) {
+            return false;
+        }
+        if (!infos.isMouvementAmeliorant()) {
+            return false;
+        }
+
+        //En voulant l'insérer à la positionJ, cela va décaler le reste de la list (incrément de 1 de le leur index)
+        this.beneficeTotal += infos.getDeltaBenefice();
+
+        Echanges echangeFini = infos.getEchangeFini();
+        this.paires = echangeFini.getPaires();
+
+        if (!this.check()) {
+            System.out.println("Mauvais déplacement, " + this.toString());
+            System.out.println(infos);
+            System.exit(-1); //Termine le programme
+        }
+
+        return true;
+    }
 
     
 
     public LinkedList<Paire> getPaires() {
         return new LinkedList<>(paires);
     }
+    public LinkedList<Paire> getPairesReference() {
+        return this.paires;
+    }
     
     
+    
+    /**
+     * renvoie le co?t engendr? par la suppression de la paire i ? la position
+     * position de la tourn?e On fait trois trajets : on enl?ve la
+     * transplantation de i-1 ? i, on enl?ve la transplantation de i ? i+1, on
+     * ajoute la transplantation de i-1 ? i+1
+     *
+     * @param position
+     * @return
+     */
+    public abstract int deltaBeneficeSuppression(int position);
+
+    /**
+     * Renvoie le co?t engendr? par le d?placement dans la m?me ?change de la
+     * paire ? la position positionI avant le point ? la position positionJ.
+     * Cette m?thode renverra -1 si une des positions pass?es en param?tre est
+     * incorrecte, ou si les deux positions ne sont pas compatibles pour un
+     * d?placement.
+     *
+     * @param positionI
+     * @param positionJ
+     * @return
+     */
+    /*public int deltaBeneficeDeplacement(int positionI, int positionJ) {
+        if (positionDeplacementValides(positionI, positionJ)
+                && this.deltaBeneficeInsertion(positionJ, new Paire[] {paires.get(positionI)}) != -1) {
+            int deltaBeneficeDeplacement = this.deltaBeneficeSuppression(positionI)
+                    + this.deltaBeneficeInsertion(positionJ, new Paire[]{paires.get(positionI)});
+            return deltaBeneficeDeplacement;
+        }
+        return -1;
+    }*/
+
+    /**
+     * Renvoie un boolean indiquant si : positionI, la position de la paire est
+     * une position valide positionJ, la position d'insertion est possible
+     * positionI et positionJ ne sont pas ?gaux positionI n'est pas coll? dans
+     * la liste ? positionJ
+     *
+     * @param positionI
+     * @param positionJ
+     * @return
+     */
+    public boolean positionDeplacementValides(int positionI, int positionJ) {
+        int difference = Math.abs(positionI - positionJ);
+
+        if (this.isPositionInsertionValide(positionJ)
+                && this.isPositionValide(positionI)) {
+            if (positionI != positionJ && difference > 1) {
+                return true;
+            }
+        }
+        return false;
+    }
      
     private int deltaBeneficeEchangeConsecutif(int positionI){
         
@@ -317,6 +447,5 @@ public abstract class Echanges {
         System.out.println("Pas cons?cutif");
         return deltaBeneficeRemplacement(positionI,this.getCurrent(positionJ))+deltaBeneficeRemplacement(positionJ,this.getCurrent(positionI));
     }    
-    
     
 }

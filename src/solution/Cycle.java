@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ensemble;
+package solution;
 
 import instance.reseau.Paire;
 import java.io.PrintWriter;
@@ -23,6 +23,11 @@ public class Cycle extends Echanges {
 
     public Cycle(Instance i) {
         this.maxCycle = i.getMaxCycles();
+    }
+    
+    public Cycle(Cycle c) {
+        this.maxCycle = c.maxCycle;
+        this.paires = c.getPaires();
     }
     
     public Cycle(Instance i, LinkedList<Paire> cycle) {
@@ -254,7 +259,7 @@ public class Cycle extends Echanges {
             Participant pPrec = this.getPrec(position);
             Participant pCour = this.getCurrent(position);
             
-            deltaBenefice = this.DelBenefice(deltaBenefice, pPrec.getBeneficeVers(pCour));
+            deltaBenefice = this.delBenefice(deltaBenefice, pPrec.getBeneficeVers(pCour));
             deltaBenefice = this.addBenefice(deltaBenefice, pPrec.getBeneficeVers(paireToAdd));
             deltaBenefice = this.addBenefice(deltaBenefice, paireToAdd.getBeneficeVers(pCour));
         }
@@ -262,6 +267,48 @@ public class Cycle extends Echanges {
         return deltaBenefice;
     }
     
+    public int beneficeGlobal(int positionInsertion, int longueur) {
+        if(this.getSize() == 1) return 0;
+        if(isCompatible(positionInsertion, longueur))
+        {
+            int BeneficeTotalCalcule = 0;
+
+            Paire p = this.getFirstPaire();
+            for (int i = 1; i < this.getSize(); i++) {
+                Paire pcurr = this.get(i);
+                BeneficeTotalCalcule = this.addBenefice(BeneficeTotalCalcule, p.getBeneficeVers(pcurr));
+                p = pcurr;
+            }
+            BeneficeTotalCalcule = this.addBenefice(BeneficeTotalCalcule, this.getLastPaire().getBeneficeVers(this.getFirstPaire()));
+            return BeneficeTotalCalcule;
+        }
+        return -1;
+    }
+    
+    /**
+     * Est compatible si l'élement avant est compatible avec le premier et 
+     * si le dernier élement est compatible avec le suivant
+     * avec le suivant de la chaine
+     *
+     * @param position
+     * @param longueur
+     * @param pairesToAdd
+     * @return
+     */
+    private boolean isCompatible(int positionInsertion, int longueur)
+    {
+        if(this.getSize() == 1) return true;
+        Participant pPrec = this.getPrec(positionInsertion);
+        Participant pFirst = this.getCurrent(positionInsertion);
+        Participant pLast = this.getCurrent(positionInsertion + longueur-1);
+        Participant pNext = this.getNext(positionInsertion+longueur-1);
+        if(pPrec.getBeneficeVers(pFirst) != -1 
+                && pLast.getBeneficeVers(pNext) != -1)
+        {
+            return true;
+        }
+        return false;
+    }
 
     
     @Override
@@ -280,12 +327,12 @@ public class Cycle extends Echanges {
     }
 
     @Override 
-    protected boolean isPaireInserable(Paire p) {
+    protected boolean isPaireInserable(Paire[] p) {
 
         for (int i = 0; i < this.getSize(); i++) {
-            if (isPaireInserablePosition(i, p)) {
+            /*if (isPaireInserablePosition(i, p)) {
                 return true;
-            }
+            }*/
 
         }
 
@@ -325,4 +372,8 @@ public class Cycle extends Echanges {
         }
         return this.paires.get(position);
     }
+
+
+    
+
 }

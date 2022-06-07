@@ -6,8 +6,8 @@
 package test;
 
 // TO CHECK : import des classes Instance, InstanceReader et ReaderException
-import ensemble.Chaine;
-import ensemble.Cycle;
+import solution.Chaine;
+import solution.Cycle;
 import instance.Instance;
 import instance.reseau.Paire;
 import io.InstanceReader;
@@ -120,10 +120,10 @@ public class TestAllSolveur {
 //        System.out.println("Large Cycle");
 //        solveurs.add(new LargeCycles());
 //        
-//        System.out.println("Arbre");
-//        solveurs.add(new ArbreSolveur());
+      System.out.println("Arbre");
+     solveurs.add(new ArbreSolveur());
         
-        solveurs.add(new MeilleureInsertion());
+       // solveurs.add(new MeilleureInsertion());
 
         /*
         Solveur solutionRechercheLocale = new RechercheLocale(solutionSimple);

@@ -4,9 +4,6 @@
  */
 package solution;
 
-import ensemble.Chaine;
-import ensemble.Cycle;
-import ensemble.Echanges;
 import instance.Instance;
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;
@@ -17,6 +14,10 @@ import java.util.List;
 import java.util.Map;
 import javax.print.attribute.standard.MediaSize;
 import operateur.InsertionPaire;
+import operateur.OperateurInterEchange;
+import operateur.OperateurIntraEchange;
+import operateur.OperateurLocal;
+import operateur.TypeOperateurLocal;
 
 
 
@@ -339,6 +340,67 @@ public class Solution {
             }
         }
         return insMeilleur;
+    }
+    
+    /**
+     * Renvoie le meilleur opérateur intra-echange de type type dans la
+     * solution.
+     *
+     * @param type
+     * @return
+     */
+    private OperateurLocal getMeilleurOperateurIntra(TypeOperateurLocal type) {
+        OperateurLocal best = OperateurLocal.getOperateur(type);
+        OperateurLocal operateurTournee;
+        for (Echanges ech : this.echanges) {
+            operateurTournee = ech.getMeilleurOperateurIntra(type);
+            if (operateurTournee.isMeilleur(best)) {
+                best = operateurTournee;
+            }
+        }
+        return best;
+    }
+
+    /**
+     * Renvoie le meilleur opérateur inter-echange de type type dans la
+     * solution.
+     *
+     * @param type
+     * @return
+     */
+    private OperateurLocal getMeilleurOperateurInter(TypeOperateurLocal type) {
+        OperateurLocal best = OperateurLocal.getOperateur(type);
+        OperateurLocal operateurTournee;
+        for (Echanges ech : this.echanges) {
+            for (Echanges autreEchange : this.echanges) {
+                /* TODO : 
+                operateurTournee = ech.getMeilleurOperateurInter(autreEchange, type);
+                if (operateurTournee.isMeilleur(best)) {
+                    best = operateurTournee;
+                }*/
+            }
+
+        }
+        return best;
+    }
+    
+    
+    /**
+     * renvoie le meilleur opérateur de recherche locale de type type dans la
+     * solution
+     *
+     * @param type
+     * @return
+     */
+    public OperateurLocal getMeilleurOperateurLocal(TypeOperateurLocal type) {
+        OperateurLocal operateurLocal = OperateurLocal.getOperateur(type);
+        if (operateurLocal instanceof OperateurIntraEchange) {
+            operateurLocal = this.getMeilleurOperateurIntra(type);
+        } else if (operateurLocal instanceof OperateurInterEchange) {
+            operateurLocal = this.getMeilleurOperateurInter(type);
+        }
+
+        return operateurLocal;
     }
     
     /**

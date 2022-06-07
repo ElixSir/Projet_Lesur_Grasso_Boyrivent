@@ -4,7 +4,7 @@
  */
 package operateur;
 
-import ensemble.Echanges;
+import solution.Echanges;
 
 
 /**
@@ -17,11 +17,10 @@ public abstract class OperateurIntraEchange extends OperateurLocal{
         super();
     }
 
-    public OperateurIntraEchange(int positionI, int positionJ, Echanges echange) {
-        super(echange,positionI, positionJ);
-        this.deltaBenefice = this.evalDeltaBenefice();
+    public OperateurIntraEchange(int positionI, int positionJ, int longueurI, Echanges echange) {
+        super(echange,positionI, positionJ, longueurI);
+        this.benefice = this.evalBenefice();
     }
-
     
-    
+    protected abstract int evalBenefice();
 }

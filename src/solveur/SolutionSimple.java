@@ -5,7 +5,7 @@
  */
 package solveur;
 
-import ensemble.Chaine;
+import solution.Chaine;
 import instance.Instance;
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;

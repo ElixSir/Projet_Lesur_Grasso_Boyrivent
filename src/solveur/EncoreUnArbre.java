@@ -4,8 +4,8 @@
  */
 package solveur;
 
-import ensemble.Chaine;
-import ensemble.Cycle;
+import solution.Chaine;
+import solution.Cycle;
 import instance.Instance;
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;

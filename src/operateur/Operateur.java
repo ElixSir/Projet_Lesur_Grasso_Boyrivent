@@ -4,7 +4,7 @@
  */
 package operateur;
 
-import ensemble.Echanges;
+import solution.Echanges;
 
 
 
@@ -14,9 +14,11 @@ import ensemble.Echanges;
  */
 public abstract class Operateur {
     protected Echanges echange;
+    protected int benefice;
     protected int deltaBenefice;
 
     public Operateur(){
+        this.benefice = -1;
         this.deltaBenefice = -1;
     }
     
@@ -25,6 +27,10 @@ public abstract class Operateur {
         this.echange = echange;
     }
 
+    public int getBenefice() {
+        return benefice;
+    }
+    
     public int getDeltaBenefice() {
         return deltaBenefice;
     }
@@ -34,7 +40,7 @@ public abstract class Operateur {
      * @return 
      */
     public boolean isMouvementRealisable(){
-        if(this.deltaBenefice == -1){
+        if(this.benefice == -1){
             return false;
         }
         return true;
@@ -60,13 +66,13 @@ public abstract class Operateur {
         if(op == null){
             return true;
         }
-        if(this.getDeltaBenefice() > op.getDeltaBenefice()){
+        if(this.getBenefice() > op.getBenefice()){
             return true;
         }
         return false;
     }
 
-    protected abstract int evalDeltaBenefice();
+    protected abstract int evalBenefice();
     protected abstract boolean doMouvement();
     
     public boolean doMouvementIfRealisable(){
@@ -79,6 +85,7 @@ public abstract class Operateur {
     public Echanges getEchange() {
         return this.echange;
     }
+    
     
     
 

@@ -5,8 +5,9 @@
  */
 package operateur;
 
-import ensemble.Echanges;
+import solution.Echanges;
 import instance.reseau.Paire;
+import solution.Cycle;
 
 /**
  *
@@ -27,7 +28,7 @@ public class InsertionPaire extends Operateur {
         super(echange);
         this.position = position;
         this.paire = paireToInsert;
-        this.deltaBenefice = this.evalDeltaBenefice();
+        this.benefice = this.evalBenefice();
     }
     
 
@@ -35,8 +36,9 @@ public class InsertionPaire extends Operateur {
    
    
     @Override
-    protected int evalDeltaBenefice() {
+    protected int evalBenefice() {
         if(this.echange == null) return -1;
+
         return this.echange.deltaBeneficeInsertion(this.position, this.paire);
     }
 

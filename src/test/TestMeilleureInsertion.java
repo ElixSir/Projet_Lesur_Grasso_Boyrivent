@@ -5,8 +5,8 @@
  */
 package test;
 
-import ensemble.Cycle;
-import ensemble.Echanges;
+import solution.Cycle;
+import solution.Echanges;
 import instance.Instance;
 import instance.reseau.Paire;
 import io.InstanceReader;
