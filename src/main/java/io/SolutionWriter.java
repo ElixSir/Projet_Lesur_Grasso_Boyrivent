@@ -33,7 +33,7 @@ public class SolutionWriter {
     private final String outputPath = "";
     
     
-    public SolutionWriter( Solution solution) throws ReaderException {
+    public SolutionWriter( Solution solution ) throws ReaderException {
         String instanceName = this.outputPath;
         this.solution = solution;
         this.instanceFile = new File(instanceName);

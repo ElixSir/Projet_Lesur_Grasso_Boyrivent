@@ -306,7 +306,7 @@ public class EncoreUnArbre implements Solveur{
         // KEP_p250_n13_k5_l17
         // KEP_p250_n28_k3_l13
         try {
-            InstanceReader read = new InstanceReader("instancesFinales1/KEP_p250_n28_k3_l13.txt");
+            InstanceReader read = new InstanceReader("instancesFinales/KEP_p250_n28_k3_l13.txt");
             // InstanceReader read = new InstanceReader("instancesFinales1/KEP_p250_n28_k3_l13.txt");
             // InstanceReader read = new InstanceReader("instancesInitiales/KEP_p250_n13_k5_l17.txt");
             

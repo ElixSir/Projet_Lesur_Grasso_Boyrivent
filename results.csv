@@ -1,0 +1,26 @@
+;Large Cycle;;;Arbre Solveur;;;Eh oui un arbre;;
+;cout;tps(ms);valide ?;cout;tps(ms);valide ?;cout;tps(ms);valide ?
+KEP_p100_n0_k3_l0;1 238;30;true;1 238;12;true;1 238;156;true
+KEP_p100_n11_k3_l13;1 436;10;true;1 567;148;true;2 256;4 494;true
+KEP_p100_n11_k3_l4;1 408;6;true;1 490;12;true;2 075;105;true
+KEP_p100_n11_k3_l7;1 436;8;true;1 567;40;true;2 256;4 810;true
+KEP_p100_n11_k5_l17;1 798;241;true;1 867;105;true;2 328;4 078;true
+KEP_p100_n5_k3_l13;1 641;6;true;1 487;11;true;2 053;642;true
+KEP_p100_n5_k3_l4;1 558;6;true;1 269;8;true;1 729;61;true
+KEP_p100_n5_k3_l7;1 641;8;true;1 487;10;true;2 053;628;true
+KEP_p100_n5_k5_l17;1 802;53;true;1 744;64;true;2 359;617;true
+KEP_p18_n0_k4_l0;66;1;true;66;1;true;98;16;true
+KEP_p18_n2_k4_l4;71;1;true;95;1;true;107;23;true
+KEP_p50_n0_k3_l0;313;0;true;313;1;true;313;15;true
+KEP_p50_n3_k3_l13;448;1;true;384;1;true;478;43;true
+KEP_p50_n3_k3_l4;448;1;true;311;0;true;448;37;true
+KEP_p50_n3_k3_l7;448;1;true;384;0;true;478;34;true
+KEP_p50_n3_k5_l17;490;2;true;427;2;true;508;36;true
+KEP_p50_n6_k3_l13;643;1;true;617;1;true;951;43;true
+KEP_p50_n6_k3_l4;643;0;true;576;1;true;873;18;true
+KEP_p50_n6_k3_l7;643;1;true;617;1;true;951;47;true
+KEP_p50_n6_k5_l17;951;1;true;617;2;true;965;41;true
+KEP_p9_n0_k3_l0;57;1;true;57;0;true;61;39;true
+KEP_p9_n1_k3_l3;57;0;true;64;1;true;65;38;true
+
+SOMME;19 236;379;true;18 244;422;true;24 643;16 021;true

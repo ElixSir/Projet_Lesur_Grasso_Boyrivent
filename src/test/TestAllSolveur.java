@@ -122,10 +122,10 @@ public class TestAllSolveur {
         */
         System.out.println("Large Cycle");
         solveurs.add(new LargeCycles());
-        /*
+        
         System.out.println("Arbre");
         solveurs.add(new ArbreSolveur());
-        
+        /*
         System.out.println("Meilleure Insertion");
         solveurs.add(new MeilleureInsertion());
         */
@@ -445,9 +445,8 @@ public class TestAllSolveur {
      * @param args
      */
     public static void main(String[] args) {
-        // TestAllSolveur test = new TestAllSolveur("instancesInitiales");
-        TestAllSolveur test = new TestAllSolveur("instancesFinales1");
-        // TestAllSolveur test = new TestAllSolveur("instancesFinales2");
+        TestAllSolveur test = new TestAllSolveur("instancesInitiales");
+        // TestAllSolveur test = new TestAllSolveur("instancesFinales");
         test.printAllResultats("results", "annexe/");
     }
 

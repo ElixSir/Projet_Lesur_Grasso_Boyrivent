@@ -214,6 +214,14 @@ public class Solution {
     public int getCoutTotal() {
         return beneficeTotal;
     }
+    
+    public LinkedList<Cycle> getCycles() {
+        return new LinkedList(this.cycles);
+    }
+    
+    public LinkedList<Chaine> getChaines() {
+        return new LinkedList(this.chaines.values());
+    }
 
     public Instance getInstance() {
         return instance;

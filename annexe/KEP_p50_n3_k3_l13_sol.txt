@@ -8,6 +8,14 @@
 // Chaines
 3	5	6	
 // Cout total de la solution
+384
+// Description de la solution
+// Cycles
+31	41	43	
+
+// Chaines
+3	5	6	17	33	
+// Cout total de la solution
 478
 // Description de la solution
 // Cycles

@@ -8,6 +8,15 @@
 
 // Chaines
 // Cout total de la solution
+66
+// Description de la solution
+// Cycles
+5	16	10	11	
+8	12	18	9	
+7	13	
+
+// Chaines
+// Cout total de la solution
 98
 // Description de la solution
 // Cycles
