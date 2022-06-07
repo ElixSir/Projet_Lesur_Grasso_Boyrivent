@@ -22,8 +22,8 @@ public class IntraDeplacement extends OperateurIntraEchange{
         super();
     }
 
-    public IntraDeplacement(int positionI, int positionJ, Echanges echange, int longueurI) {
-        super(positionI, positionJ, longueurI, echange);
+    public IntraDeplacement(int positionI, int positionJ, Echanges echange, int longueurI, int longueurJ) {
+        super(positionI, positionJ, echange, longueurI, longueurJ);
     }
     
     

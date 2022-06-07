@@ -17,8 +17,8 @@ public abstract class OperateurIntraEchange extends OperateurLocal{
         super();
     }
 
-    public OperateurIntraEchange(int positionI, int positionJ, int longueurI, Echanges echange) {
-        super(echange,positionI, positionJ, longueurI);
+    public OperateurIntraEchange(int positionI, int positionJ, Echanges echange, int longueurI, int longueurJ) {
+        super(echange,positionI, positionJ, longueurI, longueurJ);
         this.benefice = this.evalBenefice();
     }
     

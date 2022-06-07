@@ -9,6 +9,7 @@ import instance.reseau.Paire;
 import instance.reseau.Participant;
 import java.util.LinkedList;
 import operateur.InsertionPaire;
+import operateur.InterEchange;
 import operateur.IntraDeplacement;
 import operateur.IntraEchange;
 import operateur.OperateurLocal;
@@ -74,6 +75,8 @@ public abstract class Echanges {
     public abstract boolean isPaireAjoutableFin(Paire p);
     
     public abstract boolean check();
+    
+    
     
     /**
      * set les paires (possible uniquement si la classe est Cycle)
@@ -419,33 +422,14 @@ public abstract class Echanges {
         
         return true;
     }
+    public abstract boolean doEchange(InterEchange infos);
+    public abstract boolean doEchange(IntraEchange infos);
+
+    public abstract int BeneficeEchange(int positionI, int positionJ, int longueurI, int longueurJ);
+
+    public abstract int BeneficeEchangeInter(int positionI, int positionJ, int longueurI, int longueurJ);
     
     
-    
-    public int deltaBeneficeEchange(int positionI, int positionJ) {
-        if(!isPositionInsertionValide(positionI)){
-            System.out.println("posI Invalid");
-            return -1;
-        }
-        if(!isPositionInsertionValide(positionJ)){
-            System.out.println("posJ Invalid");
-            return -1;
-        }
-        if(positionI == positionJ){
-            System.out.println("posI = posJ");
-            return -1;
-        }
-        if(!(positionI<positionJ)){
-            System.out.println("!(positionI<positionJ)");
-            return -1;
-        }
-        
-        if(positionJ-positionI == 1 || positionJ-positionI == this.paires.size()-1){
-            System.out.println("Cons?cutif");
-            return deltaBeneficeEchangeConsecutif(positionI);
-        }
-        System.out.println("Pas cons?cutif");
-        return deltaBeneficeRemplacement(positionI,this.getCurrent(positionJ))+deltaBeneficeRemplacement(positionJ,this.getCurrent(positionI));
-    }    
+  
     
 }

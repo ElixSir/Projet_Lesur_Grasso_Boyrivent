@@ -11,6 +11,7 @@ import instance.Instance;
 import instance.reseau.Participant;
 import java.util.LinkedList;
 import operateur.InsertionPaire;
+import operateur.InterEchange;
 import operateur.IntraEchange;
 
 /**
@@ -373,6 +374,187 @@ public class Cycle extends Echanges {
         return this.paires.get(position);
     }
 
+
+    public int BeneficeEchange(int positionI, int positionJ, int longueurI, int longueurJ) {
+        if (!isPositionInsertionValide(positionI)) {
+            System.out.println("posI Invalid");
+            return -1;
+        }
+        if (!isPositionInsertionValide(positionJ)) {
+            System.out.println("posJ Invalid");
+            return -1;
+        }
+        /*
+        if(positionI == positionJ){
+            System.out.println("posI = posJ");
+            return -1;
+        }
+        if(!(positionI<positionJ)){
+            System.out.println("!(positionI<positionJ)");
+            return -1;
+        }*/
+
+        int beneficeTotal = 0;
+
+        if (this.getSize() > 1) {
+
+            Paire p = this.getFirstPaire();
+            for (int i = 1; i < this.getSize(); i++) {
+                Paire pcurr = this.get(i);
+                beneficeTotal = this.addBenefice(beneficeTotal, p.getBeneficeVers(pcurr));
+                p = pcurr;
+            }
+            beneficeTotal = this.addBenefice(beneficeTotal, this.getLastPaire().getBeneficeVers(this.getFirstPaire()));
+        }
+
+        if (this.getSize() > this.maxCycle) {
+            System.err.println("[CALCUL CYCLE] : La taille totale est supérieur à la capacité : ( taille totale : " + this.getSize() + ", capacité : " + this.maxCycle + " )");
+            return -1;
+        }
+
+        return beneficeTotal;
+    }
+
+    public int BeneficeEchangeInter(int positionI, int positionJ, int longueurI, int longueurJ) {
+        if (!isPositionInsertionValide(positionI)) {
+            System.out.println("posI Invalid");
+            return -1;
+        }
+        if (!isPositionInsertionValide(positionJ)) {
+            System.out.println("posJ Invalid");
+            return -1;
+        }
+
+        /*
+        if(positionI == positionJ){
+            System.out.println("posI = posJ");
+            return -1;
+        }
+        if(!(positionI<positionJ)){
+            System.out.println("!(positionI<positionJ)");
+            return -1;
+        }*/
+        int beneficeTotal = 0;
+
+        if (this.getSize() > 1) {
+
+            Paire p = this.getFirstPaire();
+            for (int i = 1; i < this.getSize(); i++) {
+                Paire pcurr = this.get(i);
+                beneficeTotal = this.addBenefice(beneficeTotal, p.getBeneficeVers(pcurr));
+                p = pcurr;
+            }
+            beneficeTotal = this.addBenefice(beneficeTotal, this.getLastPaire().getBeneficeVers(this.getFirstPaire()));
+        }
+
+        if (this.getSize() > this.maxCycle) {
+            System.err.println("[CALCUL CYCLE] : La taille totale est supérieur à la capacité : ( taille totale : " + this.getSize() + ", capacité : " + this.maxCycle + " )");
+            return -1;
+        }
+
+        return beneficeTotal;
+    }
+
+    public boolean doEchange(IntraEchange infos) {
+        if (infos == null) {
+            return false;
+        }
+        if (!infos.isMouvementRealisable()) {
+            return false;
+        }
+
+        int positionI = infos.getPositionI();
+        int positionJ = infos.getPositionJ();
+        int longueurI = infos.getLongueurI();
+        int longueurJ = infos.getLongueurJ();
+
+        if (positionI > positionJ) { // Echanger dans un sens ou un autre ne change rien
+            int saveJ = positionJ; // Si I>J j'inverse pour que mon calcul ne change pas 
+            positionJ = positionI;
+            positionI = saveJ;
+
+            int savelJ = longueurJ;
+            longueurJ = longueurI;
+            longueurI = savelJ;
+        }
+
+        for (int i = 0; i < longueurJ; i++) {
+            this.getPairesReference().add(positionI + i, this.get(positionJ + i));
+            this.getPairesReference().remove(positionJ + i + 1);
+
+        }
+
+        for (int i = 0; i < longueurI; i++) {
+            this.getPairesReference().add(positionJ + longueurJ, this.get(positionI + longueurJ));
+            this.getPairesReference().remove(positionI + longueurJ);
+
+        }
+
+        this.beneficeTotal = infos.getBenefice(); //MAJ cout total
+
+        if (!this.check()) {
+            System.out.println("Mauvais ?change des clients");
+            System.out.println(infos);
+            System.exit(-1); //Termine le programme
+        }
+
+        return true;
+    }
+
+    public boolean doEchange(InterEchange infos) {
+        if (infos == null) {
+            return false;
+        }
+        if (!infos.isMouvementRealisable()) {
+            return false;
+        }
+
+        Echanges c = infos.getEchange();
+        Echanges c2 = infos.getAutreEchange();
+
+        int positionI = infos.getPositionI();
+        int positionJ = infos.getPositionJ();
+        int longueurI = infos.getLongueurI();
+        int longueurJ = infos.getLongueurJ();
+
+        if (positionI > positionJ) { // Echanger dans un sens ou un autre ne change rien
+            int saveJ = positionJ; // Si I>J j'inverse pour que mon calcul ne change pas 
+            positionJ = positionI;
+            positionI = saveJ;
+
+            int savelJ = longueurJ;
+            longueurJ = longueurI;
+            longueurI = savelJ;
+        }
+        /*       System.out.println("PositionI "+positionI);
+        System.out.println("PositionJ " + positionJ);
+        System.out.println("longueurI "+longueurI);
+        System.out.println("longueurJ"+longueurJ);*/
+
+        for (int i = 0; i < longueurJ; i++) {
+            c.getPairesReference().add(positionI + i, c2.get(positionJ));
+            c2.getPairesReference().remove(positionJ);
+
+        }
+
+        for (int i = 0; i < longueurI; i++) {
+            c2.getPairesReference().add(positionJ + i, c.get(positionI + longueurJ));
+            c.getPairesReference().remove(positionI + longueurJ);
+
+        }
+
+        c.beneficeTotal = infos.getBeneficeEchange();
+        c2.beneficeTotal = infos.getBeneficeAutreEchange();
+
+        if (!this.check()) {
+            System.out.println("Mauvais ?change des clients");
+            System.out.println(infos);
+            System.out.println("");
+            System.exit(-1); //Termine le programme
+        }
+
+        return true;
+    }
 
     
 

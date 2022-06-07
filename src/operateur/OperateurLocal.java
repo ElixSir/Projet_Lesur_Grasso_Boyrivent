@@ -20,17 +20,19 @@ public abstract class OperateurLocal extends Operateur{
     protected Paire paireI;
     protected Paire paireJ;
     protected int longueurI;
+    protected int longueurJ;
 
     public OperateurLocal() {
         this.positionI = -1;
         this.positionJ = -1;      
     }
     
-    public OperateurLocal(Echanges echange, int positionI, int positionJ, int longueurI) { 
+    public OperateurLocal(Echanges echange, int positionI, int positionJ, int longueurI, int longueurJ) { 
         super(echange);
         this.positionI = positionI;
         this.positionJ = positionJ;
         this.longueurI = longueurI;
+        this.longueurJ = longueurJ;
         this.paireI = this.echange.getPairePosition(positionI);
         this.paireJ = this.echange.getPairePosition(positionJ);
     }
@@ -49,6 +51,14 @@ public abstract class OperateurLocal extends Operateur{
 
     public Paire getClientJ() {
         return this.paireJ;
+    }
+    
+    public int getLongueurI() {
+        return this.longueurI;
+    }
+
+    public int getLongueurJ() {
+        return this.longueurJ;
     }
      
     
@@ -70,9 +80,9 @@ public abstract class OperateurLocal extends Operateur{
     public static OperateurIntraEchange getOperateurIntra(TypeOperateurLocal type, Echanges echange, int positionI, int positionJ, int longueurI, int longueurJ) {
         switch(type) {
             case INTRA_DEPLACEMENT:
-                return new IntraDeplacement(positionI, positionJ, echange, longueurI);
+                return new IntraDeplacement(positionI, positionJ, echange, longueurI, longueurJ);
             case INTRA_ECHANGE:
-                return new IntraEchange(echange, positionI, positionJ, longueurI);
+                return new IntraEchange(echange, positionI, positionJ, longueurI, longueurJ);
             default:
                 return null;
         }
@@ -83,7 +93,7 @@ public abstract class OperateurLocal extends Operateur{
             case INTER_DEPLACEMENT:
                 return new InterDeplacement(echange, autreEchange, positionI, positionJ, longueurI);
             case INTER_ECHANGE:
-                return null;//new InterEchange(echange, autreEchange, positionI, positionJ);
+                new InterEchange(echange, autreEchange, positionI, positionJ, longueurI, longueurJ);
             default:
                 return null;
         }

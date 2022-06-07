@@ -23,7 +23,7 @@ public class InterDeplacement extends OperateurInterEchange{
     }
 
     public InterDeplacement(Echanges echange, Echanges autreEchange, int positionI, int positionJ, int longueurI) {
-        super(echange, autreEchange, positionI, positionJ, longueurI);
+        super(echange, autreEchange, positionI, positionJ, longueurI, 0);
 
         this.beneficeEchange = this.evalBeneficeEchange();
         this.beneficeAutreEchange = evalBeneficeAutreEchange();
