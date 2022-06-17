@@ -10,11 +10,13 @@ import instance.reseau.Paire;
 import java.io.PrintWriter;
 import instance.Instance;
 import instance.reseau.Participant;
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import operateur.InsertionPaire;
+import operateur.InterEchange;
 import operateur.IntraEchange;
+import operateur.OperateurLocal;
+import operateur.TypeOperateurLocal;
 
 /**
  *
@@ -30,9 +32,52 @@ public class Chaine extends Echanges {
         altruiste = null;
     }
     
+    public Chaine(Chaine ch) {
+        this.maxChaine = ch.maxChaine;
+        this.altruiste = ch.getAltruiste();
+        this.paires = ch.getPaires();
+    }
+    
     public Chaine(Instance i, Altruiste altruiste){
         this(i);
         this.altruiste = altruiste;
+    }
+    
+    public Chaine(Instance i, List<Participant> chaine){
+        this(i);
+        
+        LinkedList<Participant> chaineToCopy = new LinkedList<>(chaine);
+        // if(Chaine.checkValide(chaineToCopy)) {
+            
+            this.altruiste = (Altruiste)chaineToCopy.pop();
+            
+            LinkedList<Paire> paireChaine = new LinkedList<>();
+            for (Participant p : chaineToCopy) {
+                paireChaine.add((Paire)p);
+            }
+            
+            this.setPaires(paireChaine);
+        // }
+    }
+    
+    public static boolean checkValide(LinkedList<Participant> chaine) {
+        if(null == chaine) return false;
+        LinkedList<Participant> chaineToCopy = new LinkedList<>(chaine);
+        if(chaineToCopy.size() < 2) return false;
+        Participant a = chaineToCopy.pop();
+        if(!(a instanceof Altruiste)) return false; 
+        
+        Participant ptemp = chaineToCopy.pop();
+        
+        if(a.getBeneficeVers(ptemp) == -1) return false;        
+        
+        for (Iterator<Participant> iterator = chaineToCopy.iterator(); iterator.hasNext();) {
+            Participant next = iterator.next();
+            if(ptemp.getBeneficeVers(next) == -1) return false;
+            ptemp = next;
+        }
+        
+        return true;
     }
     
     public static int beneficeTotalChaine(LinkedList<Participant> chaine) {
@@ -210,12 +255,16 @@ public class Chaine extends Echanges {
 
     @Override
     public String toString(){
-           String s = "Chaine{" + "maxChaine=" + maxChaine + ", altruiste=" + altruiste + ", paires=";
-            
-            for(Paire p: this.getPaires()){
-                s+= p.getId()+",";
-            }
-            
+           String s = "Chaine(" + this.getBeneficeTotal() + "){" ;//+ "maxChaine=" + maxChaine + ", altruiste=" + altruiste + ", paires=";
+           
+           LinkedList<Paire> list = new LinkedList<>(this.getPaires());
+           
+           s += list.pop().toString();
+            for(Paire p: list){
+                s+= ", " + p.toString();
+           }
+           
+           s += "}\n";
         return s;
     }
 
@@ -223,21 +272,6 @@ public class Chaine extends Echanges {
      public int deltaBeneficeEchange(int positionI, int positionJ, IntraEchange i) {
 
         return 0;
-    }    
-    
-    public  boolean doEchange(IntraEchange infos){
-        if(infos == null) return false;
-        if(!infos.isMouvementRealisable()) return false; 
-        
-          /// CODE HERE
-        
-        if (!this.check()){
-            System.out.println("Mauvais échange des clients");
-            System.out.println(infos);
-            System.exit(-1); //Termine le programme
-        }
-        
-        return true;
     }
      
     @Override
@@ -263,4 +297,236 @@ public class Chaine extends Echanges {
         }
         return this.paires.get(position);
     }
+    
+    /**
+     * Est compatible si l'?lement avant est compatible avec le premier et soit 
+     * on ins?re ? la derni?re place, soit le dernier ?lement est compatible 
+     * avec le suivant de la chaine
+     * @param position
+     * @param longueur
+     * @param pairesToAdd
+     * @return 
+     */
+    private boolean isCompatible(int positionInsertion, int longueur) {
+        if (this.getSize() == 1) return true;
+        Participant pPrec = this.getPrec(positionInsertion);
+
+        Participant pFirst = this.getCurrent(positionInsertion);
+        Participant pLast = this.getCurrent(positionInsertion + longueur - 1);
+        Participant pNext = this.getNext(positionInsertion + longueur - 1);
+        if (pPrec.getBeneficeVers(pFirst) != -1
+                && ((pNext != null && pLast.getBeneficeVers(pNext) != -1) 
+                    || pNext == null)) {
+            return true;
+        }
+        return false;
+    }
+    
+    public int beneficeGlobal(int position, int longueur) {
+        if (this.getSize() == 1) return 0;
+        if (isCompatible(position, longueur)) {
+            int beneficeTotalCalcule = 0;
+
+            Altruiste a = this.getAltruiste();
+            Paire p = this.getFirstPaire();
+            beneficeTotalCalcule = this.addBenefice(beneficeTotalCalcule, a.getBeneficeVers(p));
+
+            for (int i = 1; i < this.paires.size(); i++) {
+                Paire pcurr = this.get(i);
+                beneficeTotalCalcule = this.addBenefice(beneficeTotalCalcule, p.getBeneficeVers(pcurr));
+                p = pcurr;
+            }
+            
+            return beneficeTotalCalcule;
+        }
+        return -1;
+    }
+
+    public boolean doEchange(IntraEchange infos) {
+        if (infos == null) {
+            return false;
+        }
+        if (!infos.isMouvementRealisable()) {
+            return false;
+        }
+
+        /// CODE HERE
+        int positionI = infos.getPositionI();
+        int positionJ = infos.getPositionJ();
+        int longueurI = infos.getLongueurI();
+        int longueurJ = infos.getLongueurJ();
+
+        if (positionI > positionJ) { // Echanger dans un sens ou un autre ne change rien
+            int saveJ = positionJ; // Si I>J j'inverse pour que mon calcul ne change pas 
+            positionJ = positionI;
+            positionI = saveJ;
+
+            int savelJ = longueurJ;
+            longueurJ = longueurI;
+            longueurI = savelJ;
+        }
+
+        System.out.println("PositionI " + positionI);
+        System.out.println("PositionJ " + positionJ);
+        System.out.println("longueurI " + longueurI);
+        System.out.println("longueurJ" + longueurJ);
+
+        this.paires = infos.getEchangeFini().paires;
+        this.beneficeTotal = infos.getBenefice();
+
+        if (!this.check()) {
+            System.out.println("Mauvais ?change des clients");
+            System.out.println(infos);
+            System.exit(-1); //Termine le programme
+        }
+
+        return true;
+    }
+
+    public boolean doEchange(InterEchange infos) {
+        if (infos == null) {
+            return false;
+        }
+        if (!infos.isMouvementRealisable()) {
+            return false;
+        }
+
+        Echanges c = infos.getEchange();
+        Echanges c2 = infos.getAutreEchange();
+
+        int positionI = infos.getPositionI();
+        int positionJ = infos.getPositionJ();
+        int longueurI = infos.getLongueurI();
+        int longueurJ = infos.getLongueurJ();
+
+        if (positionI > positionJ) { // Echanger dans un sens ou un autre ne change rien
+            int saveJ = positionJ; // Si I>J j'inverse pour que mon calcul ne change pas 
+            positionJ = positionI;
+            positionI = saveJ;
+
+            int savelJ = longueurJ;
+            longueurJ = longueurI;
+            longueurI = savelJ;
+        }
+        /*       System.out.println("PositionI "+positionI);
+        System.out.println("PositionJ " + positionJ);
+        System.out.println("longueurI "+longueurI);
+        System.out.println("longueurJ"+longueurJ);*/
+
+        c.paires = infos.getEchangeFini().getPaires();
+        c2.paires = infos.getAutreEchangeFini().getPaires();
+
+        c.beneficeTotal = infos.getBeneficeEchange();
+        c2.beneficeTotal = infos.getBeneficeAutreEchange();
+
+        if (!this.check()) {
+            System.out.println("Mauvais ?change des clients");
+            System.out.println(infos);
+            System.out.println("");
+            System.exit(-1); //Termine le programme
+        }
+
+        return true;
+    }
+    
+    public int BeneficeEchange(int positionI, int positionJ, int longueurI, int longueurJ) {
+        if (!isPositionInsertionValide(positionI)) {
+            System.out.println("posI Invalid");
+            return -1;
+        }
+        if (!isPositionInsertionValide(positionJ)) {
+            System.out.println("posJ Invalid");
+            return -1;
+        }
+        if (positionI == positionJ) {
+            System.out.println("posI = posJ");
+            return -1;
+        }
+        /* if(!(positionI<positionJ)){
+            System.out.println("!(positionI<positionJ)");
+            return -1;
+        }*/
+
+        int beneficeTotal = 0;
+
+        if (this.getSize() > 1) {
+
+            Altruiste a = this.getAltruiste();
+            Paire p = this.getFirstPaire();
+            beneficeTotal = this.addBenefice(beneficeTotal, a.getBeneficeVers(p));
+
+            for (int i = 1; i < this.getSize() - 1; i++) {
+                Paire pcurr = this.get(i);
+                beneficeTotal = this.addBenefice(beneficeTotal, p.getBeneficeVers(pcurr));
+                p = pcurr;
+            }
+        }
+
+        if (this.getSize() > this.maxChaine) {
+            System.err.println("[CALCUL CYCLE] : La taille totale est sup?rieur ? la capacit? : ( taille totale : " + this.getSize() + ", capacit? : " + this.maxChaine + " )");
+            return -1;
+        }
+
+        return beneficeTotal;
+    }
+
+    public int BeneficeEchangeInter(int positionI, int positionJ, int longueurI, int longueurJ) {
+        if (!isPositionInsertionValide(positionI)) {
+            System.out.println("posI Invalid");
+            return -1;
+        }
+        if (!isPositionInsertionValide(positionJ)) {
+            System.out.println("posJ Invalid");
+            return -1;
+        }
+
+        /* if(!(positionI<positionJ)){
+            System.out.println("!(positionI<positionJ)");
+            return -1;
+        }*/
+        int beneficeTotal = 0;
+
+        if (this.getSize() > 1) {
+
+            Altruiste a = this.getAltruiste();
+            Paire p = this.getFirstPaire();
+            beneficeTotal = this.addBenefice(beneficeTotal, a.getBeneficeVers(p));
+
+            for (int i = 1; i < this.getSize() - 1; i++) {
+                Paire pcurr = this.get(i);
+                beneficeTotal = this.addBenefice(beneficeTotal, p.getBeneficeVers(pcurr));
+                p = pcurr;
+            }
+        }
+
+        if (this.getSize() > this.maxChaine) {
+            System.err.println("[CALCUL CYCLE] : La taille totale est sup?rieur ? la capacit? : ( taille totale : " + this.getSize() + ", capacit? : " + this.maxChaine + " )");
+            return -1;
+        }
+
+        return beneficeTotal;
+    }
+    
+    /** 
+     * renvoie le meilleur op?rateur intra-echange de type type pour cette
+     * tourn?e
+     * TODO : Augmenter la longueur pour l'op?rateur (ici 1)
+     * Il faut faire en sorte que l'on teste avec des ensemble de paires, longueur
+     * sup?rieure ? 1
+     * @param type
+     * @return
+     */
+    public OperateurLocal getMeilleurOperateurIntra(TypeOperateurLocal type) {
+        OperateurLocal best = OperateurLocal.getOperateur(type);
+        for (int i = 0; i < this.paires.size(); i++) {
+            for (int j = 0; j < this.paires.size() + 1; j++) {
+                OperateurLocal op = OperateurLocal.getOperateurIntra(type, this, i, j, 1, 0);
+                if (op.isMeilleur(best)) {
+                    best = op;
+                }
+            }
+        }
+        return best;
+    }
+    
 }

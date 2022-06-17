@@ -13,6 +13,7 @@ import instance.reseau.Paire;
 import io.InstanceReader;
 import io.exception.ReaderException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -21,15 +22,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 // TO CHECK : import des classes Solution, InsertionSimple et Solveur
 import solution.Solution;
 import solveur.ArbreSolveur;
 import solveur.ChainesMeilleurBenef;
 import solveur.CycleMeilleurBenef;
-import solveur.EncoreUnArbre;
+import solveur.PLNE;
 import solveur.InsertionSimple;
 import solveur.LargeCycles;
-import solveur.MeilleureInsertion;
 import solveur.SolutionSimple;
 import solveur.Solveur;
 
@@ -106,7 +108,7 @@ public class TestAllSolveur {
     private void addSolveurs() {
         // TO CHECK : constructeur par defaut de la classe InsertionSimple
         
-       /* System.out.println("Meilleur B�n�fice Chaine");
+        /* System.out.println("Meilleur B�n�fice Chaine");
         solveurs.add(new ChainesMeilleurBenef());*/
         
         //System.out.println("Insertion Simple");
@@ -122,15 +124,13 @@ public class TestAllSolveur {
         */
         System.out.println("Large Cycle");
         solveurs.add(new LargeCycles());
+        /*
         
         System.out.println("Arbre");
         solveurs.add(new ArbreSolveur());
-        /*
-        System.out.println("Meilleure Insertion");
-        solveurs.add(new MeilleureInsertion());
         */
         System.out.println("PLNE");     
-        solveurs.add(new EncoreUnArbre());
+        solveurs.add(new PLNE());
 
         /*
         Solveur solutionRechercheLocale = new RechercheLocale(solutionSimple);
@@ -198,15 +198,7 @@ public class TestAllSolveur {
             ecriture = new PrintWriter(nomFichierResultats + ".csv");
             printEnTetes(ecriture);
             for (Instance inst : instances) {
-                printResultatsInstance(ecriture, inst);
-                PrintWriter ecritureIndividuelle = new PrintWriter(destinationSol + "/" + inst.getNom() + "_sol" + ".txt");
-                printResultatsInstanceIndividuelle(ecritureIndividuelle, inst);
-                ecritureIndividuelle.println();
-                
-                if(ecritureIndividuelle != null)
-                {
-                    ecritureIndividuelle.close();
-                }
+                printResultatsInstance(destinationSol, ecriture, inst);
             }
             ecriture.println();
             printSommeResultats(ecriture);
@@ -240,13 +232,25 @@ public class TestAllSolveur {
      * @param ecriture le writer sur lequel on fait l'ecriture
      * @param inst l'instane pour laquelle on ecrit les resultats
      */
-    private void printResultatsInstance(PrintWriter ecriture, Instance inst) {
+    private void printResultatsInstance(String destinationSol, PrintWriter ecriture, Instance inst) {
         // TO CHECK : recuperer le nom de l'instance
+        try {
         ecriture.print(inst.getNom());
         for (Solveur solveur : solveurs) {
             long start = System.currentTimeMillis();
             // TO CHECK : resolution de l'instance avec le solveur
             Solution sol = solveur.solve(inst);
+            PrintWriter ecritureIndividuelle;
+            
+            ecritureIndividuelle = new PrintWriter(destinationSol + "/" + inst.getNom() + "_sol" + ".txt");
+            sol.printSolution(ecritureIndividuelle);
+            ecritureIndividuelle.println();
+            if(ecritureIndividuelle != null)
+            {
+                ecritureIndividuelle.close();
+            }
+
+
             long time = System.currentTimeMillis() - start;
             // TO CHECK : recperer le cout total de la solution, et savoir si
             // la solution est valide
@@ -255,25 +259,13 @@ public class TestAllSolveur {
             ecriture.print(";" + result.formatCsv());
             totalStats.get(solveur).add(result);
         }
+
         ecriture.println();
+        } catch (FileNotFoundException ex) {
+                Logger.getLogger(TestAllSolveur.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }
     
-    /**
-     * Cette m�thode cr�e un fichier de solutions individuel 
-     * avec un format adapt�e au checker externe
-     *
-     * @param ecriture le writer sur lequel on fait l'ecriture
-     * @param inst l'instane pour laquelle on ecrit les resultats
-     */
-    private void printResultatsInstanceIndividuelle(PrintWriter ecritureIndividuelle, Instance inst) {
-
-        for (Solveur solveur : solveurs) {
-            // TO CHECK : resolution de l'instance avec le solveur
-            Solution sol = solveur.solve(inst);
-            sol.printSolution(ecritureIndividuelle);
-        }
-        ecritureIndividuelle.println();
-    }
 
     /**
      * Eriture des en-tetes dans le fichier de resultats.
@@ -445,9 +437,17 @@ public class TestAllSolveur {
      * @param args
      */
     public static void main(String[] args) {
-        TestAllSolveur test = new TestAllSolveur("instancesInitiales");
+        long maxMemory = Runtime.getRuntime().maxMemory();
+        /* Maximum amount of memory the JVM will attempt to use */
+        System.out.println("Maximum memory (bytes): " + 
+        (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory));
+        long time = System.currentTimeMillis();
         // TestAllSolveur test = new TestAllSolveur("instancesFinales");
+        // TestAllSolveur test = new TestAllSolveur("test");
+        TestAllSolveur test = new TestAllSolveur("allInstances");
+        // TestAllSolveur test = new TestAllSolveur("instancesInitiales");
         test.printAllResultats("results", "annexe/");
+        System.out.println("Time : " + (System.currentTimeMillis() - time) );
     }
 
 }

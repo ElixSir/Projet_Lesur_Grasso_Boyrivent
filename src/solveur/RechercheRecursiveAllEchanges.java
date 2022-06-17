@@ -24,7 +24,7 @@ public class RechercheRecursiveAllEchanges {
     public int maxTailleCycle;
     
     public final LinkedList<Participant> participants;
-    public final Instance instance;
+    public Instance instance;
     
     public RechercheRecursiveAllEchanges(Instance i) {
         
@@ -47,13 +47,13 @@ public class RechercheRecursiveAllEchanges {
         this(i,tailleLimite,tailleLimite);
     }
     
-    private void rechercheCycle(Paire paire,int maxtailleCycle, LinkedList<LinkedList<Participant>> echangesPossibles, LinkedList<Participant> cycle, Participant next) {
+    private void rechercheCycle(Paire paire,int maxtailleCycle, LinkedList<Echanges> echangesPossibles, LinkedList<Paire> cycle, Paire next) {
         
         cycle.add(next);
         // this.printCycle(cycle);
         
         if(next.getBeneficeVers(paire) >= 0) {
-            echangesPossibles.add(new LinkedList(cycle));
+            echangesPossibles.add(new Cycle(this.instance,cycle));
         }
         
         if(cycle.size() >= maxtailleCycle) return;
@@ -69,15 +69,16 @@ public class RechercheRecursiveAllEchanges {
         }
     }
     
-    private void rechercheChaine(Altruiste altruiste, int maxtailleChaine, LinkedList<LinkedList<Participant>> echangesPossibles, LinkedList<Participant> chaine, Participant next) {
+    private void rechercheChaine(Altruiste altruiste, int maxtailleChaine, LinkedList<Echanges> echangesPossibles, LinkedList<Participant> chaine, Participant next) {
         
         chaine.add(next);
         
-        if(chaine.size() >= maxtailleChaine) {
-            echangesPossibles.add(new LinkedList<>(chaine) );
+        if(chaine.size() >= maxtailleChaine ) {
+            Chaine c = new Chaine(this.instance,chaine);
+            echangesPossibles.add( c );
             return;
         } else if( chaine.size() >= 2 ){
-            echangesPossibles.add(new LinkedList<>(chaine) );
+            echangesPossibles.add(new Chaine(this.instance,chaine) );
         }
         
         for(Transplantation t: next.getTransplantations()) {
@@ -94,38 +95,38 @@ public class RechercheRecursiveAllEchanges {
     
     public LinkedList<Echanges> recherche() {
         LinkedList<Echanges> echangesPossibles = new LinkedList<>();
-        LinkedList<LinkedList<Participant>> recherche;
+        LinkedList<Echanges> recherche;
         
-        LinkedList<Participant> temp;
+        LinkedList<Paire> tempCycle;
+        LinkedList<Participant> tempChaine;
         
         for (Participant p : participants) {
 
-            temp = new LinkedList<>();
             recherche = new LinkedList<>();
             
             if( p instanceof Paire ) {
-                this.rechercheCycle((Paire)p, maxTailleCycle, recherche, temp, p);
+                tempCycle = new LinkedList<>();
+                this.rechercheCycle((Paire)p, maxTailleCycle, recherche, tempCycle, (Paire)p);
                 
-                for (LinkedList<Participant> e : recherche) {
-                    LinkedList<Paire> ep = new LinkedList(e);
-                    echangesPossibles.add( new Cycle(this.instance, ep ));
+                for (Echanges e : recherche) {
+                    echangesPossibles.add( new Cycle((Cycle)e));
                 }
             } else if( p instanceof Altruiste ) {
                 Altruiste a = (Altruiste)p;
-                this.rechercheChaine(a, maxTailleChaine, recherche, temp, p);
+                tempChaine = new LinkedList<>();
+                this.rechercheChaine(a, maxTailleChaine, recherche, tempChaine, p);
                 
-                for (LinkedList<Participant> e : recherche) {
-                    Chaine c = new Chaine(this.instance, (Altruiste) e.pop());
-                    
-                    for (Participant paire : e) {
-                        c.ajouterPaire((Paire)paire);
-                    }
-                    
-                    echangesPossibles.add(c);
+                for (Echanges e : recherche) {
+                    echangesPossibles.add((Chaine)e);
                 }
             }
         }
         
         return echangesPossibles;
+    }
+    
+    public void clear() {
+        this.participants.clear();
+        this.instance = null;
     }
 }

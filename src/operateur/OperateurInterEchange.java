@@ -7,34 +7,35 @@ package operateur;
 import solution.ensemble.Echanges;
 import instance.reseau.Paire;
 
-
-
 /**
  *
  * @author Bart
  */
 public abstract class OperateurInterEchange extends OperateurLocal {
+
     protected Echanges autreEchange;
+    protected int beneficeEchange;
     protected int deltaBeneficeEchange;
+    protected int beneficeAutreEchange;
     protected int deltaBeneficeAutreEchange;
 
 
     public OperateurInterEchange() {
         super();
-        this.deltaBeneficeEchange = Integer.MAX_VALUE;
-        this.deltaBeneficeAutreEchange = Integer.MAX_VALUE;
+        this.beneficeEchange = Integer.MAX_VALUE;
+        this.beneficeAutreEchange = Integer.MAX_VALUE;
     }
 
-       
-    public OperateurInterEchange(Echanges echange, Echanges autreEchange, int positionI, int positionJ) {
-        super(echange,positionI, positionJ);
+    public OperateurInterEchange(Echanges echange, Echanges autreEchange, int positionI, int positionJ, int longueurI, int longueurJ) {
+        super(echange, positionI, positionJ, longueurI, longueurJ);
         this.autreEchange = autreEchange;
         this.paireJ = (Paire) autreEchange.getCurrent(positionJ);
-        this.deltaBenefice = this.evalDeltaBenefice();
+        this.paireI = (Paire) echange.getCurrent(positionI);
+        this.deltaBeneficeAutreEchange = -1;
+        this.deltaBenefice = -1;
+        this.evalBenefice();
+
     }
-    
-    protected abstract int evalDeltaBeneficeEchange();
-    protected abstract int evalDeltaBeneficeAutreEchange();
 
     public Echanges getAutreEchange() {
         return this.autreEchange;
@@ -44,27 +45,12 @@ public abstract class OperateurInterEchange extends OperateurLocal {
         return this.echange;
     }
 
-    public int getDeltaBeneficeEchange() {
-        return this.deltaBeneficeEchange;
+    public int getBeneficeEchange() {
+        return this.beneficeEchange;
     }
 
-    public int getDeltaBeneficeAutreEchange() {
-        return this.deltaBeneficeAutreEchange;
+    public int getBeneficeAutreEchange() {
+        return this.beneficeAutreEchange;
     }
-    
-    
-    
-    @Override
-    protected int evalDeltaBenefice() {
-        this.deltaBenefice = this.evalDeltaBeneficeEchange();
-        this.deltaBeneficeAutreEchange = this.evalDeltaBeneficeAutreEchange();
-        
-        if(this.evalDeltaBeneficeEchange() == Integer.MAX_VALUE || this.evalDeltaBeneficeAutreEchange() == Integer.MAX_VALUE){
-            return Integer.MAX_VALUE;
-        }
-        return this.evalDeltaBeneficeEchange()+ this.evalDeltaBeneficeAutreEchange();
-    }
-    
-    
-    
+
 }

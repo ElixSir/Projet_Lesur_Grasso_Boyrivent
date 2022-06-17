@@ -18,6 +18,8 @@ import instance.reseau.Transplantation;
 import io.InstanceReader;
 import io.exception.ReaderException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,19 +31,17 @@ import solution.ensemble.Echanges;
  *
  * @author Clem
  */
-public class EncoreUnArbre implements Solveur{
+public class PLNE implements Solveur{
     
     private IloCplex iloCplex;
     private IloIntVar[] x;
-    private LinkedList<Paire> paires;
-    private LinkedList<Altruiste> altruistes;
     private List<Echanges> echangesPossibles;
     private int nbAltruistes;
     private int nbPaires;
 
     @Override
     public String getNom() {
-        return "Eh oui un arbre";
+        return "PLNE";
     }
     
     private void printPourcent(int cur, int fin) {
@@ -78,62 +78,11 @@ public class EncoreUnArbre implements Solveur{
                 
                 exprs[j].addTerm(x[i], 1);
             }
-            // this.printPourcent(i, this.echangesPossibles.size());
         }
-        // System.out.println("");
         for (IloLinearNumExpr expr : exprs) {
             this.iloCplex.addLe(expr, 1);
         }
     }
-    /*
-    private void contrainte1() throws IloException {
-        LinkedList<Integer> echangesPaire;
-        LinkedList<Participant> temp;
-        
-        for (Paire p : this.paires) {
-            echangesPaire = new LinkedList();
-            
-            for (int i = 0; i < this.echangesPossibles.size(); i++) {
-                temp = this.echangesPossibles.get(i);
-                if( temp.contains(p) ) {
-                    echangesPaire.add(i);
-                }
-            }
-
-            
-            IloLinearNumExpr expr = this.iloCplex.linearNumExpr();
-            for (Integer i : echangesPaire) {
-                expr.addTerm(x[i], 1);
-            }
-            
-            this.iloCplex.addLe(expr, 1);
-        }
-    }
-    
-    private void contrainte2() throws IloException {
-        LinkedList<Integer> chainesDonneurAltruiste;
-        LinkedList<Participant> temp;
-        
-        for (Altruiste a : this.altruistes) {
-            chainesDonneurAltruiste = new LinkedList();
-            
-            for (int i = 0; i < this.echangesPossibles.size(); i++) {
-                temp = this.echangesPossibles.get(i);
-                Participant tempFirstE = temp.getFirst();
-                if( tempFirstE instanceof Altruiste && tempFirstE.equals(a) ) {
-                    chainesDonneurAltruiste.add(i);
-                }
-            }
-            
-            IloLinearNumExpr expr = this.iloCplex.linearNumExpr();
-            for (Integer i : chainesDonneurAltruiste) {
-                expr.addTerm(x[i], 1);
-            }
-            
-            this.iloCplex.addLe(expr, 1);
-        }
-    }
-    */
     
     private void objective() throws IloException {
         IloLinearNumExpr expr = this.iloCplex.linearNumExpr();
@@ -160,47 +109,128 @@ public class EncoreUnArbre implements Solveur{
     private void buildModel() throws IloException {
         this.iloCplex = new IloCplex();
         this.defXVarDecision();
-        // System.out.println("Fin X var");
         this.objective();
-        // System.out.println("Fin objective");
         this.contrainte1();
-        // System.out.println("Fin contrainte 1");
-        // this.contrainte2();
-        // System.out.println("Fin contrainte 2");
     }
 
     @Override
     public Solution solve(Instance instance) {
+        System.out.println("Free memory (%): " +  ((double)Runtime.getRuntime().freeMemory()/ (double)Runtime.getRuntime().maxMemory())*100 + "%");
+
         
         Solution s = new Solution(instance);
         
-        System.out.println("Instance : " + instance.getNom());
+        System.out.println("[PLNE]: " + instance.getNom());
         
-        this.altruistes = instance.getAltruistes();
         this.nbAltruistes = instance.getNbAltruistes();
-        this.paires = instance.getPaires();
         this.nbPaires = instance.getNbPaires();
 
-        int tailleLimite = 6;
-
-        RechercheRecursiveAllEchanges r = new RechercheRecursiveAllEchanges(instance, tailleLimite);
-
-        this.echangesPossibles = new ArrayList( r.recherche() );
+        
+        int tailleLimite = 5;
+        
+        int p = this.nbPaires;
+        int n = this.nbAltruistes;
+        int l = instance.getMaxChaines();
+        int maxBe =0;
+        int minBe =Integer.MAX_VALUE;        
+        
+        float sump = 0;
+        float suma = 0;
+        float sumbet = 0;
+        float nbt = 0;
+        float moyt = 0;
+        int median =0 ;
+        
+        ArrayList<Integer> arrayT = new ArrayList();
+        
+        for (Paire paire : instance.getPaires()) {
+            sump += paire.getTransplantations().size();
+            for (Transplantation t : paire.getTransplantations()) {
+                arrayT.add(t.getBenefice());
+                sumbet += t.getBenefice();
+                nbt++;
+                if(maxBe < t.getBenefice())
+                    maxBe = t.getBenefice();
+                if(minBe > t.getBenefice())
+                    minBe = t.getBenefice();
+            }
+        }
+        
+        for (Altruiste a : instance.getAltruistes()) {
+            suma += a.getTransplantations().size();
+            for (Transplantation t : a.getTransplantations()) {
+                arrayT.add(t.getBenefice());
+                sumbet += t.getBenefice();
+                nbt++;
+                if(maxBe < t.getBenefice())
+                    maxBe = t.getBenefice();
+                if(minBe > t.getBenefice())
+                    minBe = t.getBenefice();
+            }
+        }
+        
+        Collections.sort(arrayT);
+        int lenght = arrayT.size();
+        if(lenght%2 ==1){
+            median = arrayT.get(lenght/2);
+        } else {
+            median = (arrayT.get(lenght/2) + arrayT.get(lenght/2 - 1) )/2;
+        }
+        
+        moyt=(sumbet/nbt);
+        System.out.println("moy: "+(suma + sump)/(this.nbPaires + this.nbAltruistes));
+        System.out.println("sump: "+sump/this.nbPaires);
+        System.out.println("suma: "+suma/this.nbAltruistes);
+        System.out.println("max: "+maxBe);
+        System.out.println("min: "+minBe);
+        System.out.println("moybet: "+moyt);
+        System.out.println("median: "+median);
         
         
-        /*
-        */
-        System.out.println("Fin de recherche des echanges possiblie pour une taille d'échange de " + tailleLimite + ". " 
-                + this.echangesPossibles.size() + " trouvées");
+        int tailleLimiteCycle = 6, tailleLimiteChaine = 3,nbLimit = 3 * 1000000,nbEchanges =0,nbEchangesPrec =-1 ;
+        RechercheRecursiveAllEchanges r;
+        LinkedList<Echanges> resultats = new LinkedList<>();
         
+        while (nbEchanges < nbLimit  && nbEchangesPrec != nbEchanges) {            
+            r = new RechercheRecursiveAllEchanges(instance, tailleLimiteChaine, tailleLimiteCycle);
+            
+            resultats = r.recherche();
+            System.out.println((tailleLimiteChaine) + " " + resultats.size() + " " );
+            
+            nbEchangesPrec = nbEchanges;
+            // nbEchanges = this.echangesPossibles.size();
+            nbEchanges = resultats.size();
+            tailleLimiteChaine++;
+            r.clear();
+        }
+        this.echangesPossibles = new ArrayList();
+        
+        getStats(resultats,tailleLimiteChaine, tailleLimiteCycle, instance,moyt,median);
+        
+        
+        if( nbEchanges > 7*1000000 ) {
+            for (Echanges res : resultats) {
+                if( res instanceof Chaine && res.getBeneficeTotal() >= (median*(res.getSize()-1)))
+                    this.echangesPossibles.add(res);
+            }
+        } else {
+            this.echangesPossibles = new ArrayList<>(resultats);
+        }
+        resultats.clear();
+        resultats = null;
+        
+        getStats(this.echangesPossibles,tailleLimiteChaine, tailleLimiteCycle, instance,moyt,median);
+        
+        // System.exit(0);
         try {
             long time = System.currentTimeMillis();
             this.buildModel();
             time = System.currentTimeMillis() - time;
             System.out.println("fin build (" + time + " s)");
             
-            iloCplex.exportModel("model_" + instance.getNom() + ".lp");
-            iloCplex.setParam(IloCplex.DoubleParam.TimeLimit, 5 * 60);
+            // iloCplex.exportModel("model_" + instance.getNom() + ".lp");
+            
+            iloCplex.setParam( IloCplex.DoubleParam.TimeLimit, 15 * 60 );
             
             if(iloCplex.solve()){
                 /*
@@ -224,13 +254,151 @@ public class EncoreUnArbre implements Solveur{
                       
             }
         } catch (IloException ex) {
-            Logger.getLogger(EncoreUnArbre.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PLNE.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        System.out.println("[PLNE]: " + instance.getNom());
-        
+        // System.out.println("[PLNE]: " + instance.getNom());
+        this.iloCplex.end();
+        this.iloCplex = null;
+        this.echangesPossibles.clear();
         s.clean();
+        
+        int tot = 0;
+        int totMoyT = 0;
+        int totMedian = 0;
+        
+        for (Chaine c : s.getChaines()) {
+            tot++;
+            if(c.getSize() == instance.getMaxChaines() && (c.getBeneficeTotal()) < (instance.getNbPaires() + instance.getNbAltruistes())/2 ) {
+                System.err.println(c.toString());
+            }
+            
+            if(c.getBeneficeTotal() < (instance.getNbPaires() + instance.getNbAltruistes())/2) {
+                // System.err.println("Général\t" +c.toString());
+            }
+            
+            if(c.getBeneficeTotal() < ((instance.getNbPaires()*c.getSize())/tailleLimiteChaine)/2 ) {
+                System.err.println("Taille\t"+c.toString());
+            }
+            
+            if(c.getBeneficeTotal() < (moyt*c.getSize()) ) {
+                // System.err.println("MoyT\t"+c.toString());
+                totMoyT++;
+            }
+            
+            if(c.getBeneficeTotal() < (median*(c.getSize()-1)) ) {
+                System.err.println("median\t"+c.toString());
+                totMedian++;
+            }
+        }
+        if(totMoyT > 0)
+            // System.err.println("totMoyT\t" + totMoyT + "/" + tot);
+        
+        if(totMedian > 0)
+            System.err.println("totMedian\t" + totMedian + "/" + tot);
+        
+        
+        
+        /*
+        
+        for (Chaine chaine : s.getChaines()) {
+            System.out.println(chaine.getBeneficeTotal() + "\t" + chaine.getSize() + "\t" + chaine.getBeneficeTotal()/chaine.getSize() + "\t" + chaine.getSize()/chaine.getBeneficeTotal());
+        }
+        
+        for (Cycle cycle : s.getCycles()) {
+            System.out.println(cycle.getBeneficeTotal() + "\t" + cycle.getSize() + "\t" + cycle.getBeneficeTotal()/ cycle.getSize() + "\t" + cycle.getSize()/cycle.getBeneficeTotal()); 
+        }
+        */
         return s;
+    }
+
+    private void getStats(List<Echanges> ech,int tailleLimiteChaine, int tailleLimiteCycle, Instance i, float moyt, int median) {
+        int taille = Math.max(tailleLimiteChaine, tailleLimiteCycle);
+        int[] sum = new int[taille];
+        int[] sumInfMoit = new int[taille];
+        int[] sumTaille = new int[taille];
+        int[] sumInfmoy = new int[taille];
+        int[] sumInfmed = new int[taille];
+        
+        for (Echanges e : ech) {
+            sum[e.getSize()]++;
+            if(e.getBeneficeTotal() < (i.getNbPaires() + i.getNbAltruistes())/2) {
+                sumInfMoit[e.getSize()]++;
+            }
+            
+            if(e.getBeneficeTotal() < ((i.getNbPaires()*e.getSize())/tailleLimiteChaine)/2 ) {
+                sumTaille[e.getSize()]++;
+            }
+            if(e.getBeneficeTotal()< (e.getSize()*moyt)) {
+                sumInfmoy[e.getSize()]++;
+            }
+            
+            if(e.getBeneficeTotal()< ((e.getSize()-1)*median)) {
+                sumInfmed[e.getSize()]++;
+            }
+        }
+        
+        String str = "taille\t|";
+        
+        for (int j = 2; j < sum.length; j++) {
+            str += "\t" + j + "\t|";
+        }
+        
+        System.out.println(str);
+        
+        str = "nb\t|";
+        
+        for (int j = 2; j < sum.length; j++) {
+            str += "\t" + sum[j] + "\t|";
+        }
+        
+        System.out.println(str);
+        
+        str = "nbInfMo\t|";
+        
+        for (int j = 2; j < sum.length; j++) {
+            str += "\t" + sumInfMoit[j] + "\t|";
+        }
+        
+        System.out.println(str);
+        
+        str = "nbTaill\t|";
+        
+        for (int j = 2; j < sum.length; j++) {
+            str += "\t" + sumTaille[j] + "\t|";
+        }
+        
+        System.out.println(str);
+        
+        
+        str = "InfmoyT\t|";
+        
+        for (int j = 2; j < sum.length; j++) {
+            str += "\t" + sumInfmoy[j] + "\t|";
+        }
+        
+        System.out.println(str);
+        
+        str = "InfmedT\t|";
+        
+        for (int j = 2; j < sum.length; j++) {
+            str += "\t" + sumInfmed[j] + "\t|";
+        }
+        
+        System.out.println(str);
+        
+        
+        
+        
+        /*
+        */
+        System.out.println("Fin de recherche des echanges possiblie pour une taille d'échange de " + (tailleLimiteChaine - 1) + ". "
+                + this.echangesPossibles.size() + " trouvées");
+        // System.out.println(this.echangesPossibles.size());
+        
+        // if(true) return s;
+        System.out.println("Free memory (bytes): " + Runtime.getRuntime().freeMemory());
+        System.out.println("Free memory (%): " + ((double) Runtime.getRuntime().freeMemory() / (double) Runtime.getRuntime().maxMemory()) * 100 + "% - " + Runtime.getRuntime().freeMemory() / 1000000 + " " + Runtime.getRuntime().maxMemory() / 1000000);
     }
     
     private int getbenefEchange(LinkedList<Participant> ech) {
@@ -302,23 +470,39 @@ public class EncoreUnArbre implements Solveur{
         // KEP_p100_n11_k5_l17
         // KEP_p50_n6_k5_l17
         // KEP_p100_n11_k3_l7
-        // KEP_p250_n83_k5_l17
+        // KEP_p250_n13_k3_l7
+        
+        // KEP_p250_n28_k3_l13
         // KEP_p250_n13_k5_l17
         // KEP_p250_n28_k3_l13
+        // KEP_p250_n83_k3_l7
+        // KEP_p250_n83_k3_l4
+        // KEP_p250_n83_k5_l17
+        
+        // KEP_p250_n83_k3_l13 2577933840
         try {
-            InstanceReader read = new InstanceReader("instancesFinales/KEP_p250_n28_k3_l13.txt");
+            // InstanceReader read = new InstanceReader("instancesFinales/KEP_p250_n83_k5_l17.txt");
             // InstanceReader read = new InstanceReader("instancesFinales1/KEP_p250_n28_k3_l13.txt");
-            // InstanceReader read = new InstanceReader("instancesInitiales/KEP_p250_n13_k5_l17.txt");
+            InstanceReader read = new InstanceReader("instancesInitiales/KEP_p9_n0_k3_l0.txt");
             
             Instance i = read.readInstance();
-
-            EncoreUnArbre algoSimple = new EncoreUnArbre();
-
+            
+            PLNE algoSimple = new PLNE();
+            
             Solution simple = algoSimple.solve(i);
+            
+            /*
+            for (Chaine c : simple.getChaines()) {
+                if(c.getSize() == 4) {
+                    System.out.println(c.toString());
+                }
+            }
+            */
 
             System.out.println("solution valide : " + simple.check());
             
             System.out.println(simple.toString());
+            
 
         } catch (ReaderException ex) {
             System.out.println(ex.getMessage());

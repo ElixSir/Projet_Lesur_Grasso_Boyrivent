@@ -5,8 +5,11 @@
 package solveur;
 
 import instance.Instance;
+import instance.reseau.Participant;
 import io.InstanceReader;
 import io.exception.ReaderException;
+import operateur.OperateurLocal;
+import operateur.TypeOperateurLocal;
 
 import solution.Solution;
 
@@ -31,27 +34,29 @@ public class RechercheLocale implements Solveur{
 
     @Override
     public Solution solve(Instance instance) {
-      /*  ListeTabou liste = ListeTabou.getInstance();
-        liste.vider();
            
         Solution s = this.solveurInitial.solve(instance);
-
+        s.creerEchangesVides();
+        System.out.println(s);
         boolean improve = true;
         
         while(improve == true){
             improve = false;
             
             for(TypeOperateurLocal type :TypeOperateurLocal.values()){
-                OperateurLocal bestOperateur = s.getMeilleurOperateurLocal(type);
-                System.out.println(bestOperateur);
-                if(bestOperateur.isMouvementAmeliorant()){
-                    s.doMouvementRechercheLocale(bestOperateur);
-                    improve = true;
+                    OperateurLocal bestOperateur = s.getMeilleurOperateurLocal(type);
+                    System.out.println(bestOperateur);
+                    if (bestOperateur.isMouvementAmeliorant()) {
+                        s.doMouvementRechercheLocale(bestOperateur);
+                        improve = true;
+                
                 } 
             }
-        }*/
-        return null;
+        }
+        s.clean();
+        return s;
     }
+    
     
     /**
      * Test sur la première instance
@@ -60,17 +65,24 @@ public class RechercheLocale implements Solveur{
     public static void main(String[] args) {
         try{
             System.out.println("main recherchelocale");
-           /* InstanceReader read = new InstanceReader("instances/A-n32-k5.vrp");
+            InstanceReader read = new InstanceReader("instancesInitiales/KEP_p100_n11_k5_l17.txt");
+            //InstanceReader read = new InstanceReader("test/instance_test_InterDeplacement.txt");
             Instance i = read.readInstance();
             
-            Solveur solveurInitial = new InsertionPlusProcheVoisin();
+            InsertionSimple algoInitial = new InsertionSimple();
             
-            RechercheLocale algo = new RechercheLocale(solveurInitial);
+            Solution sInitiale = algoInitial.solve(i);
             
-            Solution s = algo.solve(i);
+            RechercheLocale rechercheLocale = new RechercheLocale(algoInitial);
             
-            System.out.println(s.toString());
-            System.out.println(s.check());*/
+            Solution sRechecheLocale = rechercheLocale.solve(i);
+            
+            System.out.println("\n Solution Initiale \n");
+            System.out.println(sInitiale.toString());
+            System.out.println("/////");
+            System.out.println("\n Solution Recherche Locale \n");
+            System.out.println(sRechecheLocale.toString());
+            //System.out.println(sRechecheLocale.check());
         }
         catch(Exception ex){
             System.out.println(ex.getMessage());

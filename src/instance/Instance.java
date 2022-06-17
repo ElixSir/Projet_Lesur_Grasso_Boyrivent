@@ -292,7 +292,7 @@ public class Instance {
         }
         
         return nbParti;
-    } 
+    }
     
     
     public static void main(String[] args) {

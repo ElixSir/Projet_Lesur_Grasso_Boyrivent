@@ -10,12 +10,16 @@ import solution.ensemble.Echanges;
 import instance.Instance;
 import instance.reseau.Altruiste;
 import instance.reseau.Paire;
+import instance.reseau.Participant;
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import operateur.InsertionPaire;
+import operateur.OperateurInterEchange;
+import operateur.OperateurIntraEchange;
+import operateur.OperateurLocal;
+import operateur.TypeOperateurLocal;
 
 
 
@@ -342,53 +346,130 @@ public class Solution {
         return benef;
     }
     
-    /**
-     * Récupère la meilleure insertion
-     * @param paireToInsert
-     * @return 
-     */
-    public InsertionPaire getMeilleurInsertion(Paire paireToInsert) {
-        InsertionPaire insMeilleur = new InsertionPaire();
-        if (paireToInsert == null) {
-            return insMeilleur;
+    public void creerEchangesVides() {
+        LinkedList listeParticipantUtilises = new LinkedList<Participant>();
+        for(Chaine ch : this.chaines.values())
+        {
+            listeParticipantUtilises.add(ch.getAltruiste());
+            for(Participant p : ch.getPaires())
+            {
+                listeParticipantUtilises.add(p);
+            }
         }
-
-        InsertionPaire insActu;
-        for (Chaine c : this.chaines.values()) {
-            insActu = c.getMeilleureInsertion(paireToInsert);
-            if (insActu.isMeilleur(insMeilleur)) {
-                //problème ici, on n'arrive jamais dans la boucle
-                insMeilleur = insActu;
+        for(Cycle cy : this.cycles)
+        {
+            for(Participant p : cy.getPaires())
+            {
+                listeParticipantUtilises.add(p);
             }
         }
         
-        for (Cycle cy : this.cycles) {
-            insActu = cy.getMeilleureInsertion(paireToInsert);
-            if (insActu.isMeilleur(insMeilleur)) {
-                insMeilleur = insActu;
+        System.out.println(listeParticipantUtilises);
+        for (Participant p : this.instance.getAltruistes()) {
+            if(!listeParticipantUtilises.contains(p)){
+                this.ajouterAltruisteNouvelleChaine((Altruiste) p);
             }
         }
-        return insMeilleur;
+        for (Participant p : this.instance.getPaires()) {
+            if (!listeParticipantUtilises.contains(p)) {
+
+                this.ajouterPaireNouveauCycle((Paire) p);
+            }
+        }
     }
     
     /**
-     * Effectue une insertion dans la solution
-     * @param infos
-     * @return 
+     * Renvoie le meilleur opérateur intra-echange de type type dans la
+     * solution.
+     *
+     * @param type
+     * @return
      */
-    public boolean doInsertion(InsertionPaire infos) {
-        if (infos == null) {
-            return false;
+    private OperateurLocal getMeilleurOperateurIntra(TypeOperateurLocal type) {
+        OperateurLocal best = OperateurLocal.getOperateur(type);
+        OperateurLocal operateurTournee;
+        for (Chaine ch : this.chaines.values()) {
+            operateurTournee = ch.getMeilleurOperateurIntra(type);
+            if (operateurTournee.isMeilleur(best)) {
+                best = operateurTournee;
+            }
         }
-        if (!this.chaines.containsValue(infos.getEchange()) && !this.cycles.contains(infos.getEchange())) {
-            return false;
+        for (Cycle c : this.cycles) {
+            operateurTournee = c.getMeilleurOperateurIntra(type);
+            if (operateurTournee.isMeilleur(best)) {
+                best = operateurTournee;
+            }
         }
-        if (!infos.doMouvementIfRealisable()) {
-            return false;
+        
+        return best;
+    }
+
+    /**
+     * Renvoie le meilleur opérateur inter-echange de type type dans la
+     * solution.
+     *
+     * @param type
+     * @return
+     */
+    private OperateurLocal getMeilleurOperateurInter(TypeOperateurLocal type) {
+        OperateurLocal best = OperateurLocal.getOperateur(type);
+        OperateurLocal operateurTournee;
+        for (Chaine ch : this.chaines.values()) {
+            for (Chaine autreCh : this.chaines.values()) {
+
+                operateurTournee = ch.getMeilleurOperateurInter(autreCh, type);
+                if (operateurTournee.isMeilleur(best)) {
+                    best = operateurTournee;
+                }
+            }
+
+        }
+        for (Cycle cy : this.cycles) {
+            for (Cycle autreCy : this.cycles) {
+
+                operateurTournee = cy.getMeilleurOperateurInter(autreCy, type);
+                if (operateurTournee.isMeilleur(best)) {
+                    best = operateurTournee;
+                }
+            }
+
+        }
+        
+        return best;
+    }
+    
+    /**
+     * renvoie le meilleur opérateur de recherche locale de type type dans la
+     * solution
+     *
+     * @param type
+     * @return
+     */
+    public OperateurLocal getMeilleurOperateurLocal(TypeOperateurLocal type) {
+        OperateurLocal operateurLocal = OperateurLocal.getOperateur(type);
+        if (operateurLocal instanceof OperateurIntraEchange) {
+            operateurLocal = this.getMeilleurOperateurIntra(type);
+        } else if (operateurLocal instanceof OperateurInterEchange) {
+            operateurLocal = this.getMeilleurOperateurInter(type);
         }
 
-        this.beneficeTotal += infos.getDeltaBenefice();
-        return true;
+        return operateurLocal;
+    }
+    
+    /**
+     * implémente le mouvement lié à l?opérateur de recherche locale infos s?il
+     * est réalisable
+     *
+     * @param infos
+     * @return boolean
+     */
+    public boolean doMouvementRechercheLocale(OperateurLocal infos) {
+        if (infos != null && infos.isMouvementAmeliorant() && infos.doMouvementIfRealisable()) {
+            this.beneficeTotal += infos.getDeltaBenefice();
+            System.out.println("Check solution : " + this.check());
+            return true;
+        }
+        return false;
     }
     
     private boolean uniqParticipantInEchanges() {

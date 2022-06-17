@@ -17,7 +17,7 @@ import org.json.JSONObject;
 import solution.Solution;
 import solution.ensemble.Chaine;
 import solution.ensemble.Cycle;
-import solveur.EncoreUnArbre;
+import solveur.PLNE;
 import solveur.LargeCycles;
 
 /**
@@ -124,7 +124,7 @@ public class SolutionWriter {
             Instance i = read.readInstance();
 
             LargeCycles algo1 = new LargeCycles();
-            EncoreUnArbre algo2 = new EncoreUnArbre();
+            PLNE algo2 = new PLNE();
 
             Solution sol1 = algo1.solve(i);
             Solution sol2 = algo2.solve(i);

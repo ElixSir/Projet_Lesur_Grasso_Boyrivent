@@ -1,48 +1,13 @@
 // Cout total de la solution
-1641
+2539
 // Description de la solution
 // Cycles
-57	85	64	
-12	13	22	
-37	44	52	
-20	88	
-30	68	
-17	73	38	
-61	11	72	
 50	84	
 
 // Chaines
-2	35	105	96	89	
-4	23	45	
-5	53	
-// Cout total de la solution
-1487
-// Description de la solution
-// Cycles
-30	68	
-17	73	38	
-50	84	
-
-// Chaines
-2	35	85	64	57	
-5	44	52	22	12	
-1	11	20	33	6	
-3	37	105	96	89	
-// Cout total de la solution
-2053
-// Description de la solution
-// Cycles
-12	13	22	
-30	68	
-50	84	
-52	37	44	
-73	38	17	
-
-// Chaines
-1	11	72	61	7	67	
-2	35	105	96	89	
-3	85	64	57	63	
-4	23	45	20	33	6	
-5	42	94	86	103	53	
-
+1	11	72	61	30	68	28	62	105	96	89	
+2	35	85	16	42	94	86	103	44	25	
+3	37	64	74	38	17	57	63	23	45	
+4	22	12	27	7	67	
+5	93	102	88	20	33	6	
 

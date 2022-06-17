@@ -153,7 +153,7 @@ public class LargeCycles implements Solveur {
     
     @Override
     public Solution solve(Instance instance) {
-        System.out.println("[LARGE]: " + instance.getNom());
+        //System.out.println("[LARGE]: " + instance.getNom());
         Solution s = new Solution(instance);
         LinkedList<Paire> paires = instance.getPaires();
         int maxTailleCycle = instance.getMaxCycles();
@@ -219,7 +219,7 @@ public class LargeCycles implements Solveur {
                 s.ajouterPaireNouveauCycle(bestP);
             }
         }
-        
+        System.out.println("Free memory (%): " +  ((double)Runtime.getRuntime().freeMemory()/ (double)Runtime.getRuntime().maxMemory())*100 + "%");
         s.clean();
         return s;
     }

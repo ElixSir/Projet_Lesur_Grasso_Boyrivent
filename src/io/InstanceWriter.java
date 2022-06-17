@@ -12,9 +12,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import solution.Solution;
-import solution.ensemble.Chaine;
-import solution.ensemble.Cycle;
+import instance.Instance;
+import instance.reseau.Altruiste;
+import instance.reseau.Transplantation;
+import io.exception.ReaderException;
 
 /**
  *
@@ -22,54 +23,74 @@ import solution.ensemble.Cycle;
  */
 public class InstanceWriter {
     
-    private final String PATH_FILE = "instance.json";
+    private final String PATH_FILE = "instances.json";
     
-    private JSONObject solutions;
+    private JSONObject instances;
 
     public InstanceWriter() {
-        this.solutions = new JSONObject();
+        this.instances = new JSONObject();
         
-        this.solutions.put("solutions", new JSONArray());
+        this.instances.put("instances", new JSONArray());
     }
     
-    public void ajouterSolution(Solution s, String nomSolution) {
+    public void ajouterInstance(Instance i) {
         JSONObject sol = new JSONObject();
         
-        sol.put("nom", nomSolution);
-        sol.put("benefice", s.getCoutTotal());
+        sol.put("nom", i.getNom());
+        sol.put("maxChaines", i.getMaxChaines());
+        sol.put("maxCycles", i.getMaxCycles());
+        sol.put("nbAltruistes", i.getNbAltruistes());
+        sol.put("nbPaires", i.getNbPaires());
         
-        JSONArray cycles = new JSONArray();
+        JSONArray altruistes = new JSONArray();
         
-        for (Cycle c : s.getCycles()) {
-            JSONArray cycle = new JSONArray();
+        for (Altruiste a : i.getAltruistes()) {
+            JSONObject altruiste = new JSONObject();
+            JSONArray transplantations = new JSONArray();
             
-            for (Paire paire : c.getPaires()) {
-                cycle.put(paire.getId());
+            altruiste.put("id", a.getId());
+            
+            for (Transplantation t : a.getTransplantations()) {
+                JSONObject transplantation = new JSONObject();
+                
+                transplantation.put("beneficiaire", t.getBeneficiaire().getId());
+                transplantation.put("benefice", t.getBenefice());
+
+                transplantations.put(transplantation);
             }
             
-            cycles.put(cycle);
+            altruiste.put("transplantations", transplantations);
+            
+            altruistes.put(altruiste);
         }
         
-        sol.put("cycles", cycles);
+        sol.put("altruistes", altruistes);
         
-        JSONArray chaines = new JSONArray();
+        JSONArray paires = new JSONArray();
         
-        for (Chaine c : s.getChaines()) {
-            JSONArray chaine = new JSONArray();
+        for (Paire p : i.getPaires()) {
+            JSONObject paire = new JSONObject();
+            JSONArray transplantations = new JSONArray();
             
-            chaine.put(c.getAltruiste().getId());
+            paire.put("id", p.getId());
             
-            for (Paire paire : c.getPaires()) {
-                chaine.put(paire.getId());
+            for (Transplantation t : p.getTransplantations()) {
+                JSONObject transplantation = new JSONObject();
+                
+                transplantation.put("beneficiaire", t.getBeneficiaire().getId());
+                transplantation.put("benefice", t.getBenefice());
+
+                transplantations.put(transplantation);
             }
             
-            chaines.put(chaine);
+            paire.put("transplantations", transplantations);
+            
+            paires.put(paire);
         }
         
-        sol.put("chaines", chaines);
-        sol.put("nom_instance", s.getInstance().getNom());
+        sol.put("paires", paires);
         
-        this.solutions.getJSONArray("solutions").put(sol);
+        this.instances.getJSONArray("instances").put(sol);
         
     }
     
@@ -86,8 +107,6 @@ public class InstanceWriter {
         
         File solutionFile = new File(path);
         
-        
-        
         try{
             if(! solutionFile.exists()) {
                 solutionFile.createNewFile();
@@ -96,7 +115,7 @@ public class InstanceWriter {
             FileWriter f = new FileWriter(solutionFile.getAbsolutePath());
             BufferedWriter br = new BufferedWriter(f);
             
-            br.write(this.solutions.toString()); //this.solutions.toString()
+            br.write(this.instances.toString()); //this.solutions.toString()
             
             br.close();
             f.close();
@@ -110,5 +129,37 @@ public class InstanceWriter {
         }
         
         return true;
+    }
+    
+    public static void main(String[] args) {
+        // KEP_p9_n1_k3_l3
+        // KEP_p100_n11_k3_l7
+        String path = "C:\\Users\\Clem\\Documents\\Travail\\Le4\\POO\\Projet\\Interface web\\src\\data\\db\\instances.json";
+        String[] instancesDirectories = {"instancesInitiales","instancesFinales"};
+        InstanceWriter iw = new InstanceWriter();
+
+        for (String instancesDirectory : instancesDirectories) {
+            File[] listOfFiles;
+            if ( (listOfFiles = new File(instancesDirectory).listFiles()) != null) {
+                for (File file : listOfFiles) {
+                    if (file.isFile()) {
+                        try {
+
+                            InstanceReader reader = new InstanceReader(file.getAbsolutePath());
+
+                            Instance i = reader.readInstance();
+
+                            iw.ajouterInstance(i);
+
+                        } catch (ReaderException ex) {
+                            System.out.println("L'instance " + file.getAbsolutePath()
+                                    + " n'a pas pu etre lue correctement");
+                        }
+                    }
+                }
+            }
+        }
+
+        iw.write(path);
     }
 }

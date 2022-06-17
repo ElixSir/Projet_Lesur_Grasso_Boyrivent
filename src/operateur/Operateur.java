@@ -14,9 +14,11 @@ import solution.ensemble.Echanges;
  */
 public abstract class Operateur {
     protected Echanges echange;
+    protected int benefice;
     protected int deltaBenefice;
 
     public Operateur(){
+        this.benefice = -1;
         this.deltaBenefice = -1;
     }
     
@@ -25,6 +27,10 @@ public abstract class Operateur {
         this.echange = echange;
     }
 
+    public int getBenefice() {
+        return benefice;
+    }
+    
     public int getDeltaBenefice() {
         return deltaBenefice;
     }
@@ -33,18 +39,9 @@ public abstract class Operateur {
      * N'engendre pas un cout infini, donc on vérifie le cout
      * @return 
      */
-    public boolean isMouvementRealisable(){
-        if(this.deltaBenefice == -1){
-            return false;
-        }
-        return true;
-    }
+    public abstract boolean isMouvementRealisable();
     
-    public boolean isMouvementAmeliorant(){
-        if(deltaBenefice > 0)
-            return true;
-        return false;
-    }
+    public abstract boolean isMouvementAmeliorant();
     
     /**
      * Renvoie true si l'Opérateur courant est strictement meilleur que l'opérateur passé en param
@@ -60,13 +57,13 @@ public abstract class Operateur {
         if(op == null){
             return true;
         }
-        if(this.getDeltaBenefice() > op.getDeltaBenefice()){
+        if(this.getDeltaBenefice()> op.getDeltaBenefice()){
             return true;
         }
         return false;
     }
 
-    protected abstract int evalDeltaBenefice();
+    protected abstract int evalBenefice();
     protected abstract boolean doMouvement();
     
     public boolean doMouvementIfRealisable(){
@@ -79,6 +76,7 @@ public abstract class Operateur {
     public Echanges getEchange() {
         return this.echange;
     }
+    
     
     
 
