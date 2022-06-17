@@ -1,0 +1,47 @@
+;Large Cycle;;;PLNE;;
+;cout;tps(ms);valide ?;cout;tps(ms);valide ?
+KEP_p100_n0_k3_l0;1 238;129;true;1 238;320;true
+KEP_p100_n11_k3_l13;1 436;53;true;2 308;74 451;true
+KEP_p100_n11_k3_l4;1 408;5;true;2 075;106;true
+KEP_p100_n11_k3_l7;1 436;4;true;2 278;14 207;true
+KEP_p100_n11_k5_l17;1 798;45;true;2 334;48 260;true
+KEP_p100_n33_k3_l13;2 191;2;true;2 974;75 982;true
+KEP_p100_n33_k3_l4;2 191;5;true;2 725;81;true
+KEP_p100_n33_k3_l7;2 191;3;true;2 969;1 513;true
+KEP_p100_n33_k5_l17;2 204;10;true;3 073;72 828;true
+KEP_p100_n5_k3_l13;1 641;5;true;2 539;113 432;true
+KEP_p100_n5_k3_l4;1 558;7;true;1 729;44;true
+KEP_p100_n5_k3_l7;1 641;7;true;2 193;1 183;true
+KEP_p100_n5_k5_l17;1 802;38;true;2 588;94 244;true
+KEP_p18_n0_k4_l0;66;2;true;98;27;true
+KEP_p18_n2_k4_l4;71;1;true;107;14;true
+KEP_p250_n0_k3_l0;3 663;277;true;4 299;79;true
+KEP_p250_n13_k3_l13;5 226;268;true;7 316;161 301;true
+KEP_p250_n13_k3_l4;5 164;233;true;6 267;676;true
+KEP_p250_n13_k3_l7;5 165;214;true;7 316;169 933;true
+KEP_p250_n13_k5_l17;5 694;9 350;true;7 864;219 220;true
+KEP_p250_n28_k3_l13;6 822;242;true;9 671;613 358;true
+KEP_p250_n28_k3_l4;6 518;457;true;8 497;4 418;true
+KEP_p250_n28_k3_l7;6 822;181;true;9 671;668 709;true
+KEP_p250_n28_k5_l17;7 465;11 571;true;9 671;645 828;true
+KEP_p250_n83_k3_l13;9 870;422;true;14 184;406 687;true
+KEP_p250_n83_k3_l4;9 691;545;true;13 540;11 234;true
+KEP_p250_n83_k3_l7;9 870;809;true;14 184;439 463;true
+KEP_p250_n83_k5_l17;10 070;24 758;true;14 144;224 192;true
+KEP_p50_n0_k3_l0;313;5;true;313;35;true
+KEP_p50_n17_k3_l13;1 353;1;true;1 547;196;true
+KEP_p50_n17_k3_l4;1 224;1;true;1 538;23;true
+KEP_p50_n17_k3_l7;1 353;1;true;1 547;59;true
+KEP_p50_n17_k5_l17;1 353;2;true;1 547;197;true
+KEP_p50_n3_k3_l13;448;2;true;509;24;true
+KEP_p50_n3_k3_l4;448;1;true;448;9;true
+KEP_p50_n3_k3_l7;448;1;true;487;17;true
+KEP_p50_n3_k5_l17;490;3;true;509;31;true
+KEP_p50_n6_k3_l13;643;1;true;951;63;true
+KEP_p50_n6_k3_l4;643;1;true;873;14;true
+KEP_p50_n6_k3_l7;643;3;true;951;41;true
+KEP_p50_n6_k5_l17;951;3;true;965;177;true
+KEP_p9_n0_k3_l0;57;0;true;61;6;true
+KEP_p9_n1_k3_l3;57;1;true;65;9;true
+
+SOMME;125 336;49 669;true;170 163;4 62 691;true
