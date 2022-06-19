@@ -26,6 +26,11 @@ public class InterEchange extends OperateurInterEchange {
         return "InterEchange{" + "positionI=" + positionI + ", positionJ=" + positionJ + ", coutDeplacement=" + deltaBenefice + ", paireI=" + paireI + ", paireJ=" + paireJ + ",echange=" + this.echange + ",auteechange=" + this.autreEchange + '}';
     }
 
+    
+    /**
+     * Evalue le bénéfice de l'opérateur
+     * @return 
+     */
     @Override
     protected int evalBenefice() {
         if (echange == null) {
@@ -142,6 +147,8 @@ public class InterEchange extends OperateurInterEchange {
 
     }
 
+    
+    
     public boolean isMouvementAmeliorant() {
         if (deltaBenefice + deltaBeneficeAutreEchange > 0) {
             return true;

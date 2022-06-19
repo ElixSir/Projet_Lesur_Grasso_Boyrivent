@@ -1,0 +1,25 @@
+<h1>Solution</h1>
+<div>
+    <!-- <h2>Chaines</h2> -->
+    <br>
+    <p><b>Nom :</b> <%= param.solution.nom %> </p>
+    <p><b>Bénefice total :</b> <%= param.solution.benefice %> </p>
+    <p><b>Nombre total de chaines :</b> <%= param.solution.chaines.length %> </p>
+    <p><b>Nombre total de cycles :</b> <%= param.solution.cycles.length %> </p>
+    <p><b>Instance :</b> <%= param.solution.nom_instance %> </p>
+    <br>
+    <h2>Chaines (<%= param.solution.chaines.length %>)</h2>
+    <% param.solution.chaines.forEach(function(chaine){ %>
+        <canvas class="chaine"></canvas>
+    <% }); %>
+    <h2>Cycles (<%= param.solution.cycles.length %>)</h2>
+    <% param.solution.cycles.forEach(function(cycle){ %>
+        <canvas class="cycle"></canvas>
+    <% }); %>
+
+    <!-- <% JSON.stringify(param.solution) %> -->
+</div>
+<script>
+    var solution = <%- JSON.stringify(param.solution) %>
+</script>
+<script src="/static/script/solution.js"></script>

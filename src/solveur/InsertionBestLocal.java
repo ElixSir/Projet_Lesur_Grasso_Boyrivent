@@ -24,7 +24,7 @@ public class InsertionBestLocal implements Solveur{
 
         @Override
         public String getNom() {
-            return "Meilleur Bénéfice Chaines";
+            return "Insertion Best Local";
         }
 
         private Paire getPlusGrandBenefice(List<Paire> P, Participant p) {

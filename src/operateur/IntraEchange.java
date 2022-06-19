@@ -30,6 +30,12 @@ public class IntraEchange extends OperateurIntraEchange {
         return "IntraEchange{" + "positionI=" + positionI + ", positionJ=" + positionJ + ", coutDeplacement=" + deltaBenefice + ", paireI=" + paireI + ", paireJ=" + paireJ + ",echange=" + this.echange + '}';
     }
 
+    
+    /**
+     * Evalue le bénéfice de la fonction
+     *
+     * @return
+     */
     @Override
     protected int evalBenefice() {
         if (echange == null) {

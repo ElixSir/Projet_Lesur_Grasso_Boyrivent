@@ -24,7 +24,7 @@ import solveur.LargeCycles;
  *
  * @author Clem
  */
-public class SolutionWriter {
+public class SolutionWriter { 
     
     private final String PATH_FILE = "solution.json";
     
@@ -134,7 +134,8 @@ public class SolutionWriter {
             sw.ajouterSolution(sol1, "Soltution Larges Cycles");
             sw.ajouterSolution(sol2, "Soltution Encore Un Arbre");
             
-            if(!sw.write("C:\\Users\\Clem\\Documents\\Travail\\Le4\\POO\\Projet\\Interface web\\src\\data\\db\\solutions.json")) {
+            //if(!sw.write("C:\\Users\\felix\\Interface web\\src\\data\\db\\solutions.json")) {
+            if(!sw.write("Interface web\\\\src\\\\data\\\\db\\\\solutions.json")) {
                 System.out.println("erreur");
             }
             

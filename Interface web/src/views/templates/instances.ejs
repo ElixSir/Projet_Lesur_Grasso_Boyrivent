@@ -1,0 +1,15 @@
+<h1>Instances</h1>
+<% if (param.instances) { %>
+   <!-- <%#= JSON.stringify(param.instances) %> -->
+    <p>
+    </p>
+    <ul>
+        <% param.instances.forEach(function(instance){ %>
+            <li>
+              <a href="/instance/<%= instance.nom %>">
+                <%= instance.nom %>
+              </a>
+            </li>
+        <% }); %>
+    </ul>
+<% } %>

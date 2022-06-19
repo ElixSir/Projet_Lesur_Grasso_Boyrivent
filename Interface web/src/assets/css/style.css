@@ -1,0 +1,83 @@
+html, body {
+    margin: 0;
+    font-size: 1em;
+    font-family: sans-serif; /* Verdana, Geneva, Tahoma,  */
+}
+
+body {
+    min-width: 100vw;
+    height: 100vh;
+    background-color: snow; /* snow;*/ 
+}
+
+.header {
+    display: inline-block;
+    position: sticky;
+    top:0;
+    width: 100vw;
+    box-shadow: 0 -3px 15px gray;
+    z-index: 98;
+}
+
+.header-title {
+    display: inline-block;
+    width: 100%;
+    background-color: #2e86c1;
+    z-index: 99;
+}
+
+.header-title > h1 {
+    display: block;
+    color: snow;
+    margin-left: 20px;
+}
+
+.header-nav {
+    display: inline-block;
+    width: 100%;
+    z-index: 0;
+    background-color: #85c1e9;
+    z-index: 98;
+}
+
+.nav {
+    display: flex;
+    height: 30px;
+    margin-left: 20px;
+}
+
+.nav > a {
+    width: 100px;
+    text-align: center;
+    color: snow;
+    padding-top: 5px;
+    margin-right: 1px ;
+    border-radius: 2px;
+    outline: none;
+    text-decoration: none;
+    background-color: #5dade2;
+}
+
+.nav > a:hover {
+    background-color: #21618c;
+    color: snow;
+}
+
+.nav > a:visited  {
+    color: snow;
+}
+
+/*
+.nav > a:link {
+    color: #21618c;
+}*/
+
+.main {
+    display: inline-block;
+    position: relative;
+    margin: 0 20px;
+}
+
+canvas {
+    border: 1px solid black;
+}

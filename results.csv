@@ -1,0 +1,47 @@
+;Arbre Solveur;;;Meilleur Bénéfice Chaines;;;Meilleur Bénéfice Cycles;;;Meilleur Bénéfice Chaines;;;Insertion Simple;;;Large Cycle;;
+;cout;tps(ms);valide ?;cout;tps(ms);valide ?;cout;tps(ms);valide ?;cout;tps(ms);valide ?;cout;tps(ms);valide ?;cout;tps(ms);valide ?
+KEP_p100_n0_k3_l0;1 238;48;true;563;4;true;467;3;true;467;3;true;563;2;true;1 238;15;true
+KEP_p100_n11_k3_l13;1 567;50;true;1 824;3;true;580;3;true;1 824;2;true;1 154;2;true;1 436;11;true
+KEP_p100_n11_k3_l4;1 490;19;true;1 533;1;true;580;1;true;1 533;1;true;1 018;2;true;1 408;8;true
+KEP_p100_n11_k3_l7;1 567;31;true;1 683;2;true;580;1;true;1 683;1;true;1 139;0;true;1 436;7;true
+KEP_p100_n11_k5_l17;1 867;132;true;1 824;1;true;580;1;true;1 824;1;true;1 154;1;true;1 798;87;true
+KEP_p100_n33_k3_l13;1 668;14;true;2 113;2;true;391;1;true;2 113;2;true;1 351;1;true;2 191;6;true
+KEP_p100_n33_k3_l4;2 025;12;true;2 095;1;true;391;1;true;2 095;1;true;1 351;1;true;2 191;7;true
+KEP_p100_n33_k3_l7;1 668;13;true;2 141;1;true;391;2;true;2 141;1;true;1 351;1;true;2 191;5;true
+KEP_p100_n33_k5_l17;1 668;27;true;2 113;1;true;391;1;true;2 113;2;true;1 351;1;true;2 204;11;true
+KEP_p100_n5_k3_l13;1 487;8;true;1 144;1;true;467;1;true;1 144;1;true;801;1;true;1 641;5;true
+KEP_p100_n5_k3_l4;1 269;5;true;988;1;true;467;1;true;988;1;true;855;1;true;1 558;6;true
+KEP_p100_n5_k3_l7;1 487;6;true;1 144;0;true;467;1;true;1 144;1;true;801;1;true;1 641;5;true
+KEP_p100_n5_k5_l17;1 744;28;true;1 144;1;true;467;1;true;1 144;1;true;801;1;true;1 802;23;true
+KEP_p18_n0_k4_l0;66;1;true;66;1;true;51;0;true;51;1;true;66;0;true;66;1;true
+KEP_p18_n2_k4_l4;95;1;true;61;0;true;51;1;true;61;1;true;43;0;true;71;1;true
+KEP_p250_n0_k3_l0;3 663;322;true;1 802;2;true;1 494;2;true;1 494;2;true;1 802;2;true;3 663;305;true
+KEP_p250_n13_k3_l13;4 888;1 087;true;5 379;3;true;1 494;2;true;5 229;2;true;2 470;2;true;5 226;310;true
+KEP_p250_n13_k3_l4;4 495;424;true;3 176;2;true;1 494;3;true;3 093;6;true;1 919;2;true;5 164;319;true
+KEP_p250_n13_k3_l7;4 888;1 056;true;4 072;1;true;1 494;2;true;3 837;2;true;2 463;2;true;5 165;312;true
+KEP_p250_n13_k5_l17;5 869;16 137;true;5 764;4;true;1 517;2;true;5 667;1;true;2 419;2;true;5 694;12 477;true
+KEP_p250_n28_k3_l13;6 400;3 391;true;6 885;2;true;1 424;2;true;6 812;1;true;4 206;2;true;6 822;273;true
+KEP_p250_n28_k3_l4;6 175;740;true;5 131;0;true;1 424;2;true;5 084;2;true;3 626;1;true;6 518;283;true
+KEP_p250_n28_k3_l7;6 400;3 412;true;6 497;2;true;1 424;2;true;6 424;3;true;3 896;1;true;6 822;270;true
+KEP_p250_n28_k5_l17;6 586;19 174;true;6 652;2;true;1 659;2;true;6 579;1;true;4 182;2;true;7 465;11 717;true
+KEP_p250_n83_k3_l13;9 971;21 423;true;10 568;2;true;2 216;2;true;10 568;2;true;6 887;1;true;9 870;484;true
+KEP_p250_n83_k3_l4;9 578;2 408;true;9 773;1;true;2 216;2;true;9 773;2;true;5 985;2;true;9 691;470;true
+KEP_p250_n83_k3_l7;9 971;21 538;true;10 197;2;true;2 216;2;true;10 197;1;true;6 680;2;true;9 870;473;true
+KEP_p250_n83_k5_l17;9 971;60 915;true;10 925;2;true;2 125;2;true;10 925;2;true;6 887;1;true;10 070;31 577;true
+KEP_p50_n0_k3_l0;313;1;true;210;0;true;210;0;true;210;0;true;210;0;true;313;0;true
+KEP_p50_n17_k3_l13;995;1;true;1 424;1;true;211;0;true;1 424;0;true;551;0;true;1 353;0;true
+KEP_p50_n17_k3_l4;1 164;1;true;1 204;0;true;211;0;true;1 204;0;true;591;1;true;1 224;0;true
+KEP_p50_n17_k3_l7;995;1;true;1 424;0;true;211;1;true;1 424;0;true;551;0;true;1 353;0;true
+KEP_p50_n17_k5_l17;995;1;true;1 424;1;true;211;0;true;1 424;0;true;551;1;true;1 353;0;true
+KEP_p50_n3_k3_l13;384;1;true;404;0;true;210;0;true;404;0;true;404;1;true;448;0;true
+KEP_p50_n3_k3_l4;311;1;true;404;0;true;210;0;true;404;0;true;404;1;true;448;0;true
+KEP_p50_n3_k3_l7;384;0;true;404;1;true;210;0;true;404;0;true;404;0;true;448;1;true
+KEP_p50_n3_k5_l17;427;1;true;404;0;true;210;1;true;404;0;true;404;0;true;490;1;true
+KEP_p50_n6_k3_l13;617;0;true;744;0;true;92;0;true;700;0;true;390;1;true;643;0;true
+KEP_p50_n6_k3_l4;576;1;true;758;0;true;92;0;true;714;0;true;390;1;true;643;0;true
+KEP_p50_n6_k3_l7;617;1;true;744;0;true;92;0;true;700;0;true;390;1;true;643;0;true
+KEP_p50_n6_k5_l17;617;1;true;744;0;true;92;0;true;700;1;true;390;0;true;951;1;true
+KEP_p9_n0_k3_l0;57;0;true;38;0;true;26;0;true;26;0;true;38;1;true;57;0;true
+KEP_p9_n1_k3_l3;64;0;true;49;0;true;26;1;true;42;0;true;40;0;true;57;0;true
+
+SOMME;118 277;152 433;true;117 636;48;true;30 832;49;true;116 191;48;true;72 929;45;true;125 336;59 471;true

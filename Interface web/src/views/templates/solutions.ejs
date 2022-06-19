@@ -1,0 +1,17 @@
+<h1>Solutions</h1>
+
+<% if (param.solutions) { %>
+    <p>
+      <!-- <%#= JSON.stringify(param.solutions) %> -->
+    </p>
+  
+    <ul>
+        <% param.solutions.forEach(function(solution){ %>
+            <li>
+              <a href="/solution/<%= solution.nom %>">
+                <%= solution.nom %>
+              </a>
+            </li>
+        <% }); %>
+    </ul>
+  <% } %>

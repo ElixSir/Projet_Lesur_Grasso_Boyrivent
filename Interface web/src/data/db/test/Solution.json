@@ -1,0 +1,31 @@
+{
+    "solutions" : [{
+        "nom": "Solution Test",
+        "benefice": 17,
+        "cycles":[[5,4], [103,104,105], [17,18,19,20], [21,22,23,24,25], [11,12,13,14,15,16]],
+        "chaines":[[1,3],[6,7,8,9,10],[100,102,101]],
+        "instance" : {
+            "nom":"instance Test",
+            "maxChaines": 7,
+            "maxCycles": 3,
+            "nbAltruistes": 2,
+            "nbPaires": 3,
+            "altruistes": [{"id":1}, {"id":2}],
+            "paires": [{"id":3}, {"id":4}, {"id":5}]
+        }
+    },{
+        "nom": "Solution 2",
+        "benefice": 17,
+        "cycles":[[5,4], [103,104,105], [17,18,19,20]],
+        "chaines":[[1,3],[6,7,8,9,10]],
+        "instance" : {
+            "nom":"instance Test",
+            "maxChaines": 7,
+            "maxCycles": 3,
+            "nbAltruistes": 2,
+            "nbPaires": 3,
+            "altruistes": [{"id":1}, {"id":2}],
+            "paires": [{"id":3}, {"id":4}, {"id":5}]
+        }
+    }]
+}

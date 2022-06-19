@@ -1,0 +1,24 @@
+<h1>Instance</h1>
+<div>
+    <!-- <%#= JSON.stringify(param.instance) %> -->
+    <br>
+    <p><b>Nom :</b> <%= param.instance.nom %> </p>
+    <p><b>Nombre de donneur altruistes :</b> <%= param.instance.nbAltruistes %> </p>
+    <p><b>Nombre de donneur paires donneur/receveur :</b> <%= param.instance.nbPaires %> </p>
+    <p><b>Taille maximale de cycles :</b> <%= param.instance.maxCycles %> </p>
+    <p><b>Taille maximale de chaines :</b> <%= param.instance.maxChaines %> </p>
+    <br>
+    <!-- 
+        TODO : afficher les transplantations par participants
+    -->
+    <h2>Listes des transplantations possibles</h2>
+    <h3>Donneurs Altruistes (<%= param.instance.nbAltruistes %>)</h3>
+    <% param.instance.altruistes.forEach(function(altruiste){ %>
+        <canvas class="chaine"></canvas><br>
+    <% }); %>
+    
+    <h3>Paires (<%= param.instance.nbPaires %>)</h3>
+    <% param.instance.paires.forEach(function(paire){ %>
+        <canvas class="cycle"></canvas>
+    <% }); %>
+</div>

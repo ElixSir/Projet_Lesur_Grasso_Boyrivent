@@ -1,0 +1,15 @@
+<%- include('header.ejs'); -%>
+<div class="header">
+    <div class="header-title">
+        <h1>Transplantations</h1>
+    </div> 
+    <div class="header-nav">
+        <%- include('nav.ejs'); -%> 
+    </div>
+</div>
+<div class="main">
+    <% if(template != "") { %>
+        <%- include(template) -%>
+    <% } %>
+</div>
+<%- include('footer.ejs'); -%>

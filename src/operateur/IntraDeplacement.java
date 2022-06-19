@@ -26,7 +26,11 @@ public class IntraDeplacement extends OperateurIntraEchange{
         super(positionI, positionJ, echange, longueurI, longueurJ);
     }
     
-    
+    /**
+     * Evalue le bénéfice de l'opérateur
+     *
+     * @return
+     */
     @Override
     protected int evalBenefice() {
         if (echange == null || !echange.positionDeplacementValides(this.positionI, this.positionJ)) {
