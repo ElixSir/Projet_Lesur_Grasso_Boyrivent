@@ -219,7 +219,7 @@ public class LargeCycles implements Solveur {
                 s.ajouterPaireNouveauCycle(bestP);
             }
         }
-        System.out.println("Free memory (%): " +  ((double)Runtime.getRuntime().freeMemory()/ (double)Runtime.getRuntime().maxMemory())*100 + "%");
+        // System.out.println("Free memory (%): " +  ((double)Runtime.getRuntime().freeMemory()/ (double)Runtime.getRuntime().maxMemory())*100 + "%");
         s.clean();
         return s;
     }

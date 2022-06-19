@@ -11,6 +11,7 @@ import solution.ensemble.Cycle;
 import instance.Instance;
 import instance.reseau.Paire;
 import io.InstanceReader;
+import io.SolutionWriter;
 import io.exception.ReaderException;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -233,35 +234,42 @@ public class TestAllSolveur {
     private void printResultatsInstance(String destinationSol, PrintWriter ecriture, Instance inst) {
         // TO CHECK : recuperer le nom de l'instance
         try {
-        ecriture.print(inst.getNom());
-        for (Solveur solveur : solveurs) {
-            long start = System.currentTimeMillis();
-            // TO CHECK : resolution de l'instance avec le solveur
-            Solution sol = solveur.solve(inst);
-            PrintWriter ecritureIndividuelle;
+            ecriture.print(inst.getNom());
+            SolutionWriter sw = new SolutionWriter();
             
-            ecritureIndividuelle = new PrintWriter(destinationSol + "/" + inst.getNom() + "_sol" + ".txt");
-            sol.printSolution(ecritureIndividuelle);
-            ecritureIndividuelle.println();
-            if(ecritureIndividuelle != null)
-            {
-                ecritureIndividuelle.close();
+            for (Solveur solveur : solveurs) {
+                long start = System.currentTimeMillis();
+                // TO CHECK : resolution de l'instance avec le solveur
+                Solution sol = solveur.solve(inst);
+                
+                sw.ajouterSolution(sol,solveur.getNom());
+                PrintWriter ecritureIndividuelle;
+
+                ecritureIndividuelle = new PrintWriter(destinationSol + "/" + inst.getNom() + "_sol" + ".txt");
+                sol.printSolution(ecritureIndividuelle);
+                ecritureIndividuelle.println();
+                if(ecritureIndividuelle != null)
+                {
+                    ecritureIndividuelle.close();
+                }
+
+
+                long time = System.currentTimeMillis() - start;
+                // TO CHECK : recperer le cout total de la solution, et savoir si
+                // la solution est valide
+                Resultat result = new Resultat(sol.getCoutTotal(), time, sol.check());
+                resultats.put(new InstanceSolveur(inst, solveur), result);
+                ecriture.print(";" + result.formatCsv());
+                totalStats.get(solveur).add(result);
             }
-
-
-            long time = System.currentTimeMillis() - start;
-            // TO CHECK : recperer le cout total de la solution, et savoir si
-            // la solution est valide
-            Resultat result = new Resultat(sol.getCoutTotal(), time, sol.check());
-            resultats.put(new InstanceSolveur(inst, solveur), result);
-            ecriture.print(";" + result.formatCsv());
-            totalStats.get(solveur).add(result);
-        }
-
-        ecriture.println();
+            
+            if(!sw.write("Interface web\\src\\data\\db\\solutions.json")) {
+                System.err.println("erreur JSON");
+            }
+            ecriture.println();
         } catch (FileNotFoundException ex) {
-                Logger.getLogger(TestAllSolveur.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Logger.getLogger(TestAllSolveur.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 

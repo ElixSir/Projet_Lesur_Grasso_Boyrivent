@@ -134,8 +134,12 @@ public class SolutionWriter {
             sw.ajouterSolution(sol1, "Soltution Larges Cycles");
             sw.ajouterSolution(sol2, "Soltution Encore Un Arbre");
             
+<<<<<<< HEAD
             //if(!sw.write("C:\\Users\\felix\\Interface web\\src\\data\\db\\solutions.json")) {
             if(!sw.write("Interface web\\\\src\\\\data\\\\db\\\\solutions.json")) {
+=======
+            if(!sw.write("Interface web\\src\\data\\db\\solutions.json")) {
+>>>>>>> main
                 System.out.println("erreur");
             }
             
